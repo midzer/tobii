@@ -1,0 +1,340 @@
+@import
+  'variables',
+  'functions';
+
+/* Link */
+.Tobii-zoom {
+  border: 0;
+  box-shadow: none;
+  display: block;
+  position: relative;
+  text-decoration: none;
+
+
+  & img {
+    display: block;
+  }
+
+  &__icon {
+    align-items: center;
+    background-color: $zoom-icon-background;
+    bottom: 0;
+    color: $zoom-icon-color;
+    display: flex;
+    justify-content: center;
+    line-height: 1;
+    position: absolute;
+    right: 0;
+
+
+    & svg {
+      color: $zoom-icon-color;
+      fill: none;
+      height: em(20);
+      padding-bottom: em(4);
+      padding-left: em(4);
+      padding-right: em(4);
+      padding-top: em(4);
+      pointer-events: none;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      stroke-width: 2;
+      stroke: $zoom-icon-color;
+      width: em(20);
+    }
+  }
+}
+
+/* Hide scrollbar if lightbox is displayed */
+.Tobii-is-open {
+  overflow-y: hidden;
+}
+
+/* Lightbox */
+.Tobii {
+  background-color: $lightbox-background;
+  bottom: 0;
+  box-sizing: border-box;
+  contain: strict;
+  font-size: #{$base-font-size}px;
+  left: 0;
+  line-height: 1.5555555555555556;
+  overflow: hidden;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1337;
+
+
+  &[aria-hidden="true"] {
+    display: none;
+  }
+
+  & *,
+  & *::before,
+  & *::after {
+    box-sizing: inherit;
+  }
+}
+
+/* Slider */
+.Tobii__slider {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  will-change: transform;
+
+
+  &:not(&--is-dragging) {
+    transition-duration: $transition-duration;
+    transition-property: transform;
+    transition-timing-function: $transition-timing-function;
+
+    @media screen and (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  &--is-draggable &__slide__content {
+    cursor: grab;
+  }
+
+  &--is-dragging &__slide__content {
+    cursor: grabbing;
+  }
+}
+
+/* Slide */
+.Tobii__slider__slide {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Slide content */
+.Tobii__slider__slide__content {
+
+
+
+  > figure {
+    margin: 0;
+    position: relative;
+
+
+    > img {
+      display: block;
+      height: auto;
+      max-height: $slide-max-height;
+      max-width: $slide-max-width;
+      width: auto;
+    }
+
+    > figcaption {
+      background-color: $caption-background;
+      bottom: 0;
+      color: $caption-color;
+      display: block;
+      left: 0;
+      padding-bottom: em(4);
+      padding-left: em(8);
+      padding-right: em(8);
+      padding-top: em(4);
+      position: absolute;
+      white-space: pre-wrap;
+      width: 100%;
+    }
+  }
+
+  &[data-type="html"] {
+    max-height: $slide-max-height;
+    max-width: $slide-max-width;
+    overflow: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+
+    & video {
+      cursor: auto;
+      display: block !important;
+      max-height: $slide-max-height;
+      max-width: $slide-max-width;
+    }
+  }
+
+  &[data-type="iframe"] {
+    max-height: $slide-max-height;
+    max-width: $slide-max-width;
+    overflow: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    /* Fix iframe scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    transform: translate3d(0, 0, 0);
+
+
+    & iframe {
+      display: block !important;
+      height: $slide-max-height;
+      width: $slide-max-width;
+    }
+  }
+
+  &[data-type="youtube"] {
+    max-height: $slide-max-height;
+    max-width: $slide-max-width;
+    overflow: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+
+    & iframe {
+      display: block !important;
+    }
+  }
+}
+
+/* Buttons */
+.Tobii > button {
+  align-items: center;
+  appearance: none;
+  background-color: $button-background;
+  border: em(1) solid transparent;
+  color: $button-color;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  opacity: 0.5;
+  padding-bottom: em(4);
+  padding-left: em(4);
+  padding-right: em(4);
+  padding-top: em(4);
+  position: absolute;
+  touch-action: manipulation;
+  transition-duration: $transition-duration;
+  transition-property: opacity, transform;
+  transition-timing-function: $transition-timing-function;
+  will-change: opacity, transform;
+  z-index: 1;
+
+  @media screen and (prefers-reduced-motion: reduce) {
+    transition: none;
+    will-change: opacity;
+  }
+
+
+  & svg {
+    pointer-events: none;
+    stroke: #fff;
+    stroke-width: 1;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+    fill: none;
+    color: #fff;
+  }
+
+  &:active,
+  &:focus,
+  &:hover {
+    opacity: 1;
+    transform: scale(.84);
+
+    @media screen and (prefers-reduced-motion: reduce) {
+      transform: none;
+    }
+  }
+
+  &.Tobii__prev,
+  &.Tobii__next {
+    top: 50%;
+    top: calc(50% - #{em(40)});
+
+
+    & svg {
+      height: em(70);
+      width: em(70);
+    }
+  }
+
+  &.Tobii__prev {
+    left: 0;
+  }
+
+  &.Tobii__next {
+    right: 0;
+  }
+
+  &.Tobii__close {
+    right: em(5);
+    top: em(18);
+
+
+    & svg {
+      height: em(60);
+      width: em(60);
+    }
+  }
+
+  &:disabled,
+  &[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* Counter */
+.Tobii__counter {
+  align-items: center;
+  background-color: $counter-background;
+  color: $counter-color;
+  display: flex;
+  font-size: em(20);
+  justify-content: center;
+  left: em(18);
+  line-height: 1;
+  position: absolute;
+  top: em(40);
+  z-index: 1;
+
+
+  &[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+/* Loader */
+.Tobii-loader {
+  display: inline-block;
+  height: em(100);
+  left: calc(50% - #{em(50)});
+  position: absolute;
+  top: calc(50% - #{em(50)});
+  width: em(100);
+
+
+  &::before {
+    animation: spin 1s infinite;
+    border-radius: 100%;
+    border: em(4) solid #949ba3;
+    border-top-color: $loader-color;
+    bottom: 0;
+    content: "";
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "tobii",
+  "version": "2.0.0",
+  "description": "An accessible, open-source lightbox with no dependencies.",
+  "main": "dist/js/tobii.js",
+  "style": "dist/css/tobii.css",
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "autoprefixer": "^9.6.5",
+    "rollup": "^1.25.1",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-babel-minify": "^9.1.0",
+    "standard": "^14.3.1"
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not <= 1%",
+    "not IE 10"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rqrauhvmra/tobii.git"
+  },
+  "keywords": [
+    "lightbox",
+    "accessible",
+    "a11y",
+    "javascript",
+    "vanilla",
+    "scss",
+    "css"
+  ],
+  "author": "rqrauhvmra",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rqrauhvmra/tobii/issues"
+  },
+  "homepage": "https://github.com/rqrauhvmra/tobii",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@rqrauhvmra"
+  }
+}
