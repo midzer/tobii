@@ -14,7 +14,8 @@ export default [
         presets: [
           [
             '@babel/preset-env', {
-              modules: false
+              modules: false,
+              loose: true
             }
           ]
         ]
@@ -34,7 +35,8 @@ export default [
         presets: [
           [
             '@babel/preset-env', {
-              modules: false
+              modules: false,
+              loose: true
             }
           ]
         ]

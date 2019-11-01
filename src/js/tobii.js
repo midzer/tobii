@@ -90,7 +90,7 @@ export default function Tobii (userOptions) {
     }
 
     if (userOptions) {
-      Object.keys(userOptions).forEach(function (key) {
+      Object.keys(userOptions).forEach(key => {
         options[key] = userOptions[key]
       })
     }
@@ -104,11 +104,11 @@ export default function Tobii (userOptions) {
    */
   const supportedElements = {
     image: {
-      checkSupport: function (el) {
+      checkSupport (el) {
         return !el.hasAttribute('data-type') && el.href.match(/\.(png|jpe?g|tiff|tif|gif|bmp|webp|svg|ico)(\?.*)?$/i)
       },
 
-      init: function (el, container) {
+      init (el, container) {
         const figure = document.createElement('figure')
         const figcaption = document.createElement('figcaption')
         const image = document.createElement('img')
@@ -138,7 +138,7 @@ export default function Tobii (userOptions) {
           }
 
           if (figcaption.textContent) {
-            figcaption.id = 'Tobii-figcaption-' + figcaptionId
+            figcaption.id = `Tobii-figcaption-${figcaptionId}`
             figure.appendChild(figcaption)
 
             image.setAttribute('aria-labelledby', figcaption.id)
@@ -162,12 +162,12 @@ export default function Tobii (userOptions) {
         container.setAttribute('data-type', 'image')
       },
 
-      onPreload: function (container) {
+      onPreload (container) {
         // Same as preload
         supportedElements.image.onLoad(container)
       },
 
-      onLoad: function (container) {
+      onLoad (container) {
         const image = container.querySelector('img')
 
         if (!image.hasAttribute('data-src')) {
@@ -177,7 +177,7 @@ export default function Tobii (userOptions) {
         const figcaption = container.querySelector('figcaption')
         const loadingIndicator = container.querySelector('.Tobii-loader')
 
-        image.onload = function () {
+        image.onload = () => {
           container.removeChild(loadingIndicator)
           image.style.opacity = '1'
 
@@ -190,26 +190,26 @@ export default function Tobii (userOptions) {
         image.removeAttribute('data-src')
       },
 
-      onLeave: function (container) {
+      onLeave (container) {
         // Nothing
       },
 
-      onCleanup: function (container) {
+      onCleanup (container) {
         // Nothing
       }
     },
 
     html: {
-      checkSupport: function (el) {
+      checkSupport (el) {
         return checkType(el, 'html')
       },
 
-      init: function (el, container) {
+      init (el, container) {
         const targetSelector = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
         const target = document.querySelector(targetSelector)
 
         if (!target) {
-          throw new Error('Ups, I can\'t find the target ' + targetSelector + '.')
+          throw new Error(`Ups, I can't find the target ${targetSelector}.`)
         }
 
         // Add content to container
@@ -219,11 +219,11 @@ export default function Tobii (userOptions) {
         container.setAttribute('data-type', 'html')
       },
 
-      onPreload: function (container) {
+      onPreload (container) {
         // Nothing
       },
 
-      onLoad: function (container) {
+      onLoad (container) {
         const video = container.querySelector('video')
 
         if (video) {
@@ -239,7 +239,7 @@ export default function Tobii (userOptions) {
         }
       },
 
-      onLeave: function (container) {
+      onLeave (container) {
         const video = container.querySelector('video')
 
         if (video) {
@@ -255,7 +255,7 @@ export default function Tobii (userOptions) {
         }
       },
 
-      onCleanup: function (container) {
+      onCleanup (container) {
         const video = container.querySelector('video')
 
         if (video) {
@@ -276,11 +276,11 @@ export default function Tobii (userOptions) {
     },
 
     iframe: {
-      checkSupport: function (el) {
+      checkSupport (el) {
         return checkType(el, 'iframe')
       },
 
-      init: function (el, container) {
+      init (el, container) {
         const iframe = document.createElement('iframe')
         const href = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
 
@@ -289,11 +289,11 @@ export default function Tobii (userOptions) {
         iframe.setAttribute('data-src', href)
 
         if (el.getAttribute('data-width')) {
-          iframe.style.maxWidth = el.getAttribute('data-width') + 'px'
+          iframe.style.maxWidth = `${el.getAttribute('data-width')}px`
         }
 
         if (el.getAttribute('data-height')) {
-          iframe.style.maxHeight = el.getAttribute('data-height') + 'px'
+          iframe.style.maxHeight = `${el.getAttribute('data-height')}px`
         }
 
         // Add iframe to container
@@ -303,31 +303,31 @@ export default function Tobii (userOptions) {
         container.setAttribute('data-type', 'iframe')
       },
 
-      onPreload: function (container) {
+      onPreload (container) {
         // Nothing
       },
 
-      onLoad: function (container) {
+      onLoad (container) {
         const iframe = container.querySelector('iframe')
 
         iframe.setAttribute('src', iframe.getAttribute('data-src'))
       },
 
-      onLeave: function (container) {
+      onLeave (container) {
         // Nothing
       },
 
-      onCleanup: function (container) {
+      onCleanup (container) {
         // Nothing
       }
     },
 
     youtube: {
-      checkSupport: function (el) {
+      checkSupport (el) {
         return checkType(el, 'youtube')
       },
 
-      init: function (el, container) {
+      init (el, container) {
         const iframePlaceholder = document.createElement('div')
 
         // Add iframePlaceholder to container
@@ -354,23 +354,23 @@ export default function Tobii (userOptions) {
         playerId++
       },
 
-      onPreload: function (container) {
+      onPreload (container) {
         // Nothing
       },
 
-      onLoad: function (container) {
+      onLoad (container) {
         if (config.autoplayVideo) {
           player[container.getAttribute('data-player')].playVideo()
         }
       },
 
-      onLeave: function (container) {
+      onLeave (container) {
         if (player[container.getAttribute('data-player')].getPlayerState() === 1) {
           player[container.getAttribute('data-player')].pauseVideo()
         }
       },
 
-      onCleanup: function (container) {
+      onCleanup (container) {
         if (player[container.getAttribute('data-player')].getPlayerState() === 1) {
           player[container.getAttribute('data-player')].pauseVideo()
         }
@@ -414,11 +414,11 @@ export default function Tobii (userOptions) {
     const els = document.querySelectorAll(config.selector)
 
     if (!els) {
-      throw new Error('Ups, I can\'t find the selector ' + config.selector + '.')
+      throw new Error(`Ups, I can't find the selector ${config.selector}.`)
     }
 
     // Execute a few things once per element
-    Array.prototype.forEach.call(els, function (el) {
+    Array.prototype.forEach.call(els, el => {
       checkDependencies(el)
     })
   }
@@ -446,8 +446,8 @@ export default function Tobii (userOptions) {
         waitingEls.push(el)
       }
 
-      window.onYouTubePlayerAPIReady = function () {
-        Array.prototype.forEach.call(waitingEls, function (waitingEl) {
+      window.onYouTubePlayerAPIReady = () => {
+        Array.prototype.forEach.call(waitingEls, waitingEl => {
           add(waitingEl, callback)
         })
 
@@ -615,11 +615,11 @@ export default function Tobii (userOptions) {
     lightbox.appendChild(counter)
 
     // Resize event using requestAnimationFrame
-    browserWindow.addEventListener('resize', function () {
+    browserWindow.addEventListener('resize', () => {
       if (!resizeTicking) {
         resizeTicking = true
 
-        browserWindow.requestAnimationFrame(function () {
+        browserWindow.requestAnimationFrame(() => {
           updateOffset()
 
           resizeTicking = false
@@ -654,7 +654,7 @@ export default function Tobii (userOptions) {
 
           sliderElement.className = 'Tobii__slider__slide'
           sliderElement.style.position = 'absolute'
-          sliderElement.style.left = groups[newGroup].x * 100 + '%'
+          sliderElement.style.left = `${groups[newGroup].x * 100}%`
           sliderElementContent.className = 'Tobii__slider__slide__content'
 
           // Create type elements
@@ -694,12 +694,12 @@ export default function Tobii (userOptions) {
       }
 
       if (index === groups[activeGroup].currentIndex) {
-        throw new Error('Ups, slide ' + index + ' is already selected.')
+        throw new Error(`Ups, slide ${index} is already selected.`)
       }
     }
 
     if (index === -1 || index >= groups[activeGroup].elementsLength) {
-      throw new Error('Ups, I can\'t find slide ' + index + '.')
+      throw new Error(`Ups, I can't find slide ${index}.`)
     }
 
     if (config.hideScrollbar) {
@@ -892,7 +892,7 @@ export default function Tobii (userOptions) {
 
     offset = -groups[activeGroup].currentIndex * window.innerWidth
 
-    groups[activeGroup].slider.style.transform = 'translate3d(' + offset + 'px, 0, 0)'
+    groups[activeGroup].slider.style.transform = `translate3d(${offset}px, 0, 0)`
     offsetTmp = offset
   }
 
@@ -901,7 +901,7 @@ export default function Tobii (userOptions) {
    *
    */
   const updateCounter = function updateCounter () {
-    counter.textContent = (groups[activeGroup].currentIndex + 1) + '/' + groups[activeGroup].elementsLength
+    counter.textContent = `${groups[activeGroup].currentIndex + 1}/${groups[activeGroup].elementsLength}`
   }
 
   /**
@@ -1173,13 +1173,13 @@ export default function Tobii (userOptions) {
   const doSwipe = function doSwipe () {
     if (Math.abs(drag.startX - drag.endX) > 0 && !isDraggingY && config.swipeClose) {
       // Horizontal swipe
-      groups[activeGroup].slider.style.transform = 'translate3d(' + (offsetTmp - Math.round(drag.startX - drag.endX)) + 'px, 0, 0)'
+      groups[activeGroup].slider.style.transform = `translate3d(${offsetTmp - Math.round(drag.startX - drag.endX)}px, 0, 0)`
 
       isDraggingX = true
       isDraggingY = false
     } else if (Math.abs(drag.startY - drag.endY) > 0 && !isDraggingX) {
       // Vertical swipe
-      groups[activeGroup].slider.style.transform = 'translate3d(' + (offsetTmp + 'px, -' + Math.round(drag.startY - drag.endY)) + 'px, 0)'
+      groups[activeGroup].slider.style.transform = `translate3d(${offsetTmp}px, -${Math.round(drag.startY - drag.endY)}px, 0)`
 
       isDraggingX = false
       isDraggingY = true
@@ -1400,7 +1400,7 @@ export default function Tobii (userOptions) {
     }
 
     if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {
-      throw new Error('Ups, I don\'t have a group called "' + name + '".')
+      throw new Error(`Ups, I don't have a group called "${name}".`)
     }
 
     activeGroup = name
