@@ -592,10 +592,9 @@
             // Create slide elements
             var sliderElement = document.createElement('div');
             var sliderElementContent = document.createElement('div');
-            sliderElement.className = 'Tobii__slider__slide';
+            sliderElement.className = 'Tobii__slider-slide';
             sliderElement.style.position = 'absolute';
-            sliderElement.style.left = groups[newGroup].x * 100 + "%";
-            sliderElementContent.className = 'Tobii__slider__slide__content'; // Create type elements
+            sliderElement.style.left = groups[newGroup].x * 100 + "%"; // Create type elements
 
             supportedElements[index].init(el, sliderElementContent); // Add slide content container to slider element
 
@@ -690,7 +689,7 @@
 
       lastFocus.focus(); // Don't forget to cleanup our current element
 
-      var container = groups[activeGroup].sliderElements[groups[activeGroup].currentIndex].querySelector('.Tobii__slider__slide__content');
+      var container = groups[activeGroup].sliderElements[groups[activeGroup].currentIndex].querySelector('[data-type]');
       var type = container.getAttribute('data-type');
       supportedElements[type].onLeave(container);
       supportedElements[type].onCleanup(container);
@@ -714,7 +713,7 @@
         return;
       }
 
-      var container = groups[activeGroup].sliderElements[index].querySelector('.Tobii__slider__slide__content');
+      var container = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       var type = container.getAttribute('data-type');
       supportedElements[type].onPreload(container);
     };
@@ -731,7 +730,7 @@
         return;
       }
 
-      var container = groups[activeGroup].sliderElements[index].querySelector('.Tobii__slider__slide__content');
+      var container = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       var type = container.getAttribute('data-type');
       supportedElements[type].onLoad(container);
     };
@@ -788,7 +787,7 @@
         return;
       }
 
-      var container = groups[activeGroup].sliderElements[index].querySelector('.Tobii__slider__slide__content');
+      var container = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       var type = container.getAttribute('data-type');
       supportedElements[type].onLeave(container);
     };
@@ -805,7 +804,7 @@
         return;
       }
 
-      var container = groups[activeGroup].sliderElements[index].querySelector('.Tobii__slider__slide__content');
+      var container = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       var type = container.getAttribute('data-type');
       supportedElements[type].onCleanup(container);
     };

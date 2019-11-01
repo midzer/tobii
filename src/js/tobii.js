@@ -652,10 +652,9 @@ export default function Tobii (userOptions) {
           const sliderElement = document.createElement('div')
           const sliderElementContent = document.createElement('div')
 
-          sliderElement.className = 'Tobii__slider__slide'
+          sliderElement.className = 'Tobii__slider-slide'
           sliderElement.style.position = 'absolute'
           sliderElement.style.left = `${groups[newGroup].x * 100}%`
-          sliderElementContent.className = 'Tobii__slider__slide__content'
 
           // Create type elements
           supportedElements[index].init(el, sliderElementContent)
@@ -762,7 +761,7 @@ export default function Tobii (userOptions) {
     lastFocus.focus()
 
     // Don't forget to cleanup our current element
-    const container = groups[activeGroup].sliderElements[groups[activeGroup].currentIndex].querySelector('.Tobii__slider__slide__content')
+    const container = groups[activeGroup].sliderElements[groups[activeGroup].currentIndex].querySelector('[data-type]')
     const type = container.getAttribute('data-type')
 
     supportedElements[type].onLeave(container)
@@ -788,7 +787,7 @@ export default function Tobii (userOptions) {
       return
     }
 
-    const container = groups[activeGroup].sliderElements[index].querySelector('.Tobii__slider__slide__content')
+    const container = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
     const type = container.getAttribute('data-type')
 
     supportedElements[type].onPreload(container)
@@ -805,7 +804,7 @@ export default function Tobii (userOptions) {
       return
     }
 
-    const container = groups[activeGroup].sliderElements[index].querySelector('.Tobii__slider__slide__content')
+    const container = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
     const type = container.getAttribute('data-type')
 
     supportedElements[type].onLoad(container)
@@ -860,7 +859,7 @@ export default function Tobii (userOptions) {
       return
     }
 
-    const container = groups[activeGroup].sliderElements[index].querySelector('.Tobii__slider__slide__content')
+    const container = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
     const type = container.getAttribute('data-type')
 
     supportedElements[type].onLeave(container)
@@ -877,7 +876,7 @@ export default function Tobii (userOptions) {
       return
     }
 
-    const container = groups[activeGroup].sliderElements[index].querySelector('.Tobii__slider__slide__content')
+    const container = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
     const type = container.getAttribute('data-type')
 
     supportedElements[type].onCleanup(container)
