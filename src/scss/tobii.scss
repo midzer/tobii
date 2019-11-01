@@ -6,7 +6,7 @@
 .Tobii-zoom {
   border: 0;
   box-shadow: none;
-  display: block;
+  display: inline-block;
   position: relative;
   text-decoration: none;
 
@@ -16,12 +16,9 @@
   }
 
   &__icon {
-    align-items: center;
     background-color: $zoom-icon-background;
     bottom: 0;
     color: $zoom-icon-color;
-    display: flex;
-    justify-content: center;
     line-height: 1;
     position: absolute;
     right: 0;
@@ -107,7 +104,7 @@
 }
 
 /* Slide */
-.Tobii__slider__slide {
+.Tobii__slider-slide {
   align-items: center;
   display: flex;
   height: 100%;
@@ -116,9 +113,17 @@
 }
 
 /* Slide content */
-.Tobii__slider__slide__content {
+[data-type] {
+  max-height: $slide-max-height;
+  max-width: $slide-max-width;
+  overflow: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 
-
+  & iframe,
+  & video {
+    display: block;
+  }
 
   > figure {
     margin: 0;
@@ -137,8 +142,6 @@
       background-color: $caption-background;
       bottom: 0;
       color: $caption-color;
-      display: block;
-      left: 0;
       padding-bottom: em(4);
       padding-left: em(8);
       padding-right: em(8);
@@ -148,67 +151,39 @@
       width: 100%;
     }
   }
+}
 
-  &[data-type="html"] {
+[data-type="html"] {
+
+
+
+  & video {
+    cursor: auto;
     max-height: $slide-max-height;
     max-width: $slide-max-width;
-    overflow: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-
-
-    & video {
-      cursor: auto;
-      display: block !important;
-      max-height: $slide-max-height;
-      max-width: $slide-max-width;
-    }
   }
+}
 
-  &[data-type="iframe"] {
-    max-height: $slide-max-height;
-    max-width: $slide-max-width;
-    overflow: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-
-    /* Fix iframe scrolling on iOS */
-    -webkit-overflow-scrolling: touch;
-    transform: translate3d(0, 0, 0);
+[data-type="iframe"] {
+  /* Fix iframe scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  transform: translate3d(0, 0, 0);
 
 
-    & iframe {
-      display: block !important;
-      height: $slide-max-height;
-      width: $slide-max-width;
-    }
-  }
-
-  &[data-type="youtube"] {
-    max-height: $slide-max-height;
-    max-width: $slide-max-width;
-    overflow: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-
-
-    & iframe {
-      display: block !important;
-    }
+  & iframe {
+    height: $slide-max-height;
+    width: $slide-max-width;
   }
 }
 
 /* Buttons */
 .Tobii > button {
-  align-items: center;
   appearance: none;
   background-color: $button-background;
   border: em(1) solid transparent;
   color: $button-color;
   cursor: pointer;
-  display: flex;
   font: inherit;
-  justify-content: center;
   line-height: 1;
   margin: 0;
   opacity: 0.5;
@@ -290,12 +265,9 @@
 
 /* Counter */
 .Tobii__counter {
-  align-items: center;
   background-color: $counter-background;
   color: $counter-color;
-  display: flex;
   font-size: em(20);
-  justify-content: center;
   left: em(18);
   line-height: 1;
   position: absolute;
