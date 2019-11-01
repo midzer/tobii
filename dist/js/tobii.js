@@ -140,7 +140,7 @@
             }
 
             if (figcaption.textContent) {
-              figcaption.id = 'Tobii-figcaption-' + figcaptionId;
+              figcaption.id = "Tobii-figcaption-" + figcaptionId;
               figure.appendChild(figcaption);
               image.setAttribute('aria-labelledby', figcaption.id);
               ++figcaptionId;
@@ -198,7 +198,7 @@
           var target = document.querySelector(targetSelector);
 
           if (!target) {
-            throw new Error('Ups, I can\'t find the target ' + targetSelector + '.');
+            throw new Error("Ups, I can't find the target " + targetSelector + ".");
           } // Add content to container
 
 
@@ -266,11 +266,11 @@
           iframe.setAttribute('data-src', href);
 
           if (el.getAttribute('data-width')) {
-            iframe.style.maxWidth = el.getAttribute('data-width') + 'px';
+            iframe.style.maxWidth = el.getAttribute('data-width') + "px";
           }
 
           if (el.getAttribute('data-height')) {
-            iframe.style.maxHeight = el.getAttribute('data-height') + 'px';
+            iframe.style.maxHeight = el.getAttribute('data-height') + "px";
           } // Add iframe to container
 
 
@@ -370,7 +370,7 @@
       var els = document.querySelectorAll(config.selector);
 
       if (!els) {
-        throw new Error('Ups, I can\'t find the selector ' + config.selector + '.');
+        throw new Error("Ups, I can't find the selector " + config.selector + ".");
       } // Execute a few things once per element
 
 
@@ -594,7 +594,7 @@
             var sliderElementContent = document.createElement('div');
             sliderElement.className = 'Tobii__slider__slide';
             sliderElement.style.position = 'absolute';
-            sliderElement.style.left = groups[newGroup].x * 100 + '%';
+            sliderElement.style.left = groups[newGroup].x * 100 + "%";
             sliderElementContent.className = 'Tobii__slider__slide__content'; // Create type elements
 
             supportedElements[index].init(el, sliderElementContent); // Add slide content container to slider element
@@ -630,12 +630,12 @@
         }
 
         if (index === groups[activeGroup].currentIndex) {
-          throw new Error('Ups, slide ' + index + ' is already selected.');
+          throw new Error("Ups, slide " + index + " is already selected.");
         }
       }
 
       if (index === -1 || index >= groups[activeGroup].elementsLength) {
-        throw new Error('Ups, I can\'t find slide ' + index + '.');
+        throw new Error("Ups, I can't find slide " + index + ".");
       }
 
       if (config.hideScrollbar) {
@@ -817,8 +817,8 @@
 
     var updateOffset = function updateOffset() {
       activeGroup = activeGroup !== null ? activeGroup : newGroup;
-      offset = -groups[activeGroup].currentIndex * window.innerWidth;
-      groups[activeGroup].slider.style.transform = 'translate3d(' + offset + 'px, 0, 0)';
+      offset = -groups[activeGroup].currentIndex * lightbox.innerWidth;
+      groups[activeGroup].slider.style.transform = "translate3d(" + offset + "px, 0, 0)";
       offsetTmp = offset;
     };
     /**
@@ -828,7 +828,7 @@
 
 
     var updateCounter = function updateCounter() {
-      counter.textContent = groups[activeGroup].currentIndex + 1 + '/' + groups[activeGroup].elementsLength;
+      counter.textContent = groups[activeGroup].currentIndex + 1 + "/" + groups[activeGroup].elementsLength;
     };
     /**
      * Set focus to the next slide
@@ -1096,12 +1096,12 @@
     var doSwipe = function doSwipe() {
       if (Math.abs(drag.startX - drag.endX) > 0 && !isDraggingY && config.swipeClose) {
         // Horizontal swipe
-        groups[activeGroup].slider.style.transform = 'translate3d(' + (offsetTmp - Math.round(drag.startX - drag.endX)) + 'px, 0, 0)';
+        groups[activeGroup].slider.style.transform = "translate3d(" + (offsetTmp - Math.round(drag.startX - drag.endX)) + "px, 0, 0)";
         isDraggingX = true;
         isDraggingY = false;
       } else if (Math.abs(drag.startY - drag.endY) > 0 && !isDraggingX) {
         // Vertical swipe
-        groups[activeGroup].slider.style.transform = 'translate3d(' + (offsetTmp + 'px, -' + Math.round(drag.startY - drag.endY)) + 'px, 0)';
+        groups[activeGroup].slider.style.transform = "translate3d(" + offsetTmp + "px, -" + Math.round(drag.startY - drag.endY) + "px, 0)";
         isDraggingX = false;
         isDraggingY = true;
       }
@@ -1330,7 +1330,7 @@
       }
 
       if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {
-        throw new Error('Ups, I don\'t have a group called "' + name + '".');
+        throw new Error("Ups, I don't have a group called \"" + name + "\".");
       }
 
       activeGroup = name;
