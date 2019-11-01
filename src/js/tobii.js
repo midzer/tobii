@@ -890,7 +890,7 @@ export default function Tobii (userOptions) {
   const updateOffset = function updateOffset () {
     activeGroup = activeGroup !== null ? activeGroup : newGroup
 
-    offset = -groups[activeGroup].currentIndex * lightbox.innerWidth
+    offset = -groups[activeGroup].currentIndex * lightbox.offsetWidth
 
     groups[activeGroup].slider.style.transform = `translate3d(${offset}px, 0, 0)`
     offsetTmp = offset
