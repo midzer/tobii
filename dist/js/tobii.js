@@ -118,8 +118,9 @@
           var figcaption = document.createElement('figcaption');
           var image = document.createElement('img');
           var thumbnail = el.querySelector('img');
-          var loadingIndicator = document.createElement('div');
-          image.style.opacity = '0';
+          var loadingIndicator = document.createElement('div'); // Hide figure until the image is loaded
+
+          figure.style.opacity = '0';
 
           if (thumbnail) {
             image.alt = thumbnail.alt || '';
@@ -131,8 +132,6 @@
           figure.appendChild(image); // Create figcaption
 
           if (config.captions) {
-            figcaption.style.opacity = '0';
-
             if (config.captionsSelector === 'self' && el.getAttribute(config.captionAttribute)) {
               figcaption.textContent = el.getAttribute(config.captionAttribute);
             } else if (config.captionsSelector === 'img' && thumbnail && thumbnail.getAttribute(config.captionAttribute)) {
@@ -169,16 +168,12 @@
             return;
           }
 
-          var figcaption = container.querySelector('figcaption');
+          var figure = container.querySelector('figure');
           var loadingIndicator = container.querySelector('.Tobii-loader');
 
           image.onload = function () {
             container.removeChild(loadingIndicator);
-            image.style.opacity = '1';
-
-            if (figcaption) {
-              figcaption.style.opacity = '1';
-            }
+            figure.style.opacity = '1';
           };
 
           image.setAttribute('src', image.getAttribute('data-src'));
