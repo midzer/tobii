@@ -115,7 +115,8 @@ export default function Tobii (userOptions) {
         const thumbnail = el.querySelector('img')
         const loadingIndicator = document.createElement('div')
 
-        image.style.opacity = '0'
+        // Hide figure until the image is loaded
+        figure.style.opacity = '0'
 
         if (thumbnail) {
           image.alt = thumbnail.alt || ''
@@ -129,8 +130,6 @@ export default function Tobii (userOptions) {
 
         // Create figcaption
         if (config.captions) {
-          figcaption.style.opacity = '0'
-
           if (config.captionsSelector === 'self' && el.getAttribute(config.captionAttribute)) {
             figcaption.textContent = el.getAttribute(config.captionAttribute)
           } else if (config.captionsSelector === 'img' && thumbnail && thumbnail.getAttribute(config.captionAttribute)) {
@@ -174,16 +173,12 @@ export default function Tobii (userOptions) {
           return
         }
 
-        const figcaption = container.querySelector('figcaption')
+        const figure = container.querySelector('figure')
         const loadingIndicator = container.querySelector('.Tobii-loader')
 
         image.onload = () => {
           container.removeChild(loadingIndicator)
-          image.style.opacity = '1'
-
-          if (figcaption) {
-            figcaption.style.opacity = '1'
-          }
+          figure.style.opacity = '1'
         }
 
         image.setAttribute('src', image.getAttribute('data-src'))
