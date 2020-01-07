@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.Tobii = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   /**
    * Tobii
@@ -549,17 +549,7 @@
 
       counter = document.createElement('div');
       counter.className = 'Tobii__counter';
-      lightbox.appendChild(counter); // Resize event using requestAnimationFrame
-
-      browserWindow.addEventListener('resize', function () {
-        if (!resizeTicking) {
-          resizeTicking = true;
-          browserWindow.requestAnimationFrame(function () {
-            updateOffset();
-            resizeTicking = false;
-          });
-        }
-      });
+      lightbox.appendChild(counter);
       document.body.appendChild(lightbox);
     };
     /**
@@ -910,12 +900,27 @@
       }
     };
     /**
+     * Resize event using requestAnimationFrame
+     *
+     */
+
+
+    var resizeHandler = function resizeHandler() {
+      if (!resizeTicking) {
+        resizeTicking = true;
+        browserWindow.requestAnimationFrame(function () {
+          updateOffset();
+          resizeTicking = false;
+        });
+      }
+    };
+    /**
      * Click event handler to trigger Tobii
      *
      */
 
 
-    var triggerTobii = function click(event) {
+    var triggerTobii = function triggerTobii(event) {
       event.preventDefault();
       activeGroup = getGroupName(this);
       open(groups[activeGroup].gallery.indexOf(this));
@@ -1108,9 +1113,11 @@
 
     var bindEvents = function bindEvents() {
       if (config.keyboard) {
-        document.addEventListener('keydown', keydownHandler);
-      } // Click event
+        browserWindow.addEventListener('keydown', keydownHandler);
+      } // Resize event
 
+
+      browserWindow.addEventListener('resize', resizeHandler); // Click event
 
       lightbox.addEventListener('click', clickHandler);
 
@@ -1136,9 +1143,11 @@
 
     var unbindEvents = function unbindEvents() {
       if (config.keyboard) {
-        document.removeEventListener('keydown', keydownHandler);
-      } // Click event
+        browserWindow.removeEventListener('keydown', keydownHandler);
+      } // Resize event
 
+
+      browserWindow.removeEventListener('resize', resizeHandler); // Click event
 
       lightbox.removeEventListener('click', clickHandler);
 
@@ -1348,4 +1357,4 @@
 
   return Tobii;
 
-}));
+})));

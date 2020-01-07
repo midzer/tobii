@@ -609,19 +609,6 @@ export default function Tobii (userOptions) {
     counter.className = 'Tobii__counter'
     lightbox.appendChild(counter)
 
-    // Resize event using requestAnimationFrame
-    browserWindow.addEventListener('resize', () => {
-      if (!resizeTicking) {
-        resizeTicking = true
-
-        browserWindow.requestAnimationFrame(() => {
-          updateOffset()
-
-          resizeTicking = false
-        })
-      }
-    })
-
     document.body.appendChild(lightbox)
   }
 
@@ -981,10 +968,26 @@ export default function Tobii (userOptions) {
   }
 
   /**
+   * Resize event using requestAnimationFrame
+   *
+   */
+  const resizeHandler = function resizeHandler () {
+    if (!resizeTicking) {
+      resizeTicking = true
+
+      browserWindow.requestAnimationFrame(() => {
+        updateOffset()
+
+        resizeTicking = false
+      })
+    }
+  }
+
+  /**
    * Click event handler to trigger Tobii
    *
    */
-  const triggerTobii = function click (event) {
+  const triggerTobii = function triggerTobii (event) {
     event.preventDefault()
 
     activeGroup = getGroupName(this)
@@ -1186,8 +1189,11 @@ export default function Tobii (userOptions) {
    */
   const bindEvents = function bindEvents () {
     if (config.keyboard) {
-      document.addEventListener('keydown', keydownHandler)
+      browserWindow.addEventListener('keydown', keydownHandler)
     }
+
+    // Resize event
+    browserWindow.addEventListener('resize', resizeHandler)
 
     // Click event
     lightbox.addEventListener('click', clickHandler)
@@ -1213,8 +1219,11 @@ export default function Tobii (userOptions) {
    */
   const unbindEvents = function unbindEvents () {
     if (config.keyboard) {
-      document.removeEventListener('keydown', keydownHandler)
+      browserWindow.removeEventListener('keydown', keydownHandler)
     }
+
+    // Resize event
+    browserWindow.removeEventListener('resize', resizeHandler)
 
     // Click event
     lightbox.removeEventListener('click', clickHandler)
