@@ -3,7 +3,7 @@
   'functions';
 
 /* Link */
-.Tobii-zoom {
+.tobii-zoom {
   border: 0;
   box-shadow: none;
   display: inline-block;
@@ -43,12 +43,12 @@
 }
 
 /* Hide scrollbar if lightbox is displayed */
-.Tobii-is-open {
+.tobii-is-open {
   overflow-y: hidden;
 }
 
 /* Lightbox */
-.Tobii {
+.tobii {
   background-color: $lightbox-background;
   bottom: 0;
   box-sizing: border-box;
@@ -75,7 +75,7 @@
 }
 
 /* Slider */
-.Tobii__slider {
+.tobii__slider {
   bottom: 0;
   left: 0;
   position: absolute;
@@ -84,7 +84,7 @@
   will-change: transform;
 
 
-  &:not(&--is-dragging) {
+  &--animate:not(&--is-dragging) {
     transition-duration: $transition-duration;
     transition-property: transform;
     transition-timing-function: $transition-timing-function;
@@ -104,7 +104,7 @@
 }
 
 /* Slide */
-.Tobii__slider-slide {
+.tobii__slider-slide {
   align-items: center;
   display: flex;
   height: 100%;
@@ -177,7 +177,7 @@
 }
 
 /* Buttons */
-.Tobii > button {
+.tobii > button {
   appearance: none;
   background-color: $button-background;
   border: em(1) solid transparent;
@@ -226,8 +226,8 @@
     }
   }
 
-  &.Tobii__prev,
-  &.Tobii__next {
+  &.tobii__prev,
+  &.tobii__next {
     top: 50%;
     top: calc(50% - #{em(40)});
 
@@ -238,15 +238,15 @@
     }
   }
 
-  &.Tobii__prev {
+  &.tobii__prev {
     left: 0;
   }
 
-  &.Tobii__next {
+  &.tobii__next {
     right: 0;
   }
 
-  &.Tobii__close {
+  &.tobii__close {
     right: em(5);
     top: em(18);
 
@@ -264,7 +264,7 @@
 }
 
 /* Counter */
-.Tobii__counter {
+.tobii__counter {
   background-color: $counter-background;
   color: $counter-color;
   font-size: em(20);
@@ -281,7 +281,7 @@
 }
 
 /* Loader */
-.Tobii-loader {
+.tobii-loader {
   display: inline-block;
   height: em(100);
   left: calc(50% - #{em(50)});

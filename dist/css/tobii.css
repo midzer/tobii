@@ -1,5 +1,5 @@
 /* Link */
-.Tobii-zoom {
+.tobii-zoom {
   border: 0;
   box-shadow: none;
   display: inline-block;
@@ -7,11 +7,11 @@
   text-decoration: none;
 }
 
-.Tobii-zoom img {
+.tobii-zoom img {
   display: block;
 }
 
-.Tobii-zoom__icon {
+.tobii-zoom__icon {
   background-color: rgba(26, 42, 58, 0.94);
   bottom: 0;
   color: #fff;
@@ -20,7 +20,7 @@
   right: 0;
 }
 
-.Tobii-zoom__icon svg {
+.tobii-zoom__icon svg {
   color: #fff;
   fill: none;
   height: 1.11111em;
@@ -37,12 +37,12 @@
 }
 
 /* Hide scrollbar if lightbox is displayed */
-.Tobii-is-open {
+.tobii-is-open {
   overflow-y: hidden;
 }
 
 /* Lightbox */
-.Tobii {
+.tobii {
   background-color: rgba(26, 42, 58, 0.94);
   bottom: 0;
   box-sizing: border-box;
@@ -57,18 +57,18 @@
   z-index: 1337;
 }
 
-.Tobii[aria-hidden="true"] {
+.tobii[aria-hidden="true"] {
   display: none;
 }
 
-.Tobii *,
-.Tobii *::before,
-.Tobii *::after {
+.tobii *,
+.tobii *::before,
+.tobii *::after {
   box-sizing: inherit;
 }
 
 /* Slider */
-.Tobii__slider {
+.tobii__slider {
   bottom: 0;
   left: 0;
   position: absolute;
@@ -77,30 +77,30 @@
   will-change: transform;
 }
 
-.Tobii__slider:not(.Tobii__slider--is-dragging) {
+.tobii__slider--animate:not(.tobii__slider--is-dragging) {
   transition-duration: 0.3s;
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  .Tobii__slider:not(.Tobii__slider--is-dragging) {
+  .tobii__slider--animate:not(.tobii__slider--is-dragging) {
     transition: none;
   }
 }
 
-.Tobii__slider--is-draggable .Tobii__slider__slide__content {
+.tobii__slider--is-draggable .tobii__slider__slide__content {
   cursor: -webkit-grab;
   cursor: grab;
 }
 
-.Tobii__slider--is-dragging .Tobii__slider__slide__content {
+.tobii__slider--is-dragging .tobii__slider__slide__content {
   cursor: -webkit-grabbing;
   cursor: grabbing;
 }
 
 /* Slide */
-.Tobii__slider-slide {
+.tobii__slider-slide {
   align-items: center;
   display: flex;
   height: 100%;
@@ -166,7 +166,7 @@
 }
 
 /* Buttons */
-.Tobii > button {
+.tobii > button {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -192,13 +192,13 @@
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  .Tobii > button {
+  .tobii > button {
     transition: none;
     will-change: opacity;
   }
 }
 
-.Tobii > button svg {
+.tobii > button svg {
   pointer-events: none;
   stroke: #fff;
   stroke-width: 1;
@@ -208,51 +208,51 @@
   color: #fff;
 }
 
-.Tobii > button:active, .Tobii > button:focus, .Tobii > button:hover {
+.tobii > button:active, .tobii > button:focus, .tobii > button:hover {
   opacity: 1;
   transform: scale(0.84);
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  .Tobii > button:active, .Tobii > button:focus, .Tobii > button:hover {
+  .tobii > button:active, .tobii > button:focus, .tobii > button:hover {
     transform: none;
   }
 }
 
-.Tobii > button.Tobii__prev, .Tobii > button.Tobii__next {
+.tobii > button.tobii__prev, .tobii > button.tobii__next {
   top: 50%;
   top: calc(50% - 2.22222em);
 }
 
-.Tobii > button.Tobii__prev svg, .Tobii > button.Tobii__next svg {
+.tobii > button.tobii__prev svg, .tobii > button.tobii__next svg {
   height: 3.88889em;
   width: 3.88889em;
 }
 
-.Tobii > button.Tobii__prev {
+.tobii > button.tobii__prev {
   left: 0;
 }
 
-.Tobii > button.Tobii__next {
+.tobii > button.tobii__next {
   right: 0;
 }
 
-.Tobii > button.Tobii__close {
+.tobii > button.tobii__close {
   right: 0.27778em;
   top: 1em;
 }
 
-.Tobii > button.Tobii__close svg {
+.tobii > button.tobii__close svg {
   height: 3.33333em;
   width: 3.33333em;
 }
 
-.Tobii > button:disabled, .Tobii > button[aria-hidden="true"] {
+.tobii > button:disabled, .tobii > button[aria-hidden="true"] {
   display: none;
 }
 
 /* Counter */
-.Tobii__counter {
+.tobii__counter {
   background-color: transparent;
   color: #fff;
   font-size: 1.11111em;
@@ -263,12 +263,12 @@
   z-index: 1;
 }
 
-.Tobii__counter[aria-hidden="true"] {
+.tobii__counter[aria-hidden="true"] {
   display: none;
 }
 
 /* Loader */
-.Tobii-loader {
+.tobii-loader {
   display: inline-block;
   height: 5.55556em;
   left: calc(50% - 2.77778em);
@@ -277,7 +277,7 @@
   width: 5.55556em;
 }
 
-.Tobii-loader::before {
+.tobii-loader::before {
   animation: spin 1s infinite;
   border-radius: 100%;
   border: 0.22222em solid #949ba3;
