@@ -5,12 +5,12 @@
   "main": "dist/js/tobii.js",
   "style": "dist/css/tobii.css",
   "devDependencies": {
-    "@babel/core": "^7.7.7",
-    "@babel/preset-env": "^7.7.7",
-    "@rollup/plugin-commonjs": "^11.0.1",
-    "@rollup/plugin-node-resolve": "^6.1.0",
-    "autoprefixer": "^9.7.3",
-    "rollup": "^1.28.0",
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "autoprefixer": "^9.7.4",
+    "rollup": "^1.32.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-babel-minify": "^9.1.1",
     "standard": "^14.3.1"
