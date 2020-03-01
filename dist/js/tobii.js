@@ -2,13 +2,13 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.Tobii = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   /**
    * Tobii
    *
    * @author rqrauhvmra
-   * @version 2.0.0
+   * @version 2.0.0-alpha
    * @url https://github.com/rqrauhvmra/Tobii
    *
    * MIT License
@@ -1348,4 +1348,4 @@
 
   return Tobii;
 
-}));
+})));
