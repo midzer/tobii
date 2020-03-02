@@ -1024,7 +1024,7 @@ export default function Tobii (userOptions) {
       prev()
     } else if (event.target === nextButton) {
       next()
-    } else if (event.target === closeButton || (event.target.className === 'tobii__slider-slide' && config.docClose)) {
+    } else if (event.target === closeButton || (event.target.classList.contains('tobii__slider-slide') && config.docClose)) {
       close()
     }
 
