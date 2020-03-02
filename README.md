@@ -276,7 +276,8 @@ The following options are available:
 | `currentSlide()` | Return the current slide index. |
 | `selectGroup()` | Select a specific group. |
 | `currentGroup()` | Return the current group. |
-| `destroy()` | Destroy Tobii. Optional `callback` (function). |
+| `reset(callback)` | Reset Tobii. Optional `callback` (function). |
+| `destroy(callback)` | Destroy Tobii. Optional `callback` (function). |
 
 ## Browser support
 

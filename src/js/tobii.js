@@ -1352,11 +1352,11 @@ export default function Tobii (userOptions) {
   }
 
   /**
-   * Destroy Tobii
+   * Reset Tobii
    *
-   * @param {function} callback - Optional callback to call after destroy
+   * @param {function} callback - Optional callback to call after reset
    */
-  const destroy = function destroy (callback) {
+  const reset = function reset (callback) {
     if (isOpen()) {
       close()
     }
@@ -1372,13 +1372,26 @@ export default function Tobii (userOptions) {
       })
     })
 
-    lightbox.parentNode.removeChild(lightbox)
-
     groups = {}
     newGroup = activeGroup = null
     figcaptionId = 0
 
     // TODO
+
+    if (callback) {
+      callback.call(this)
+    }
+  }
+
+  /**
+   * Destroy Tobii
+   *
+   * @param {function} callback - Optional callback to call after destroy
+   */
+  const destroy = function destroy (callback) {
+    reset()
+
+    lightbox.parentNode.removeChild(lightbox)
 
     if (callback) {
       callback.call(this)
@@ -1455,6 +1468,7 @@ export default function Tobii (userOptions) {
     close: close,
     add: checkDependencies,
     remove: remove,
+    reset: reset,
     destroy: destroy,
     isOpen: isOpen,
     currentSlide: currentSlide,
