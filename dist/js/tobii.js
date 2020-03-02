@@ -18,8 +18,19 @@
      * Global variables
      *
      */
+    var BROWSER_WINDOW = window;
+    var FOCUSABLE_ELEMENTS = ['a[href]:not([tabindex^="-"]):not([inert])', 'area[href]:not([tabindex^="-"]):not([inert])', 'input:not([disabled]):not([inert])', 'select:not([disabled]):not([inert])', 'textarea:not([disabled]):not([inert])', 'button:not([disabled]):not([inert])', 'iframe:not([tabindex^="-"]):not([inert])', 'audio:not([tabindex^="-"]):not([inert])', 'video:not([tabindex^="-"]):not([inert])', '[contenteditable]:not([tabindex^="-"]):not([inert])', '[tabindex]:not([tabindex^="-"]):not([inert])'];
+    var WAITING_ELS = [];
+    var GROUP_ATTS = {
+      gallery: [],
+      slider: null,
+      sliderElements: [],
+      elementsLength: 0,
+      currentIndex: 0,
+      x: 0
+    };
+    var PLAYER = [];
     var config = {};
-    var browserWindow = window;
     var figcaptionId = 0;
     var lightbox = null;
     var prevButton = null;
@@ -31,23 +42,11 @@
     var isDraggingY = false;
     var pointerDown = false;
     var lastFocus = null;
-    var firstFocusableEl = null;
-    var lastFocusableEl = null;
     var offset = null;
     var offsetTmp = null;
     var resizeTicking = false;
     var isYouTubeDependencieLoaded = false;
-    var waitingEls = [];
-    var player = [];
     var playerId = 0;
-    var groupAtts = {
-      gallery: [],
-      slider: null,
-      sliderElements: [],
-      elementsLength: 0,
-      currentIndex: 0,
-      x: 0
-    };
     var groups = {};
     var newGroup = null;
     var activeGroup = null;
@@ -60,7 +59,7 @@
 
     var mergeOptions = function mergeOptions(userOptions) {
       // Default options
-      var options = {
+      var OPTIONS = {
         selector: '.lightbox',
         captions: true,
         captionsSelector: 'img',
@@ -96,11 +95,11 @@
 
       if (userOptions) {
         Object.keys(userOptions).forEach(function (key) {
-          options[key] = userOptions[key];
+          OPTIONS[key] = userOptions[key];
         });
       }
 
-      return options;
+      return OPTIONS;
     };
     /**
      * Types - you can add new type to support something new
@@ -108,76 +107,76 @@
      */
 
 
-    var supportedElements = {
+    var SUPPORTED_ELEMENTS = {
       image: {
         checkSupport: function checkSupport(el) {
           return !el.hasAttribute('data-type') && el.href.match(/\.(png|jpe?g|tiff|tif|gif|bmp|webp|svg|ico)(\?.*)?$/i);
         },
         init: function init(el, container) {
-          var figure = document.createElement('figure');
-          var figcaption = document.createElement('figcaption');
-          var image = document.createElement('img');
-          var thumbnail = el.querySelector('img');
-          var loadingIndicator = document.createElement('div'); // Hide figure until the image is loaded
+          var FIGURE = document.createElement('figure');
+          var FIGCAPTION = document.createElement('figcaption');
+          var IMAGE = document.createElement('img');
+          var THUMBNAIL = el.querySelector('img');
+          var LOADING_INDICATOR = document.createElement('div'); // Hide figure until the image is loaded
 
-          figure.style.opacity = '0';
+          FIGURE.style.opacity = '0';
 
-          if (thumbnail) {
-            image.alt = thumbnail.alt || '';
+          if (THUMBNAIL) {
+            IMAGE.alt = THUMBNAIL.alt || '';
           }
 
-          image.setAttribute('src', '');
-          image.setAttribute('data-src', el.href); // Add image to figure
+          IMAGE.setAttribute('src', '');
+          IMAGE.setAttribute('data-src', el.href); // Add image to figure
 
-          figure.appendChild(image); // Create figcaption
+          FIGURE.appendChild(IMAGE); // Create figcaption
 
           if (config.captions) {
             if (config.captionsSelector === 'self' && el.getAttribute(config.captionAttribute)) {
-              figcaption.textContent = el.getAttribute(config.captionAttribute);
-            } else if (config.captionsSelector === 'img' && thumbnail && thumbnail.getAttribute(config.captionAttribute)) {
-              figcaption.textContent = thumbnail.getAttribute(config.captionAttribute);
+              FIGCAPTION.textContent = el.getAttribute(config.captionAttribute);
+            } else if (config.captionsSelector === 'img' && THUMBNAIL && THUMBNAIL.getAttribute(config.captionAttribute)) {
+              FIGCAPTION.textContent = THUMBNAIL.getAttribute(config.captionAttribute);
             }
 
-            if (figcaption.textContent) {
-              figcaption.id = "tobii-figcaption-" + figcaptionId;
-              figure.appendChild(figcaption);
-              image.setAttribute('aria-labelledby', figcaption.id);
+            if (FIGCAPTION.textContent) {
+              FIGCAPTION.id = "tobii-figcaption-" + figcaptionId;
+              FIGURE.appendChild(FIGCAPTION);
+              IMAGE.setAttribute('aria-labelledby', FIGCAPTION.id);
               ++figcaptionId;
             }
           } // Add figure to container
 
 
-          container.appendChild(figure); // Create loading indicator
+          container.appendChild(FIGURE); // Create loading indicator
 
-          loadingIndicator.className = 'tobii-loader';
-          loadingIndicator.setAttribute('role', 'progressbar');
-          loadingIndicator.setAttribute('aria-label', config.loadingIndicatorLabel); // Add loading indicator to container
+          LOADING_INDICATOR.className = 'tobii-loader';
+          LOADING_INDICATOR.setAttribute('role', 'progressbar');
+          LOADING_INDICATOR.setAttribute('aria-label', config.loadingIndicatorLabel); // Add loading indicator to container
 
-          container.appendChild(loadingIndicator); // Register type
+          container.appendChild(LOADING_INDICATOR); // Register type
 
           container.setAttribute('data-type', 'image');
         },
         onPreload: function onPreload(container) {
           // Same as preload
-          supportedElements.image.onLoad(container);
+          SUPPORTED_ELEMENTS.image.onLoad(container);
         },
         onLoad: function onLoad(container) {
-          var image = container.querySelector('img');
+          var IMAGE = container.querySelector('img');
 
-          if (!image.hasAttribute('data-src')) {
+          if (!IMAGE.hasAttribute('data-src')) {
             return;
           }
 
-          var figure = container.querySelector('figure');
-          var loadingIndicator = container.querySelector('.tobii-loader');
+          var FIGURE = container.querySelector('figure');
+          var LOADING_INDICATOR = container.querySelector('.tobii-loader');
 
-          image.onload = function () {
-            container.removeChild(loadingIndicator);
-            figure.style.opacity = '1';
+          IMAGE.onload = function () {
+            container.removeChild(LOADING_INDICATOR);
+            FIGURE.style.opacity = '1';
           };
 
-          image.setAttribute('src', image.getAttribute('data-src'));
-          image.removeAttribute('data-src');
+          IMAGE.setAttribute('src', IMAGE.getAttribute('data-src'));
+          IMAGE.removeAttribute('data-src');
         },
         onLeave: function onLeave(container) {// Nothing
         },
@@ -189,62 +188,62 @@
           return checkType(el, 'html');
         },
         init: function init(el, container) {
-          var targetSelector = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target');
-          var target = document.querySelector(targetSelector);
+          var TARGET_SELECTOR = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target');
+          var TARGET = document.querySelector(TARGET_SELECTOR);
 
-          if (!target) {
-            throw new Error("Ups, I can't find the target " + targetSelector + ".");
+          if (!TARGET) {
+            throw new Error("Ups, I can't find the target " + TARGET_SELECTOR + ".");
           } // Add content to container
 
 
-          container.appendChild(target); // Register type
+          container.appendChild(TARGET); // Register type
 
           container.setAttribute('data-type', 'html');
         },
         onPreload: function onPreload(container) {// Nothing
         },
         onLoad: function onLoad(container) {
-          var video = container.querySelector('video');
+          var VIDEO = container.querySelector('video');
 
-          if (video) {
-            if (video.hasAttribute('data-time') && video.readyState > 0) {
+          if (VIDEO) {
+            if (VIDEO.hasAttribute('data-time') && VIDEO.readyState > 0) {
               // Continue where video was stopped
-              video.currentTime = video.getAttribute('data-time');
+              VIDEO.currentTime = VIDEO.getAttribute('data-time');
             }
 
             if (config.autoplayVideo) {
               // Start playback (and loading if necessary)
-              video.play();
+              VIDEO.play();
             }
           }
         },
         onLeave: function onLeave(container) {
-          var video = container.querySelector('video');
+          var VIDEO = container.querySelector('video');
 
-          if (video) {
-            if (!video.paused) {
+          if (VIDEO) {
+            if (!VIDEO.paused) {
               // Stop if video is playing
-              video.pause();
+              VIDEO.pause();
             } // Backup currentTime (needed for revisit)
 
 
-            if (video.readyState > 0) {
-              video.setAttribute('data-time', video.currentTime);
+            if (VIDEO.readyState > 0) {
+              VIDEO.setAttribute('data-time', VIDEO.currentTime);
             }
           }
         },
         onCleanup: function onCleanup(container) {
-          var video = container.querySelector('video');
+          var VIDEO = container.querySelector('video');
 
-          if (video) {
-            if (video.readyState > 0 && video.readyState < 3 && video.duration !== video.currentTime) {
+          if (VIDEO) {
+            if (VIDEO.readyState > 0 && VIDEO.readyState < 3 && VIDEO.duration !== VIDEO.currentTime) {
               // Some data has been loaded but not the whole package.
               // In order to save bandwidth, stop downloading as soon as possible.
-              var videoClone = video.cloneNode(true);
-              removeSources(video);
-              video.load();
-              video.parentNode.removeChild(video);
-              container.appendChild(videoClone);
+              var VIDEO_CLONE = VIDEO.cloneNode(true);
+              removeSources(VIDEO);
+              VIDEO.load();
+              VIDEO.parentNode.removeChild(VIDEO);
+              container.appendChild(VIDEO_CLONE);
             }
           }
         }
@@ -254,30 +253,30 @@
           return checkType(el, 'iframe');
         },
         init: function init(el, container) {
-          var iframe = document.createElement('iframe');
-          var href = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target');
-          iframe.setAttribute('frameborder', '0');
-          iframe.setAttribute('src', '');
-          iframe.setAttribute('data-src', href);
+          var IFRAME = document.createElement('iframe');
+          var HREF = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target');
+          IFRAME.setAttribute('frameborder', '0');
+          IFRAME.setAttribute('src', '');
+          IFRAME.setAttribute('data-src', HREF);
 
           if (el.getAttribute('data-width')) {
-            iframe.style.maxWidth = el.getAttribute('data-width') + "px";
+            IFRAME.style.maxWidth = el.getAttribute('data-width') + "px";
           }
 
           if (el.getAttribute('data-height')) {
-            iframe.style.maxHeight = el.getAttribute('data-height') + "px";
+            IFRAME.style.maxHeight = el.getAttribute('data-height') + "px";
           } // Add iframe to container
 
 
-          container.appendChild(iframe); // Register type
+          container.appendChild(IFRAME); // Register type
 
           container.setAttribute('data-type', 'iframe');
         },
         onPreload: function onPreload(container) {// Nothing
         },
         onLoad: function onLoad(container) {
-          var iframe = container.querySelector('iframe');
-          iframe.setAttribute('src', iframe.getAttribute('data-src'));
+          var IFRAME = container.querySelector('iframe');
+          IFRAME.setAttribute('src', IFRAME.getAttribute('data-src'));
         },
         onLeave: function onLeave(container) {// Nothing
         },
@@ -289,10 +288,10 @@
           return checkType(el, 'youtube');
         },
         init: function init(el, container) {
-          var iframePlaceholder = document.createElement('div'); // Add iframePlaceholder to container
+          var IFRAME_PLACEHOLDER = document.createElement('div'); // Add iframePlaceholder to container
 
-          container.appendChild(iframePlaceholder);
-          player[playerId] = new window.YT.Player(iframePlaceholder, {
+          container.appendChild(IFRAME_PLACEHOLDER);
+          PLAYER[playerId] = new window.YT.Player(IFRAME_PLACEHOLDER, {
             host: 'https://www.youtube-nocookie.com',
             height: el.getAttribute('data-height') || '360',
             width: el.getAttribute('data-width') || '640',
@@ -313,17 +312,17 @@
         },
         onLoad: function onLoad(container) {
           if (config.autoplayVideo) {
-            player[container.getAttribute('data-player')].playVideo();
+            PLAYER[container.getAttribute('data-player')].playVideo();
           }
         },
         onLeave: function onLeave(container) {
-          if (player[container.getAttribute('data-player')].getPlayerState() === 1) {
-            player[container.getAttribute('data-player')].pauseVideo();
+          if (PLAYER[container.getAttribute('data-player')].getPlayerState() === 1) {
+            PLAYER[container.getAttribute('data-player')].pauseVideo();
           }
         },
         onCleanup: function onCleanup(container) {
-          if (player[container.getAttribute('data-player')].getPlayerState() === 1) {
-            player[container.getAttribute('data-player')].pauseVideo();
+          if (PLAYER[container.getAttribute('data-player')].getPlayerState() === 1) {
+            PLAYER[container.getAttribute('data-player')].pauseVideo();
           }
         }
       }
@@ -336,15 +335,15 @@
 
     if (!Object.entries) {
       Object.entries = function (obj) {
-        var ownProps = Object.keys(obj);
-        var i = ownProps.length;
-        var resArray = new Array(i);
+        var OWN_PROPS = Object.keys(obj);
+        var i = OWN_PROPS.length;
+        var RES_ARRAY = new Array(i);
 
         while (i--) {
-          resArray[i] = [ownProps[i], obj[ownProps[i]]];
+          RES_ARRAY[i] = [OWN_PROPS[i], obj[OWN_PROPS[i]]];
         }
 
-        return resArray;
+        return RES_ARRAY;
       };
     }
     /**
@@ -362,14 +361,14 @@
       } // Get a list of all elements within the document
 
 
-      var els = document.querySelectorAll(config.selector);
+      var ELS = document.querySelectorAll(config.selector);
 
-      if (!els) {
+      if (!ELS) {
         throw new Error("Ups, I can't find the selector " + config.selector + ".");
       } // Execute a few things once per element
 
 
-      Array.prototype.forEach.call(els, function (el) {
+      Array.prototype.forEach.call(ELS, function (el) {
         checkDependencies(el);
       });
     };
@@ -385,19 +384,19 @@
       // Check if there is a YouTube video and if the YouTube iframe-API is ready
       if (document.querySelector('[data-type="youtube"]') !== null && !isYouTubeDependencieLoaded) {
         if (document.getElementById('iframe_api') === null) {
-          var tag = document.createElement('script');
-          var firstScriptTag = document.getElementsByTagName('script')[0];
-          tag.id = 'iframe_api';
-          tag.src = 'https://www.youtube.com/iframe_api';
-          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+          var TAG = document.createElement('script');
+          var FIRST_SCRIPT_TAG = document.getElementsByTagName('script')[0];
+          TAG.id = 'iframe_api';
+          TAG.src = 'https://www.youtube.com/iframe_api';
+          FIRST_SCRIPT_TAG.parentNode.insertBefore(TAG, FIRST_SCRIPT_TAG);
         }
 
-        if (waitingEls.indexOf(el) === -1) {
-          waitingEls.push(el);
+        if (WAITING_ELS.indexOf(el) === -1) {
+          WAITING_ELS.push(el);
         }
 
         window.onYouTubePlayerAPIReady = function () {
-          Array.prototype.forEach.call(waitingEls, function (waitingEl) {
+          Array.prototype.forEach.call(WAITING_ELS, function (waitingEl) {
             add(waitingEl, callback);
           });
           isYouTubeDependencieLoaded = true;
@@ -440,7 +439,7 @@
       newGroup = getGroupName(el);
 
       if (!Object.prototype.hasOwnProperty.call(groups, newGroup)) {
-        groups[newGroup] = copyObject(groupAtts);
+        groups[newGroup] = copyObject(GROUP_ATTS);
         createSlider();
       } // Check if element already exists
 
@@ -450,11 +449,11 @@
         groups[newGroup].elementsLength++; // Set zoom icon if necessary
 
         if (config.zoom && el.querySelector('img')) {
-          var TobiiZoom = document.createElement('div');
-          TobiiZoom.className = 'tobii-zoom__icon';
-          TobiiZoom.innerHTML = config.zoomText;
+          var TOBII_ZOOM = document.createElement('div');
+          TOBII_ZOOM.className = 'tobii-zoom__icon';
+          TOBII_ZOOM.innerHTML = config.zoomText;
           el.classList.add('tobii-zoom');
-          el.appendChild(TobiiZoom);
+          el.appendChild(TOBII_ZOOM);
         } // Bind click event handler
 
 
@@ -482,28 +481,28 @@
 
 
     var remove = function add(el, callback) {
-      var groupName = getGroupName(el); // Check if element exists
+      var GROUP_NAME = getGroupName(el); // Check if element exists
 
-      if (groups[groupName].gallery.indexOf(el) === -1) ; else {
-        var slideIndex = groups[groupName].gallery.indexOf(el);
-        var slideEl = groups[groupName].sliderElements[slideIndex]; // TODO If the element to be removed is the currently visible slide
+      if (groups[GROUP_NAME].gallery.indexOf(el) === -1) ; else {
+        var SLIDE_INDEX = groups[GROUP_NAME].gallery.indexOf(el);
+        var SLIDE_EL = groups[GROUP_NAME].sliderElements[SLIDE_INDEX]; // TODO If the element to be removed is the currently visible slide
         // TODO Remove element
-        // groups[groupName].gallery.splice(groups[groupName].gallery.indexOf(el)) don't work
+        // groups[GROUP_NAME].gallery.splice(groups[GROUP_NAME].gallery.indexOf(el)) don't work
 
-        groups[groupName].elementsLength--; // Remove zoom icon if necessary
+        groups[GROUP_NAME].elementsLength--; // Remove zoom icon if necessary
 
         if (config.zoom && el.querySelector('.tobii-zoom__icon')) {
-          var zoomIcon = el.querySelector('.tobii-zoom__icon');
-          zoomIcon.parentNode.classList.remove('tobii-zoom');
-          zoomIcon.parentNode.removeChild(zoomIcon);
+          var ZOOM_ICON = el.querySelector('.tobii-zoom__icon');
+          ZOOM_ICON.parentNode.classList.remove('tobii-zoom');
+          ZOOM_ICON.parentNode.removeChild(ZOOM_ICON);
         } // Unbind click event handler
 
 
         el.removeEventListener('click', triggerTobii); // Remove slide
 
-        slideEl.parentNode.removeChild(slideEl);
+        SLIDE_EL.parentNode.removeChild(SLIDE_EL);
 
-        if (isOpen() && groupName === activeGroup) {
+        if (isOpen() && GROUP_NAME === activeGroup) {
           updateConfig();
           updateLightbox();
         }
@@ -570,23 +569,23 @@
 
     var createSlide = function createSlide(el) {
       // Detect type
-      for (var index in supportedElements) {
+      for (var index in SUPPORTED_ELEMENTS) {
         // const index don't work in IE
-        if (Object.prototype.hasOwnProperty.call(supportedElements, index)) {
-          if (supportedElements[index].checkSupport(el)) {
+        if (Object.prototype.hasOwnProperty.call(SUPPORTED_ELEMENTS, index)) {
+          if (SUPPORTED_ELEMENTS[index].checkSupport(el)) {
             // Create slide elements
-            var sliderElement = document.createElement('div');
-            var sliderElementContent = document.createElement('div');
-            sliderElement.className = 'tobii__slider-slide';
-            sliderElement.style.position = 'absolute';
-            sliderElement.style.left = groups[newGroup].x * 100 + "%"; // Create type elements
+            var SLIDER_ELEMENT = document.createElement('div');
+            var SLIDER_ELEMENT_CONTENT = document.createElement('div');
+            SLIDER_ELEMENT.className = 'tobii__slider-slide';
+            SLIDER_ELEMENT.style.position = 'absolute';
+            SLIDER_ELEMENT.style.left = groups[newGroup].x * 100 + "%"; // Create type elements
 
-            supportedElements[index].init(el, sliderElementContent); // Add slide content container to slider element
+            SUPPORTED_ELEMENTS[index].init(el, SLIDER_ELEMENT_CONTENT); // Add slide content container to slider element
 
-            sliderElement.appendChild(sliderElementContent); // Add slider element to slider
+            SLIDER_ELEMENT.appendChild(SLIDER_ELEMENT_CONTENT); // Add slider element to slider
 
-            groups[newGroup].slider.appendChild(sliderElement);
-            groups[newGroup].sliderElements.push(sliderElement);
+            groups[newGroup].slider.appendChild(SLIDER_ELEMENT);
+            groups[newGroup].sliderElements.push(SLIDER_ELEMENT);
             ++groups[newGroup].x;
             break;
           }
@@ -678,10 +677,10 @@
 
       lastFocus.focus(); // Don't forget to cleanup our current element
 
-      var container = groups[activeGroup].sliderElements[groups[activeGroup].currentIndex].querySelector('[data-type]');
-      var type = container.getAttribute('data-type');
-      supportedElements[type].onLeave(container);
-      supportedElements[type].onCleanup(container);
+      var CONTAINER = groups[activeGroup].sliderElements[groups[activeGroup].currentIndex].querySelector('[data-type]');
+      var TYPE = CONTAINER.getAttribute('data-type');
+      SUPPORTED_ELEMENTS[TYPE].onLeave(CONTAINER);
+      SUPPORTED_ELEMENTS[TYPE].onCleanup(CONTAINER);
       lightbox.setAttribute('aria-hidden', 'true'); // Reset current index
 
       groups[activeGroup].currentIndex = 0; // Remove the hack to prevent animation during opening
@@ -704,9 +703,9 @@
         return;
       }
 
-      var container = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
-      var type = container.getAttribute('data-type');
-      supportedElements[type].onPreload(container);
+      var CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
+      var TYPE = CONTAINER.getAttribute('data-type');
+      SUPPORTED_ELEMENTS[TYPE].onPreload(CONTAINER);
     };
     /**
      * Load slide
@@ -721,9 +720,11 @@
         return;
       }
 
-      var container = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
-      var type = container.getAttribute('data-type');
-      supportedElements[type].onLoad(container);
+      var CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
+      var TYPE = CONTAINER.getAttribute('data-type'); // Add active slide class
+
+      groups[activeGroup].sliderElements[index].classList.add('tobii__slider-slide--is-active');
+      SUPPORTED_ELEMENTS[TYPE].onLoad(CONTAINER);
     };
     /**
      * Show the previous slide
@@ -778,9 +779,11 @@
         return;
       }
 
-      var container = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
-      var type = container.getAttribute('data-type');
-      supportedElements[type].onLeave(container);
+      var CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
+      var TYPE = CONTAINER.getAttribute('data-type'); // Remove active slide class
+
+      groups[activeGroup].sliderElements[index].classList.remove('tobii__slider-slide--is-active');
+      SUPPORTED_ELEMENTS[TYPE].onLeave(CONTAINER);
     };
     /**
      * Cleanup slide
@@ -795,9 +798,9 @@
         return;
       }
 
-      var container = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
-      var type = container.getAttribute('data-type');
-      supportedElements[type].onCleanup(container);
+      var CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
+      var TYPE = CONTAINER.getAttribute('data-type');
+      SUPPORTED_ELEMENTS[TYPE].onCleanup(CONTAINER);
     };
     /**
      * Update offset
@@ -828,8 +831,6 @@
 
 
     var updateFocus = function updateFocus(dir) {
-      var focusableEls = null;
-
       if (config.nav) {
         prevButton.disabled = false;
         nextButton.disabled = false;
@@ -864,10 +865,6 @@
       } else if (config.close) {
         closeButton.focus();
       }
-
-      focusableEls = lightbox.querySelectorAll('.tobii > button:not(:disabled)');
-      firstFocusableEl = focusableEls[0];
-      lastFocusableEl = focusableEls.length === 1 ? focusableEls[0] : focusableEls[focusableEls.length - 1];
     };
     /**
      * Clear drag after touchend and mousup event
@@ -890,16 +887,16 @@
 
 
     var updateAfterDrag = function updateAfterDrag() {
-      var movementX = drag.endX - drag.startX;
-      var movementY = drag.endY - drag.startY;
-      var movementXDistance = Math.abs(movementX);
-      var movementYDistance = Math.abs(movementY);
+      var MOVEMENT_X = drag.endX - drag.startX;
+      var MOVEMENT_Y = drag.endY - drag.startY;
+      var MOVEMENT_X_DISTANCE = Math.abs(MOVEMENT_X);
+      var MOVEMENT_Y_DISTANCE = Math.abs(MOVEMENT_Y);
 
-      if (movementX > 0 && movementXDistance > config.threshold && groups[activeGroup].currentIndex > 0) {
+      if (MOVEMENT_X > 0 && MOVEMENT_X_DISTANCE > config.threshold && groups[activeGroup].currentIndex > 0) {
         prev();
-      } else if (movementX < 0 && movementXDistance > config.threshold && groups[activeGroup].currentIndex !== groups[activeGroup].elementsLength - 1) {
+      } else if (MOVEMENT_X < 0 && MOVEMENT_X_DISTANCE > config.threshold && groups[activeGroup].currentIndex !== groups[activeGroup].elementsLength - 1) {
         next();
-      } else if (movementY < 0 && movementYDistance > config.threshold && config.swipeClose) {
+      } else if (MOVEMENT_Y < 0 && MOVEMENT_Y_DISTANCE > config.threshold && config.swipeClose) {
         close();
       } else {
         updateOffset();
@@ -914,7 +911,7 @@
     var resizeHandler = function resizeHandler() {
       if (!resizeTicking) {
         resizeTicking = true;
-        browserWindow.requestAnimationFrame(function () {
+        BROWSER_WINDOW.requestAnimationFrame(function () {
           updateOffset();
           resizeTicking = false;
         });
@@ -949,6 +946,18 @@
       event.stopPropagation();
     };
     /**
+     * Get the focusable children of the given element
+     *
+     * @return {Array<Element>}
+     */
+
+
+    var getFocusableChildren = function getFocusableChildren() {
+      return Array.prototype.slice.call(lightbox.querySelectorAll('.tobii__slider-slide--is-active ' + FOCUSABLE_ELEMENTS.join(','), '.tobii__close', 'tobii__prev', '.tobii__next')).filter(function (child) {
+        return !!(child.offsetWidth || child.offsetHeight || child.getClientRects().length);
+      });
+    };
+    /**
      * Keydown event handler
      *
      * @TODO: Remove the deprecated event.keyCode when Edge support event.code and we drop f*cking IE
@@ -957,20 +966,21 @@
 
 
     var keydownHandler = function keydownHandler(event) {
+      var FOCUSABLE_CHILDREN = getFocusableChildren();
+      var FOCUSED_ITEM_INDEX = FOCUSABLE_CHILDREN.indexOf(document.activeElement);
+
       if (event.keyCode === 9 || event.code === 'Tab') {
-        // `TAB` Key: Navigate to the next / previous focusable element
-        if (event.shiftKey) {
-          // Step backwards in the tab-order
-          if (document.activeElement === firstFocusableEl) {
-            lastFocusableEl.focus();
-            event.preventDefault();
-          }
-        } else {
-          // Step forward in the tab-order
-          if (document.activeElement === lastFocusableEl) {
-            firstFocusableEl.focus();
-            event.preventDefault();
-          }
+        // If the SHIFT key is being pressed while tabbing (moving backwards) and
+        // the currently focused item is the first one, move the focus to the last
+        // focusable item from the slide
+        if (event.shiftKey && FOCUSED_ITEM_INDEX === 0) {
+          FOCUSABLE_CHILDREN[FOCUSABLE_CHILDREN.length - 1].focus();
+          event.preventDefault(); // If the SHIFT key is not being pressed (moving forwards) and the currently
+          // focused item is the last one, move the focus to the first focusable item
+          // from the slide
+        } else if (!event.shiftKey && FOCUSED_ITEM_INDEX === FOCUSABLE_CHILDREN.length - 1) {
+          FOCUSABLE_CHILDREN[0].focus();
+          event.preventDefault();
         }
       } else if (event.keyCode === 27 || event.code === 'Escape') {
         // `ESC` Key: Close Tobii
@@ -1119,11 +1129,11 @@
 
     var bindEvents = function bindEvents() {
       if (config.keyboard) {
-        browserWindow.addEventListener('keydown', keydownHandler);
+        BROWSER_WINDOW.addEventListener('keydown', keydownHandler);
       } // Resize event
 
 
-      browserWindow.addEventListener('resize', resizeHandler); // Click event
+      BROWSER_WINDOW.addEventListener('resize', resizeHandler); // Click event
 
       lightbox.addEventListener('click', clickHandler);
 
@@ -1149,11 +1159,11 @@
 
     var unbindEvents = function unbindEvents() {
       if (config.keyboard) {
-        browserWindow.removeEventListener('keydown', keydownHandler);
+        BROWSER_WINDOW.removeEventListener('keydown', keydownHandler);
       } // Resize event
 
 
-      browserWindow.removeEventListener('resize', resizeHandler); // Click event
+      BROWSER_WINDOW.removeEventListener('resize', resizeHandler); // Click event
 
       lightbox.removeEventListener('click', clickHandler);
 
@@ -1188,10 +1198,10 @@
 
 
     var removeSources = function setVideoSources(el) {
-      var sources = el.querySelectorAll('src');
+      var SOURCES = el.querySelectorAll('src');
 
-      if (sources) {
-        Array.prototype.forEach.call(sources, function (source) {
+      if (SOURCES) {
+        Array.prototype.forEach.call(SOURCES, function (source) {
           source.setAttribute('src', '');
         });
       }
@@ -1261,10 +1271,10 @@
       } // TODO Cleanup
 
 
-      var groupsEntries = Object.entries(groups);
-      Array.prototype.forEach.call(groupsEntries, function (groupsEntrie) {
-        var els = groupsEntrie[1].gallery;
-        Array.prototype.forEach.call(els, function (el) {
+      var GROUPS_ENTRIES = Object.entries(groups);
+      Array.prototype.forEach.call(GROUPS_ENTRIES, function (groupsEntrie) {
+        var ELS = groupsEntrie[1].gallery;
+        Array.prototype.forEach.call(ELS, function (el) {
           remove(el);
         });
       });
