@@ -1,6 +1,6 @@
 {
   "name": "tobii",
-  "version": "2.0.0-alpha",
+  "version": "2.0.0-beta",
   "description": "An accessible, open-source lightbox with no dependencies.",
   "main": "dist/js/tobii.js",
   "style": "dist/css/tobii.css",

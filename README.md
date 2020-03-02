@@ -1,6 +1,6 @@
 # Tobii
 
-[![Version](https://img.shields.io/badge/Version-2.0.0--alpha-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/releases)
+[![Version](https://img.shields.io/badge/Version-2.0.0--beta-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/releases)
 [![License](https://img.shields.io/badge/License-MIT-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/blob/master/LICENSE.md)
 ![Dependecies](https://img.shields.io/badge/Dependencies-none-1a2a3a.svg)
 [![Amazon wishlist](https://img.shields.io/badge/Amazon_wishlist-0366d6.svg)](https://www.amazon.de/hz/wishlist/ls/29WXITO63O0BX)

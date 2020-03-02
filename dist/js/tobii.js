@@ -8,7 +8,7 @@
    * Tobii
    *
    * @author rqrauhvmra
-   * @version 2.0.0-alpha
+   * @version 2.0.0-beta
    * @url https://github.com/rqrauhvmra/Tobii
    *
    * MIT License
