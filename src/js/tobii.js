@@ -540,7 +540,7 @@ export default function Tobii (userOptions) {
    * @param {HTMLElement} el - Element to remove
    * @param {function} callback - Optional callback to call after remove
    */
-  const remove = function add (el, callback) {
+  const remove = function remove (el, callback) {
     const GROUP_NAME = getGroupName(el)
 
     // Check if element exists
@@ -816,11 +816,37 @@ export default function Tobii (userOptions) {
   }
 
   /**
-   * Show the previous slide
+   * Select a slide
+   *
+   * @param {number} index - Index to select
+   * @param {function} callback - Optional callback function
+   */
+  const select = function select (index, callback) {
+    if (isOpen()) {
+      throw new Error('Ups, I can\'t do this. Tobii is open.')
+    }
+
+    if (!index) {
+      return
+    }
+
+    // TODO
+
+    if (callback) {
+      callback.call(this)
+    }
+  }
+
+  /**
+   * Select the previous slide
    *
    * @param {function} callback - Optional callback function
    */
-  const prev = function prev (callback) {
+  const previous = function previous (callback) {
+    if (isOpen()) {
+      throw new Error('Ups, I can\'t do this. Tobii is open.')
+    }
+
     if (groups[activeGroup].currentIndex > 0) {
       leave(groups[activeGroup].currentIndex)
       load(--groups[activeGroup].currentIndex)
@@ -835,11 +861,15 @@ export default function Tobii (userOptions) {
   }
 
   /**
-   * Show the next slide
+   * Select the next slide
    *
    * @param {function} callback - Optional callback function
    */
   const next = function next (callback) {
+    if (isOpen()) {
+      throw new Error('Ups, I can\'t do this. Tobii is open.')
+    }
+
     if (groups[activeGroup].currentIndex < groups[activeGroup].elementsLength - 1) {
       leave(groups[activeGroup].currentIndex)
       load(++groups[activeGroup].currentIndex)
@@ -851,6 +881,27 @@ export default function Tobii (userOptions) {
         callback.call(this)
       }
     }
+  }
+
+  /**
+   * Select a group
+   *
+   * @param {string} name
+   */
+  const selectGroup = function selectGroup (name) {
+    if (isOpen()) {
+      throw new Error('Ups, I can\'t do this. Tobii is open.')
+    }
+
+    if (!name) {
+      return
+    }
+
+    if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {
+      throw new Error(`Ups, I don't have a group called "${name}".`)
+    }
+
+    activeGroup = name
   }
 
   /**
@@ -977,7 +1028,7 @@ export default function Tobii (userOptions) {
     const MOVEMENT_Y_DISTANCE = Math.abs(MOVEMENT_Y)
 
     if (MOVEMENT_X > 0 && MOVEMENT_X_DISTANCE > config.threshold && groups[activeGroup].currentIndex > 0) {
-      prev()
+      previous()
     } else if (MOVEMENT_X < 0 && MOVEMENT_X_DISTANCE > config.threshold && groups[activeGroup].currentIndex !== groups[activeGroup].elementsLength - 1) {
       next()
     } else if (MOVEMENT_Y < 0 && MOVEMENT_Y_DISTANCE > config.threshold && config.swipeClose) {
@@ -1021,7 +1072,7 @@ export default function Tobii (userOptions) {
    */
   const clickHandler = function clickHandler (event) {
     if (event.target === prevButton) {
-      prev()
+      previous()
     } else if (event.target === nextButton) {
       next()
     } else if (event.target === closeButton || (event.target.classList.contains('tobii__slider-slide') && config.docClose)) {
@@ -1077,7 +1128,7 @@ export default function Tobii (userOptions) {
     } else if (event.keyCode === 37 || event.code === 'ArrowLeft') {
       // `PREV` Key: Show the previous slide
       event.preventDefault()
-      prev()
+      previous()
     } else if (event.keyCode === 39 || event.code === 'ArrowRight') {
       // `NEXT` Key: Show the next slide
       event.preventDefault()
@@ -1438,32 +1489,11 @@ export default function Tobii (userOptions) {
     return activeGroup !== null ? activeGroup : newGroup
   }
 
-  /**
-   * Select a specific group
-   *
-   * @param {string} name
-   */
-  const selectGroup = function selectGroup (name) {
-    if (isOpen()) {
-      throw new Error('Ups, I can\'t do this. Tobii is open.')
-    }
-
-    if (!name) {
-      return
-    }
-
-    if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {
-      throw new Error(`Ups, I don't have a group called "${name}".`)
-    }
-
-    activeGroup = name
-  }
-
   init(userOptions)
 
   return {
     open: open,
-    prev: prev,
+    previous: previous,
     next: next,
     close: close,
     add: checkDependencies,
@@ -1472,6 +1502,7 @@ export default function Tobii (userOptions) {
     destroy: destroy,
     isOpen: isOpen,
     currentSlide: currentSlide,
+    select: select,
     selectGroup: selectGroup,
     currentGroup: currentGroup
   }
