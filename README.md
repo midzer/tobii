@@ -14,7 +14,7 @@ An accessible, open-source lightbox with no dependencies.
 ## Table of contents
 
 - [Features](#features)
-- [Get Tobii](#get-Tobii)
+- [Get Tobii](#get-tobii)
   - [Download](#download)
   - [Package managers](#package-managers)
 - [Usage](#usage)
@@ -267,14 +267,14 @@ The following options are available:
 | Function | Description |
 | --- | --- |
 | `open(index, callback)` | Open Tobii. Optional with a specific slide with `index` (number). Optional `callback` (function) as a second argument. |
-| `next(callback)` | Show the next slide. Optional `callback` (function). |
-| `prev(callback)` | Show the previous slide. Optional `callback` (function). |
+| `previous(callback)` | Select the previous slide. Optional `callback` (function). |
+| `next(callback)` | Select the next slide. Optional `callback` (function). |
+| `selectGroup(name)` | Select a group with the `name` (string) of the group. |
 | `close(callback)` | Close Tobii. Optional `callback` (function). |
-| `add(element, callback)` | Add an `element` (DOM element) ([example on CodePen](https://codepen.io/rqrauhvmra/pen/vzbXxQ)). Optional `callback` (function) as a second argument ([example on CodePen](https://codepen.io/rqrauhvmra/pen/qyEmXR)). |
-| `remove(element, callback)` | Remove an `element` (DOM element). Optional `callback` (function) as a second argument. |
+| `add(element, callback)` | Add `element` (DOM element) ([example on CodePen](https://codepen.io/rqrauhvmra/pen/vzbXxQ)). Optional `callback` (function) as a second argument ([example on CodePen](https://codepen.io/rqrauhvmra/pen/qyEmXR)). |
+| `remove(element, callback)` | Remove `element` (DOM element). Optional `callback` (function) as a second argument. |
 | `isOpen()` | Check if Tobii is open. |
 | `currentSlide()` | Return the current slide index. |
-| `selectGroup()` | Select a specific group. |
 | `currentGroup()` | Return the current group. |
 | `reset(callback)` | Reset Tobii. Optional `callback` (function). |
 | `destroy(callback)` | Destroy Tobii. Optional `callback` (function). |
