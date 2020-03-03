@@ -361,15 +361,15 @@
       } // Get a list of all elements within the document
 
 
-      var ELS = document.querySelectorAll(config.selector);
+      var LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(config.selector);
 
-      if (!ELS) {
+      if (!LIGHTBOX_TRIGGER_ELS) {
         throw new Error("Ups, I can't find the selector " + config.selector + ".");
       } // Execute a few things once per element
 
 
-      Array.prototype.forEach.call(ELS, function (el) {
-        checkDependencies(el);
+      Array.prototype.forEach.call(LIGHTBOX_TRIGGER_ELS, function (lightboxTriggerEl) {
+        checkDependencies(lightboxTriggerEl);
       });
     };
     /**
@@ -1325,9 +1325,10 @@
 
       var GROUPS_ENTRIES = Object.entries(groups);
       Array.prototype.forEach.call(GROUPS_ENTRIES, function (groupsEntrie) {
-        var ELS = groupsEntrie[1].gallery;
-        Array.prototype.forEach.call(ELS, function (el) {
-          remove(el);
+        var SLIDE_ELS = groupsEntrie[1].gallery; // Remove slides
+
+        Array.prototype.forEach.call(SLIDE_ELS, function (slideEl) {
+          remove(slideEl);
         });
       });
       groups = {};

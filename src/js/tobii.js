@@ -418,15 +418,15 @@ export default function Tobii (userOptions) {
     }
 
     // Get a list of all elements within the document
-    const ELS = document.querySelectorAll(config.selector)
+    const LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(config.selector)
 
-    if (!ELS) {
+    if (!LIGHTBOX_TRIGGER_ELS) {
       throw new Error(`Ups, I can't find the selector ${config.selector}.`)
     }
 
     // Execute a few things once per element
-    Array.prototype.forEach.call(ELS, el => {
-      checkDependencies(el)
+    Array.prototype.forEach.call(LIGHTBOX_TRIGGER_ELS, lightboxTriggerEl => {
+      checkDependencies(lightboxTriggerEl)
     })
   }
 
@@ -730,7 +730,7 @@ export default function Tobii (userOptions) {
     preload(groups[activeGroup].currentIndex - 1)
 
     // Hack to prevent animation during opening
-    setTimeout(function () {
+    setTimeout(() => {
       groups[activeGroup].slider.classList.add('tobii__slider--animate')
     }, 1000)
 
@@ -1348,7 +1348,7 @@ export default function Tobii (userOptions) {
     const SOURCES = el.querySelectorAll('src')
 
     if (SOURCES) {
-      Array.prototype.forEach.call(SOURCES, function (source) {
+      Array.prototype.forEach.call(SOURCES, source => {
         source.setAttribute('src', '')
       })
     }
@@ -1415,11 +1415,12 @@ export default function Tobii (userOptions) {
     // TODO Cleanup
     const GROUPS_ENTRIES = Object.entries(groups)
 
-    Array.prototype.forEach.call(GROUPS_ENTRIES, function (groupsEntrie) {
-      const ELS = groupsEntrie[1].gallery
+    Array.prototype.forEach.call(GROUPS_ENTRIES, groupsEntrie => {
+      const SLIDE_ELS = groupsEntrie[1].gallery
 
-      Array.prototype.forEach.call(ELS, function (el) {
-        remove(el)
+      // Remove slides
+      Array.prototype.forEach.call(SLIDE_ELS, slideEl => {
+        remove(slideEl)
       })
     })
 
