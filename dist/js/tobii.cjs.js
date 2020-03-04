@@ -360,7 +360,7 @@ function Tobii(userOptions) {
     var LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(config.selector);
 
     if (!LIGHTBOX_TRIGGER_ELS) {
-      throw new Error("Ups, I can't find the selector " + config.selector + ".");
+      throw new Error("Ups, I can't find the selector " + config.selector + " on this website.");
     } // Execute a few things once per element
 
 
@@ -465,7 +465,7 @@ function Tobii(userOptions) {
         callback.call(this);
       }
     } else {
-      throw new Error('Ups, element already added to the lightbox.');
+      throw new Error('Ups, element already added.');
     }
   };
   /**
@@ -600,7 +600,7 @@ function Tobii(userOptions) {
     activeGroup = activeGroup !== null ? activeGroup : newGroup;
 
     if (isOpen()) {
-      throw new Error('Ups, Tobii is aleady open.');
+      throw new Error('Ups, I\'m aleady open.');
     }
 
     if (!isOpen()) {
@@ -657,7 +657,7 @@ function Tobii(userOptions) {
 
   var close = function close(callback) {
     if (!isOpen()) {
-      throw new Error('Tobii is already closed.');
+      throw new Error('Ups, I\'m already closed.');
     }
 
     if (config.hideScrollbar) {
@@ -730,7 +730,7 @@ function Tobii(userOptions) {
     var currIndex = groups[activeGroup].currentIndex;
 
     if (!isOpen()) {
-      throw new Error('Ups, Tobii is closed.');
+      throw new Error('Ups, I\'m closed.');
     }
 
     if (isOpen()) {
@@ -777,7 +777,7 @@ function Tobii(userOptions) {
 
   var previous = function previous(callback) {
     if (!isOpen()) {
-      throw new Error('Ups, I can\'t do this. Tobii is closed.');
+      throw new Error('Ups, I\'m closed.');
     }
 
     if (groups[activeGroup].currentIndex > 0) {
@@ -801,7 +801,7 @@ function Tobii(userOptions) {
 
   var next = function next(callback) {
     if (!isOpen()) {
-      throw new Error('Ups, I can\'t do this. Tobii is closed.');
+      throw new Error('Ups, I\'m closed.');
     }
 
     if (groups[activeGroup].currentIndex < groups[activeGroup].elementsLength - 1) {
@@ -825,11 +825,11 @@ function Tobii(userOptions) {
 
   var selectGroup = function selectGroup(name) {
     if (isOpen()) {
-      throw new Error('Ups, I can\'t do this. Tobii is open.');
+      throw new Error('Ups, I\'m open.');
     }
 
     if (!name) {
-      return;
+      throw new Error('Ups, no group specified.');
     }
 
     if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {

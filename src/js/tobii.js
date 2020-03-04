@@ -421,7 +421,7 @@ export default function Tobii (userOptions) {
     const LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(config.selector)
 
     if (!LIGHTBOX_TRIGGER_ELS) {
-      throw new Error(`Ups, I can't find the selector ${config.selector}.`)
+      throw new Error(`Ups, I can't find the selector ${config.selector} on this website.`)
     }
 
     // Execute a few things once per element
@@ -530,7 +530,7 @@ export default function Tobii (userOptions) {
         callback.call(this)
       }
     } else {
-      throw new Error('Ups, element already added to the lightbox.')
+      throw new Error('Ups, element already added.')
     }
   }
 
@@ -678,7 +678,7 @@ export default function Tobii (userOptions) {
     activeGroup = activeGroup !== null ? activeGroup : newGroup
 
     if (isOpen()) {
-      throw new Error('Ups, Tobii is aleady open.')
+      throw new Error('Ups, I\'m aleady open.')
     }
 
     if (!isOpen()) {
@@ -742,7 +742,7 @@ export default function Tobii (userOptions) {
    */
   const close = function close (callback) {
     if (!isOpen()) {
-      throw new Error('Tobii is already closed.')
+      throw new Error('Ups, I\'m already closed.')
     }
 
     if (config.hideScrollbar) {
@@ -821,7 +821,7 @@ export default function Tobii (userOptions) {
     const currIndex = groups[activeGroup].currentIndex
 
     if (!isOpen()) {
-      throw new Error('Ups, Tobii is closed.')
+      throw new Error('Ups, I\'m closed.')
     }
 
     if (isOpen()) {
@@ -868,7 +868,7 @@ export default function Tobii (userOptions) {
    */
   const previous = function previous (callback) {
     if (!isOpen()) {
-      throw new Error('Ups, I can\'t do this. Tobii is closed.')
+      throw new Error('Ups, I\'m closed.')
     }
 
     if (groups[activeGroup].currentIndex > 0) {
@@ -891,7 +891,7 @@ export default function Tobii (userOptions) {
    */
   const next = function next (callback) {
     if (!isOpen()) {
-      throw new Error('Ups, I can\'t do this. Tobii is closed.')
+      throw new Error('Ups, I\'m closed.')
     }
 
     if (groups[activeGroup].currentIndex < groups[activeGroup].elementsLength - 1) {
@@ -914,11 +914,11 @@ export default function Tobii (userOptions) {
    */
   const selectGroup = function selectGroup (name) {
     if (isOpen()) {
-      throw new Error('Ups, I can\'t do this. Tobii is open.')
+      throw new Error('Ups, I\'m open.')
     }
 
     if (!name) {
-      return
+      throw new Error('Ups, no group specified.')
     }
 
     if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {
