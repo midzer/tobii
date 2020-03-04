@@ -603,22 +603,18 @@
     var open = function open(index, callback) {
       activeGroup = activeGroup !== null ? activeGroup : newGroup;
 
-      if (!isOpen() && !index) {
-        index = 0;
-      }
-
       if (isOpen()) {
-        if (!index) {
-          throw new Error('Ups, Tobii is aleady open.');
-        }
-
-        if (index === groups[activeGroup].currentIndex) {
-          throw new Error("Ups, slide " + index + " is already selected.");
-        }
+        throw new Error('Ups, Tobii is aleady open.');
       }
 
-      if (index === -1 || index >= groups[activeGroup].elementsLength) {
-        throw new Error("Ups, I can't find slide " + index + ".");
+      if (!isOpen()) {
+        if (!index) {
+          index = 0;
+        }
+
+        if (index === -1 || index >= groups[activeGroup].elementsLength) {
+          throw new Error("Ups, I can't find slide " + index + ".");
+        }
       }
 
       if (config.hideScrollbar) {
@@ -735,14 +731,42 @@
 
 
     var select = function select(index, callback) {
-      if (isOpen()) {
-        throw new Error('Ups, I can\'t do this. Tobii is open.');
+      var currIndex = groups[activeGroup].currentIndex;
+
+      if (!isOpen()) {
+        throw new Error('Ups, Tobii is closed.');
       }
 
-      if (!index) {
-        return;
-      } // TODO
+      if (isOpen()) {
+        if (!index && index !== 0) {
+          throw new Error('Ups, no slide specified.');
+        }
 
+        if (index === groups[activeGroup].currentIndex) {
+          throw new Error("Ups, slide " + index + " is already selected.");
+        }
+
+        if (index === -1 || index >= groups[activeGroup].elementsLength) {
+          throw new Error("Ups, I can't find slide " + index + ".");
+        }
+      } // Set current index
+
+
+      groups[activeGroup].currentIndex = index;
+      leave(currIndex);
+      load(index);
+
+      if (index < currIndex) {
+        updateLightbox('left');
+        cleanup(currIndex);
+        preload(index - 1);
+      }
+
+      if (index > currIndex) {
+        updateLightbox('right');
+        cleanup(currIndex);
+        preload(index + 1);
+      }
 
       if (callback) {
         callback.call(this);
@@ -756,8 +780,8 @@
 
 
     var previous = function previous(callback) {
-      if (isOpen()) {
-        throw new Error('Ups, I can\'t do this. Tobii is open.');
+      if (!isOpen()) {
+        throw new Error('Ups, I can\'t do this. Tobii is closed.');
       }
 
       if (groups[activeGroup].currentIndex > 0) {
@@ -780,8 +804,8 @@
 
 
     var next = function next(callback) {
-      if (isOpen()) {
-        throw new Error('Ups, I can\'t do this. Tobii is open.');
+      if (!isOpen()) {
+        throw new Error('Ups, I can\'t do this. Tobii is closed.');
       }
 
       if (groups[activeGroup].currentIndex < groups[activeGroup].elementsLength - 1) {
