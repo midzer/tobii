@@ -1185,12 +1185,12 @@
 
 
     var doSwipe = function doSwipe() {
-      if (Math.abs(drag.startX - drag.endX) > 0 && !isDraggingY && config.swipeClose) {
+      if (Math.abs(drag.startX - drag.endX) > 0 && !isDraggingY && groups[activeGroup].elementsLength > 1) {
         // Horizontal swipe
         groups[activeGroup].slider.style.transform = "translate3d(" + (offsetTmp - Math.round(drag.startX - drag.endX)) + "px, 0, 0)";
         isDraggingX = true;
         isDraggingY = false;
-      } else if (Math.abs(drag.startY - drag.endY) > 0 && !isDraggingX) {
+      } else if (Math.abs(drag.startY - drag.endY) > 0 && !isDraggingX && config.swipeClose) {
         // Vertical swipe
         groups[activeGroup].slider.style.transform = "translate3d(" + offsetTmp + "px, -" + Math.round(drag.startY - drag.endY) + "px, 0)";
         isDraggingX = false;
@@ -1289,7 +1289,7 @@
 
 
     var updateConfig = function updateConfig() {
-      if (config.draggable && groups[activeGroup].elementsLength > 1 && !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable')) {
+      if (config.draggable && config.swipeClose && !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable') || config.draggable && groups[activeGroup].elementsLength > 1 && !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable')) {
         groups[activeGroup].slider.classList.add('tobii__slider--is-draggable');
       } // Hide buttons if necessary
 
@@ -1403,7 +1403,7 @@
 
 
     var isIgnoreElement = function isIgnoreElement(el) {
-      return ['TEXTAREA', 'OPTION', 'INPUT', 'SELECT'].indexOf(el.nodeName) !== -1 || el === prevButton || el === nextButton || el === closeButton || groups[activeGroup].elementsLength === 1;
+      return ['TEXTAREA', 'OPTION', 'INPUT', 'SELECT'].indexOf(el.nodeName) !== -1 || el === prevButton || el === nextButton || el === closeButton;
     };
     /**
      * Return current index
