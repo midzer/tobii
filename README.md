@@ -266,16 +266,17 @@ The following options are available:
 
 | Function | Description |
 | --- | --- |
-| `open(index, callback)` | Open Tobii. Optional with a specific slide with `index` (number). Optional `callback` (function) as a second argument. |
+| `open(index, callback)` | Open Tobii. Optional `index` (Integer) Zero-based index of the slide to open. Optional `callback` (function). |
+| `select(index, callback)` | Select a slide with `index` (Integer) Zero-based index of the slide to select. Optional `callback` (function). |
 | `previous(callback)` | Select the previous slide. Optional `callback` (function). |
 | `next(callback)` | Select the next slide. Optional `callback` (function). |
-| `selectGroup(name)` | Select a group with the `name` (string) of the group. |
+| `selectGroup(value)` | Select a group with `value` (string) Name of the group to select. |
 | `close(callback)` | Close Tobii. Optional `callback` (function). |
-| `add(element, callback)` | Add `element` (DOM element) ([example on CodePen](https://codepen.io/rqrauhvmra/pen/vzbXxQ)). Optional `callback` (function) as a second argument ([example on CodePen](https://codepen.io/rqrauhvmra/pen/qyEmXR)). |
-| `remove(element, callback)` | Remove `element` (DOM element). Optional `callback` (function) as a second argument. |
+| `add(element, callback)` | Add `element` (DOM element). Optional `callback` (function). |
+| `remove(element, callback)` | Remove `element` (DOM element). Optional `callback` (function). |
 | `isOpen()` | Check if Tobii is open. |
 | `currentSlide()` | Return the current slide index. |
-| `currentGroup()` | Return the current group. |
+| `currentGroup()` | Return the current group name. |
 | `reset(callback)` | Reset Tobii. Optional `callback` (function). |
 | `destroy(callback)` | Destroy Tobii. Optional `callback` (function). |
 
