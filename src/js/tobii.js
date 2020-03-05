@@ -1255,6 +1255,17 @@ export default function Tobii (userOptions) {
   }
 
   /**
+   * Contextmenu event handler
+   * This is a fix for chromium based browser on mac.
+   * The 'contextmenu' terminates a mouse event sequence.
+   * https://bugs.chromium.org/p/chromium/issues/detail?id=506801
+   *
+   */
+  const contextmenuHandler = function contextmenuHandler (event) {
+    pointerDown = false
+  }
+
+  /**
    * Mouseup event handler
    *
    */
@@ -1322,6 +1333,7 @@ export default function Tobii (userOptions) {
       lightbox.addEventListener('mousedown', mousedownHandler)
       lightbox.addEventListener('mouseup', mouseupHandler)
       lightbox.addEventListener('mousemove', mousemoveHandler)
+      lightbox.addEventListener('contextmenu', contextmenuHandler)
     }
   }
 
@@ -1352,6 +1364,7 @@ export default function Tobii (userOptions) {
       lightbox.removeEventListener('mousedown', mousedownHandler)
       lightbox.removeEventListener('mouseup', mouseupHandler)
       lightbox.removeEventListener('mousemove', mousemoveHandler)
+      lightbox.removeEventListener('contextmenu', contextmenuHandler)
     }
   }
 
