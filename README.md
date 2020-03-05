@@ -67,7 +67,7 @@ Tobii is also available on npm.
 
 ## Usage
 
-You can install Tobii by linking the `.css` and `.js` files to your html file. The HTML code may look like this:
+You can install Tobii by linking the `.css` and `.js` files to your HTML file. The HTML code may look like this:
 
 ```html
 <!DOCTYPE html>
@@ -109,7 +109,7 @@ The standard way of using Tobii is a linked thumbnail image with the class name 
 </a>
 ```
 
-Instead of a thumbnail, you can also refer to a larger image with a textlink:
+Instead of a thumbnail, you can also refer to a larger image with a text link:
 
 ```html
 <a href="path/to/image.jpg" class="lightbox">
@@ -145,7 +145,7 @@ or a button with the class name `lightbox` and a `data-target` attribute that ma
 </button>
 ```
 
-In both ways, the attribute `data-type` with the value `html` must be added.
+In both ways, the attribute `data-type` with the value `html` is required.
 
 ### Iframe
 
@@ -167,7 +167,7 @@ or a button with the class name `lightbox` and a `data-target` attribute:
 </button>
 ```
 
-In both ways, the attribute `data-type` with the value `iframe` must be added.
+In both ways, the attribute `data-type` with the value `iframe` is required.
 
 #### Optional attributes
 
@@ -177,7 +177,7 @@ In both ways, the attribute `data-type` with the value `iframe` must be added.
 
 [Play on CodePen](https://codepen.io/rqrauhvmra/pen/rgpjXE)
 
-For an YouTube video, create a link with the class name `lightbox` and a `data-id` attribute with the YouTube video ID:
+For a YouTube video, create a link with the class name `lightbox` and a `data-id` attribute with the YouTube video ID:
 
 ```html
 <a href="#" data-type="youtube" data-id="KU2sSZ_90PY" class="lightbox">
@@ -193,7 +193,7 @@ or a button with the class name `lightbox` and a `data-id` attribute with the Yo
 </button>
 ```
 
-In both ways, the attribute `data-type` with the value `youtube` must be added.
+In both ways, the attribute `data-type` with the value `youtube` is required.
 
 #### Optional attributes
 
@@ -266,11 +266,11 @@ The following options are available:
 
 | Function | Description |
 | --- | --- |
-| `open(index, callback)` | Open Tobii. Optional `index` (Integer) Zero-based index of the slide to open. Optional `callback` (function). |
-| `select(index, callback)` | Select a slide with `index` (Integer) Zero-based index of the slide to select. Optional `callback` (function). |
+| `open(index, callback)` | Open Tobii. Optional `index` (Integer), zero-based index of the slide to open. Optional `callback` (function). |
+| `select(index, callback)` | Select a slide with `index` (Integer), zero-based index of the slide to select. Optional `callback` (function). |
 | `previous(callback)` | Select the previous slide. Optional `callback` (function). |
 | `next(callback)` | Select the next slide. Optional `callback` (function). |
-| `selectGroup(value)` | Select a group with `value` (string) Name of the group to select. |
+| `selectGroup(value)` | Select a group with `value` (string), name of the group to select. |
 | `close(callback)` | Close Tobii. Optional `callback` (function). |
 | `add(element, callback)` | Add `element` (DOM element). Optional `callback` (function). |
 | `remove(element, callback)` | Remove `element` (DOM element). Optional `callback` (function). |
@@ -282,17 +282,13 @@ The following options are available:
 
 ## Browser support
 
-Tobii has been tested in the following browsers (all the latest versions):
+Tobii supports the following browser (all the latest versions):
 
 - Chrome
 - Firefox
 - Internet Explorer
 - Edge
 - Safari
-
-## To do
-
-- [ ] Support for `srcset` and `picture`
 
 ## Contributing
 
