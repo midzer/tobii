@@ -1025,7 +1025,7 @@ function Tobii(userOptions) {
 
 
   var getFocusableChildren = function getFocusableChildren() {
-    return Array.prototype.slice.call(lightbox.querySelectorAll('.tobii__slider-slide--is-active ' + FOCUSABLE_ELEMENTS.join(','), '.tobii__close', 'tobii__prev', '.tobii__next')).filter(function (child) {
+    return Array.prototype.slice.call(lightbox.querySelectorAll(".tobii__close:not([disabled]), .tobii__prev:not([disabled]), .tobii__next:not([disabled]), .tobii__slider-slide--is-active + " + FOCUSABLE_ELEMENTS.join(', .tobii__slider-slide--is-active '))).filter(function (child) {
       return !!(child.offsetWidth || child.offsetHeight || child.getClientRects().length);
     });
   };
