@@ -77,6 +77,10 @@
   will-change: transform;
 }
 
+.tobii__slider[aria-hidden="true"] {
+  display: none;
+}
+
 .tobii__slider--animate:not(.tobii__slider--is-dragging) {
   transition-duration: 0.3s;
   transition-property: transform;

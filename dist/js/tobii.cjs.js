@@ -555,6 +555,7 @@ function Tobii(userOptions) {
   var createSlider = function createSlider() {
     groups[newGroup].slider = document.createElement('div');
     groups[newGroup].slider.className = 'tobii__slider';
+    groups[newGroup].slider.setAttribute('aria-hidden', 'true');
     lightbox.appendChild(groups[newGroup].slider);
   };
   /**
@@ -574,7 +575,8 @@ function Tobii(userOptions) {
           var SLIDER_ELEMENT_CONTENT = document.createElement('div');
           SLIDER_ELEMENT.className = 'tobii__slider-slide';
           SLIDER_ELEMENT.style.position = 'absolute';
-          SLIDER_ELEMENT.style.left = groups[newGroup].x * 100 + "%"; // Create type elements
+          SLIDER_ELEMENT.style.left = groups[newGroup].x * 100 + "%";
+          SLIDER_ELEMENT.setAttribute('aria-hidden', 'true'); // Create type elements
 
           SUPPORTED_ELEMENTS[index].init(el, SLIDER_ELEMENT_CONTENT); // Add slide content container to slider element
 
@@ -632,7 +634,9 @@ function Tobii(userOptions) {
     clearDrag();
     bindEvents(); // Load slide
 
-    load(groups[activeGroup].currentIndex); // Makes lightbox appear, too
+    load(groups[activeGroup].currentIndex); // Show slider
+
+    groups[activeGroup].slider.setAttribute('aria-hidden', 'false'); // Show lightbox
 
     lightbox.setAttribute('aria-hidden', 'false');
     updateLightbox(); // Preload previous and next slide
@@ -669,11 +673,12 @@ function Tobii(userOptions) {
 
     lastFocus.focus(); // Don't forget to cleanup our current element
 
-    var CONTAINER = groups[activeGroup].sliderElements[groups[activeGroup].currentIndex].querySelector('[data-type]');
-    var TYPE = CONTAINER.getAttribute('data-type');
-    SUPPORTED_ELEMENTS[TYPE].onLeave(CONTAINER);
-    SUPPORTED_ELEMENTS[TYPE].onCleanup(CONTAINER);
-    lightbox.setAttribute('aria-hidden', 'true'); // Reset current index
+    leave(groups[activeGroup].currentIndex);
+    cleanup(groups[activeGroup].currentIndex); // Hide lightbox
+
+    lightbox.setAttribute('aria-hidden', 'true'); // Hide slider
+
+    groups[activeGroup].slider.setAttribute('aria-hidden', 'true'); // Reset current index
 
     groups[activeGroup].currentIndex = 0; // Remove the hack to prevent animation during opening
 
@@ -716,6 +721,7 @@ function Tobii(userOptions) {
     var TYPE = CONTAINER.getAttribute('data-type'); // Add active slide class
 
     groups[activeGroup].sliderElements[index].classList.add('tobii__slider-slide--is-active');
+    groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'false');
     SUPPORTED_ELEMENTS[TYPE].onLoad(CONTAINER);
   };
   /**
@@ -855,6 +861,7 @@ function Tobii(userOptions) {
     var TYPE = CONTAINER.getAttribute('data-type'); // Remove active slide class
 
     groups[activeGroup].sliderElements[index].classList.remove('tobii__slider-slide--is-active');
+    groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'true');
     SUPPORTED_ELEMENTS[TYPE].onLeave(CONTAINER);
   };
   /**
@@ -1320,18 +1327,6 @@ function Tobii(userOptions) {
     }
   };
   /**
-   * Update slider
-   */
-
-
-  var updateSlider = function updateSlider() {
-    for (var name in groups) {
-      // const name don't work in IE
-      if (!Object.prototype.hasOwnProperty.call(groups, name)) continue;
-      groups[name].slider.style.display = activeGroup === name ? 'block' : 'none';
-    }
-  };
-  /**
    * Update lightbox
    *
    * @param {string} dir - Current slide direction
@@ -1339,7 +1334,6 @@ function Tobii(userOptions) {
 
 
   var updateLightbox = function updateLightbox(dir) {
-    updateSlider();
     updateOffset();
     updateCounter();
     updateFocus(dir);

@@ -630,6 +630,10 @@ export default function Tobii (userOptions) {
   const createSlider = function createSlider () {
     groups[newGroup].slider = document.createElement('div')
     groups[newGroup].slider.className = 'tobii__slider'
+
+    // Hide slider
+    groups[newGroup].slider.setAttribute('aria-hidden', 'true')
+
     lightbox.appendChild(groups[newGroup].slider)
   }
 
@@ -649,6 +653,9 @@ export default function Tobii (userOptions) {
           SLIDER_ELEMENT.className = 'tobii__slider-slide'
           SLIDER_ELEMENT.style.position = 'absolute'
           SLIDER_ELEMENT.style.left = `${groups[newGroup].x * 100}%`
+
+          // Hide slide
+          SLIDER_ELEMENT.setAttribute('aria-hidden', 'true')
 
           // Create type elements
           SUPPORTED_ELEMENTS[index].init(el, SLIDER_ELEMENT_CONTENT)
@@ -716,7 +723,10 @@ export default function Tobii (userOptions) {
     // Load slide
     load(groups[activeGroup].currentIndex)
 
-    // Makes lightbox appear, too
+    // Show slider
+    groups[activeGroup].slider.setAttribute('aria-hidden', 'false')
+
+    // Show lightbox
     lightbox.setAttribute('aria-hidden', 'false')
 
     updateLightbox()
@@ -756,13 +766,14 @@ export default function Tobii (userOptions) {
     lastFocus.focus()
 
     // Don't forget to cleanup our current element
-    const CONTAINER = groups[activeGroup].sliderElements[groups[activeGroup].currentIndex].querySelector('[data-type]')
-    const TYPE = CONTAINER.getAttribute('data-type')
+    leave(groups[activeGroup].currentIndex)
+    cleanup(groups[activeGroup].currentIndex)
 
-    SUPPORTED_ELEMENTS[TYPE].onLeave(CONTAINER)
-    SUPPORTED_ELEMENTS[TYPE].onCleanup(CONTAINER)
-
+    // Hide lightbox
     lightbox.setAttribute('aria-hidden', 'true')
+
+    // Hide slider
+    groups[activeGroup].slider.setAttribute('aria-hidden', 'true')
 
     // Reset current index
     groups[activeGroup].currentIndex = 0
@@ -807,6 +818,7 @@ export default function Tobii (userOptions) {
 
     // Add active slide class
     groups[activeGroup].sliderElements[index].classList.add('tobii__slider-slide--is-active')
+    groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'false')
 
     SUPPORTED_ELEMENTS[TYPE].onLoad(CONTAINER)
   }
@@ -944,6 +956,7 @@ export default function Tobii (userOptions) {
 
     // Remove active slide class
     groups[activeGroup].sliderElements[index].classList.remove('tobii__slider-slide--is-active')
+    groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'true')
 
     SUPPORTED_ELEMENTS[TYPE].onLeave(CONTAINER)
   }
@@ -1418,22 +1431,11 @@ export default function Tobii (userOptions) {
   }
 
   /**
-   * Update slider
-   */
-  const updateSlider = function updateSlider () {
-    for (let name in groups) { // const name don't work in IE
-      if (!Object.prototype.hasOwnProperty.call(groups, name)) continue
-      groups[name].slider.style.display = activeGroup === name ? 'block' : 'none'
-    }
-  }
-
-  /**
    * Update lightbox
    *
    * @param {string} dir - Current slide direction
    */
   const updateLightbox = function updateLightbox (dir) {
-    updateSlider()
     updateOffset()
     updateCounter()
     updateFocus(dir)
