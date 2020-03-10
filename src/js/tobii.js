@@ -545,12 +545,29 @@ export default function Tobii (userOptions) {
 
     // Check if element exists
     if (groups[GROUP_NAME].gallery.indexOf(el) === -1) {
-      // TODO
+      throw new Error(`Ups, I can't find a slide for the element ${el}.`)
     } else {
       const SLIDE_INDEX = groups[GROUP_NAME].gallery.indexOf(el)
       const SLIDE_EL = groups[GROUP_NAME].sliderElements[SLIDE_INDEX]
 
-      // TODO If the element to be removed is the currently visible slide
+      // If the element to be removed is the currently visible slide
+      if (isOpen() && GROUP_NAME === activeGroup && SLIDE_INDEX === groups[GROUP_NAME].currentIndex) {
+        if (groups[GROUP_NAME].elementsLength === 1) {
+          close()
+          throw new Error('Ups, I\'ve closed. There are no slides more to show.')
+        } else {
+          // TODO If there is only one slide left, deactivate horizontal dragging/ swiping
+          // TODO Recalculate counter
+          // TODO Set new absolute position per slide
+
+          // If the first slide is displayed
+          if (groups[GROUP_NAME].currentIndex === 0) {
+            next()
+          } else {
+            previous()
+          }
+        }
+      }
 
       // TODO Remove element
       // groups[GROUP_NAME].gallery.splice(groups[GROUP_NAME].gallery.indexOf(el)) don't work
@@ -569,11 +586,6 @@ export default function Tobii (userOptions) {
 
       // Remove slide
       SLIDE_EL.parentNode.removeChild(SLIDE_EL)
-
-      if (isOpen() && GROUP_NAME === activeGroup) {
-        updateConfig()
-        updateLightbox()
-      }
 
       if (callback) {
         callback.call(this)
@@ -922,7 +934,7 @@ export default function Tobii (userOptions) {
   /**
    * Select a group
    *
-   * @param {string} name
+   * @param {string} name - Name of the group to select
    */
   const selectGroup = function selectGroup (name) {
     if (isOpen()) {
@@ -1000,7 +1012,7 @@ export default function Tobii (userOptions) {
   }
 
   /**
-   * Set focus to the next slide
+   * Update focus
    *
    * @param {string} dir - Current slide direction
    */
@@ -1281,7 +1293,7 @@ export default function Tobii (userOptions) {
    * https://bugs.chromium.org/p/chromium/issues/detail?id=506801
    *
    */
-  const contextmenuHandler = function contextmenuHandler (event) {
+  const contextmenuHandler = function contextmenuHandler () {
     pointerDown = false
   }
 

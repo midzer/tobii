@@ -479,11 +479,30 @@ function Tobii(userOptions) {
   var remove = function remove(el, callback) {
     var GROUP_NAME = getGroupName(el); // Check if element exists
 
-    if (groups[GROUP_NAME].gallery.indexOf(el) === -1) ; else {
+    if (groups[GROUP_NAME].gallery.indexOf(el) === -1) {
+      throw new Error("Ups, I can't find a slide for the element " + el + ".");
+    } else {
       var SLIDE_INDEX = groups[GROUP_NAME].gallery.indexOf(el);
-      var SLIDE_EL = groups[GROUP_NAME].sliderElements[SLIDE_INDEX]; // TODO If the element to be removed is the currently visible slide
-      // TODO Remove element
+      var SLIDE_EL = groups[GROUP_NAME].sliderElements[SLIDE_INDEX]; // If the element to be removed is the currently visible slide
+
+      if (isOpen() && GROUP_NAME === activeGroup && SLIDE_INDEX === groups[GROUP_NAME].currentIndex) {
+        if (groups[GROUP_NAME].elementsLength === 1) {
+          close();
+          throw new Error('Ups, I\'ve closed. There are no slides more to show.');
+        } else {
+          // TODO If there is only one slide left, deactivate horizontal dragging/ swiping
+          // TODO Recalculate counter
+          // TODO Set new absolute position per slide
+          // If the first slide is displayed
+          if (groups[GROUP_NAME].currentIndex === 0) {
+            next();
+          } else {
+            previous();
+          }
+        }
+      } // TODO Remove element
       // groups[GROUP_NAME].gallery.splice(groups[GROUP_NAME].gallery.indexOf(el)) don't work
+
 
       groups[GROUP_NAME].elementsLength--; // Remove zoom icon if necessary
 
@@ -497,11 +516,6 @@ function Tobii(userOptions) {
       el.removeEventListener('click', triggerTobii); // Remove slide
 
       SLIDE_EL.parentNode.removeChild(SLIDE_EL);
-
-      if (isOpen() && GROUP_NAME === activeGroup) {
-        updateConfig();
-        updateLightbox();
-      }
 
       if (callback) {
         callback.call(this);
@@ -827,7 +841,7 @@ function Tobii(userOptions) {
   /**
    * Select a group
    *
-   * @param {string} name
+   * @param {string} name - Name of the group to select
    */
 
 
@@ -905,7 +919,7 @@ function Tobii(userOptions) {
     counter.textContent = groups[activeGroup].currentIndex + 1 + "/" + groups[activeGroup].elementsLength;
   };
   /**
-   * Set focus to the next slide
+   * Update focus
    *
    * @param {string} dir - Current slide direction
    */
@@ -1175,7 +1189,7 @@ function Tobii(userOptions) {
    */
 
 
-  var contextmenuHandler = function contextmenuHandler(event) {
+  var contextmenuHandler = function contextmenuHandler() {
     pointerDown = false;
   };
   /**
