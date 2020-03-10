@@ -12,22 +12,23 @@
 }
 
 .tobii-zoom__icon {
-  background-color: rgba(26, 42, 58, 0.94);
+  align-items: center;
+  background-color: rgba(25, 41, 56, 0.94);
   bottom: 0;
   color: #fff;
+  display: flex;
+  height: 1.72222em;
+  justify-content: center;
   line-height: 1;
   position: absolute;
   right: 0;
+  width: 1.72222em;
 }
 
 .tobii-zoom__icon svg {
   color: #fff;
   fill: none;
   height: 1.11111em;
-  padding-bottom: 0.22222em;
-  padding-left: 0.22222em;
-  padding-right: 0.22222em;
-  padding-top: 0.22222em;
   pointer-events: none;
   stroke-linecap: square;
   stroke-linejoin: miter;
@@ -43,7 +44,7 @@
 
 /* Lightbox */
 .tobii {
-  background-color: rgba(26, 42, 58, 0.94);
+  background-color: rgba(25, 41, 56, 0.94);
   bottom: 0;
   box-sizing: border-box;
   contain: strict;
@@ -141,7 +142,7 @@
 .tobii__slider-slide [data-type] > figure > figcaption {
   background-color: rgba(255, 255, 255, 0.94);
   bottom: 0;
-  color: #1a2a3a;
+  color: #192938;
   padding-bottom: 0.22222em;
   padding-left: 0.44444em;
   padding-right: 0.44444em;

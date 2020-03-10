@@ -16,22 +16,23 @@
   }
 
   &__icon {
+    align-items: center;
     background-color: $zoom-icon-background;
     bottom: 0;
     color: $zoom-icon-color;
+    display: flex;
+    height: em(31);
+    justify-content: center;
     line-height: 1;
     position: absolute;
     right: 0;
+    width: em(31);
 
 
     & svg {
       color: $zoom-icon-color;
       fill: none;
       height: em(20);
-      padding-bottom: em(4);
-      padding-left: em(4);
-      padding-right: em(4);
-      padding-top: em(4);
       pointer-events: none;
       stroke-linecap: square;
       stroke-linejoin: miter;
