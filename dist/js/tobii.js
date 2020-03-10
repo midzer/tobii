@@ -558,7 +558,8 @@
 
     var createSlider = function createSlider() {
       groups[newGroup].slider = document.createElement('div');
-      groups[newGroup].slider.className = 'tobii__slider';
+      groups[newGroup].slider.className = 'tobii__slider'; // Hide slider
+
       groups[newGroup].slider.setAttribute('aria-hidden', 'true');
       lightbox.appendChild(groups[newGroup].slider);
     };
@@ -579,7 +580,8 @@
             var SLIDER_ELEMENT_CONTENT = document.createElement('div');
             SLIDER_ELEMENT.className = 'tobii__slider-slide';
             SLIDER_ELEMENT.style.position = 'absolute';
-            SLIDER_ELEMENT.style.left = groups[newGroup].x * 100 + "%";
+            SLIDER_ELEMENT.style.left = groups[newGroup].x * 100 + "%"; // Hide slide
+
             SLIDER_ELEMENT.setAttribute('aria-hidden', 'true'); // Create type elements
 
             SUPPORTED_ELEMENTS[index].init(el, SLIDER_ELEMENT_CONTENT); // Add slide content container to slider element
@@ -763,13 +765,13 @@
       load(index);
 
       if (index < currIndex) {
-        updateLightbox('left');
+        updateLightbox();
         cleanup(currIndex);
         preload(index - 1);
       }
 
       if (index > currIndex) {
-        updateLightbox('right');
+        updateLightbox();
         cleanup(currIndex);
         preload(index + 1);
       }
@@ -793,7 +795,7 @@
       if (groups[activeGroup].currentIndex > 0) {
         leave(groups[activeGroup].currentIndex);
         load(--groups[activeGroup].currentIndex);
-        updateLightbox('left');
+        updateLightbox();
         cleanup(groups[activeGroup].currentIndex + 1);
         preload(groups[activeGroup].currentIndex - 1);
 
@@ -817,7 +819,7 @@
       if (groups[activeGroup].currentIndex < groups[activeGroup].elementsLength - 1) {
         leave(groups[activeGroup].currentIndex);
         load(++groups[activeGroup].currentIndex);
-        updateLightbox('right');
+        updateLightbox();
         cleanup(groups[activeGroup].currentIndex - 1);
         preload(groups[activeGroup].currentIndex + 1);
 
@@ -915,32 +917,26 @@
 
     var updateFocus = function updateFocus(dir) {
       if (config.nav) {
-        prevButton.disabled = false;
-        nextButton.disabled = false;
-
-        if (dir === 'left') {
-          prevButton.focus();
-        } else {
-          nextButton.focus();
-        } // If there is only one slide
-
-
+        // If there is only one slide
         if (groups[activeGroup].elementsLength === 1) {
-          prevButton.disabled = true;
-          nextButton.disabled = true;
-
           if (config.close) {
             closeButton.focus();
           }
         } else {
           // If the first slide is displayed
           if (groups[activeGroup].currentIndex === 0) {
+            prevButton.setAttribute('aria-hidden', 'true');
             prevButton.disabled = true;
+            nextButton.setAttribute('aria-hidden', 'false');
+            nextButton.disabled = false;
             nextButton.focus();
           } // If the last slide is displayed
 
 
           if (groups[activeGroup].currentIndex === groups[activeGroup].elementsLength - 1) {
+            prevButton.setAttribute('aria-hidden', 'false');
+            prevButton.disabled = false;
+            nextButton.setAttribute('aria-hidden', 'true');
             nextButton.disabled = true;
             prevButton.focus();
           }
@@ -1317,10 +1313,14 @@
 
       if (!config.nav || groups[activeGroup].elementsLength === 1 || config.nav === 'auto' && isTouchDevice()) {
         prevButton.setAttribute('aria-hidden', 'true');
+        prevButton.disabled = true;
         nextButton.setAttribute('aria-hidden', 'true');
+        nextButton.disabled = true;
       } else {
         prevButton.setAttribute('aria-hidden', 'false');
+        prevButton.disabled = false;
         nextButton.setAttribute('aria-hidden', 'false');
+        nextButton.disabled = false;
       } // Hide counter if necessary
 
 
@@ -1340,7 +1340,7 @@
     var updateLightbox = function updateLightbox(dir) {
       updateOffset();
       updateCounter();
-      updateFocus(dir);
+      updateFocus();
     };
     /**
      * Reset Tobii

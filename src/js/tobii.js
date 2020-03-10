@@ -1006,32 +1006,26 @@ export default function Tobii (userOptions) {
    */
   const updateFocus = function updateFocus (dir) {
     if (config.nav) {
-      prevButton.disabled = false
-      nextButton.disabled = false
-
-      if (dir === 'left') {
-        prevButton.focus()
-      } else {
-        nextButton.focus()
-      }
-
       // If there is only one slide
       if (groups[activeGroup].elementsLength === 1) {
-        prevButton.disabled = true
-        nextButton.disabled = true
-
         if (config.close) {
           closeButton.focus()
         }
       } else {
         // If the first slide is displayed
         if (groups[activeGroup].currentIndex === 0) {
+          prevButton.setAttribute('aria-hidden', 'true')
           prevButton.disabled = true
+          nextButton.setAttribute('aria-hidden', 'false')
+          nextButton.disabled = false
           nextButton.focus()
         }
 
         // If the last slide is displayed
         if (groups[activeGroup].currentIndex === groups[activeGroup].elementsLength - 1) {
+          prevButton.setAttribute('aria-hidden', 'false')
+          prevButton.disabled = false
+          nextButton.setAttribute('aria-hidden', 'true')
           nextButton.disabled = true
           prevButton.focus()
         }
@@ -1416,10 +1410,14 @@ export default function Tobii (userOptions) {
     // Hide buttons if necessary
     if (!config.nav || groups[activeGroup].elementsLength === 1 || (config.nav === 'auto' && isTouchDevice())) {
       prevButton.setAttribute('aria-hidden', 'true')
+      prevButton.disabled = true
       nextButton.setAttribute('aria-hidden', 'true')
+      nextButton.disabled = true
     } else {
       prevButton.setAttribute('aria-hidden', 'false')
+      prevButton.disabled = false
       nextButton.setAttribute('aria-hidden', 'false')
+      nextButton.disabled = false
     }
 
     // Hide counter if necessary
