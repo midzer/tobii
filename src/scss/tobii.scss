@@ -114,69 +114,69 @@
   height: 100%;
   justify-content: center;
   width: 100%;
-}
-
-/* Slide content */
-[data-type] {
-  max-height: $slide-max-height;
-  max-width: $slide-max-width;
-  overflow: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-
-  & iframe,
-  & video {
-    display: block;
-  }
-
-  > figure {
-    margin: 0;
-    position: relative;
 
 
-    > img {
-      display: block;
-      height: auto;
-      max-height: $slide-max-height;
-      max-width: $slide-max-width;
-      width: auto;
-    }
-
-    > figcaption {
-      background-color: $caption-background;
-      bottom: 0;
-      color: $caption-color;
-      padding-bottom: em(4);
-      padding-left: em(8);
-      padding-right: em(8);
-      padding-top: em(4);
-      position: absolute;
-      white-space: pre-wrap;
-      width: 100%;
-    }
-  }
-}
-
-[data-type="html"] {
-
-
-
-  & video {
-    cursor: auto;
+  & [data-type] {
     max-height: $slide-max-height;
     max-width: $slide-max-width;
+    overflow: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    & iframe,
+    & video {
+      display: block;
+    }
+
+    & > figure {
+      margin: 0;
+      position: relative;
+
+
+      & > img {
+        display: block;
+        height: auto;
+        max-height: $slide-max-height;
+        max-width: $slide-max-width;
+        width: auto;
+      }
+
+      & > figcaption {
+        background-color: $caption-background;
+        bottom: 0;
+        color: $caption-color;
+        padding-bottom: em(4);
+        padding-left: em(8);
+        padding-right: em(8);
+        padding-top: em(4);
+        position: absolute;
+        white-space: pre-wrap;
+        width: 100%;
+      }
+    }
   }
-}
 
-[data-type="iframe"] {
-  /* Fix iframe scrolling on iOS */
-  -webkit-overflow-scrolling: touch;
-  transform: translate3d(0, 0, 0);
+  & [data-type="html"] {
 
 
-  & iframe {
-    height: $slide-max-height;
-    width: $slide-max-width;
+
+    & video {
+      cursor: auto;
+      max-height: $slide-max-height;
+      max-width: $slide-max-width;
+    }
+  }
+
+  & [data-type="iframe"] {
+    /* Fix iframe scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    transform: translate3d(0, 0, 0);
+
+
+    & iframe {
+      height: $slide-max-height;
+      width: $slide-max-width;
+    }
   }
 }
 
