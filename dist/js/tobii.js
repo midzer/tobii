@@ -765,13 +765,13 @@
       load(index);
 
       if (index < currIndex) {
-        updateLightbox();
+        updateLightbox('left');
         cleanup(currIndex);
         preload(index - 1);
       }
 
       if (index > currIndex) {
-        updateLightbox();
+        updateLightbox('right');
         cleanup(currIndex);
         preload(index + 1);
       }
@@ -795,7 +795,7 @@
       if (groups[activeGroup].currentIndex > 0) {
         leave(groups[activeGroup].currentIndex);
         load(--groups[activeGroup].currentIndex);
-        updateLightbox();
+        updateLightbox('left');
         cleanup(groups[activeGroup].currentIndex + 1);
         preload(groups[activeGroup].currentIndex - 1);
 
@@ -819,7 +819,7 @@
       if (groups[activeGroup].currentIndex < groups[activeGroup].elementsLength - 1) {
         leave(groups[activeGroup].currentIndex);
         load(++groups[activeGroup].currentIndex);
-        updateLightbox();
+        updateLightbox('right');
         cleanup(groups[activeGroup].currentIndex - 1);
         preload(groups[activeGroup].currentIndex + 1);
 
@@ -917,7 +917,11 @@
 
     var updateFocus = function updateFocus(dir) {
       if (config.nav) {
-        // If there is only one slide
+        prevButton.setAttribute('aria-hidden', 'true');
+        prevButton.disabled = true;
+        nextButton.setAttribute('aria-hidden', 'true');
+        nextButton.disabled = true; // If there is only one slide
+
         if (groups[activeGroup].elementsLength === 1) {
           if (config.close) {
             closeButton.focus();
@@ -925,20 +929,24 @@
         } else {
           // If the first slide is displayed
           if (groups[activeGroup].currentIndex === 0) {
-            prevButton.setAttribute('aria-hidden', 'true');
-            prevButton.disabled = true;
             nextButton.setAttribute('aria-hidden', 'false');
             nextButton.disabled = false;
-            nextButton.focus();
-          } // If the last slide is displayed
-
-
-          if (groups[activeGroup].currentIndex === groups[activeGroup].elementsLength - 1) {
+            nextButton.focus(); // If the last slide is displayed
+          } else if (groups[activeGroup].currentIndex === groups[activeGroup].elementsLength - 1) {
             prevButton.setAttribute('aria-hidden', 'false');
             prevButton.disabled = false;
-            nextButton.setAttribute('aria-hidden', 'true');
-            nextButton.disabled = true;
             prevButton.focus();
+          } else {
+            prevButton.setAttribute('aria-hidden', 'false');
+            prevButton.disabled = false;
+            nextButton.setAttribute('aria-hidden', 'false');
+            nextButton.disabled = false;
+
+            if (dir === 'left') {
+              prevButton.focus();
+            } else {
+              nextButton.focus();
+            }
           }
         }
       } else if (config.close) {
@@ -1340,7 +1348,7 @@
     var updateLightbox = function updateLightbox(dir) {
       updateOffset();
       updateCounter();
-      updateFocus();
+      updateFocus(dir);
     };
     /**
      * Reset Tobii

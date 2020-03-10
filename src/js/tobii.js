@@ -1006,6 +1006,11 @@ export default function Tobii (userOptions) {
    */
   const updateFocus = function updateFocus (dir) {
     if (config.nav) {
+      prevButton.setAttribute('aria-hidden', 'true')
+      prevButton.disabled = true
+      nextButton.setAttribute('aria-hidden', 'true')
+      nextButton.disabled = true
+
       // If there is only one slide
       if (groups[activeGroup].elementsLength === 1) {
         if (config.close) {
@@ -1014,20 +1019,28 @@ export default function Tobii (userOptions) {
       } else {
         // If the first slide is displayed
         if (groups[activeGroup].currentIndex === 0) {
-          prevButton.setAttribute('aria-hidden', 'true')
-          prevButton.disabled = true
           nextButton.setAttribute('aria-hidden', 'false')
           nextButton.disabled = false
-          nextButton.focus()
-        }
 
-        // If the last slide is displayed
-        if (groups[activeGroup].currentIndex === groups[activeGroup].elementsLength - 1) {
+          nextButton.focus()
+
+          // If the last slide is displayed
+        } else if (groups[activeGroup].currentIndex === groups[activeGroup].elementsLength - 1) {
           prevButton.setAttribute('aria-hidden', 'false')
           prevButton.disabled = false
-          nextButton.setAttribute('aria-hidden', 'true')
-          nextButton.disabled = true
+
           prevButton.focus()
+        } else {
+          prevButton.setAttribute('aria-hidden', 'false')
+          prevButton.disabled = false
+          nextButton.setAttribute('aria-hidden', 'false')
+          nextButton.disabled = false
+
+          if (dir === 'left') {
+            prevButton.focus()
+          } else {
+            nextButton.focus()
+          }
         }
       }
     } else if (config.close) {
