@@ -45,6 +45,8 @@ export default function Tobii (userOptions) {
   let groups = {}
   let newGroup = null
   let activeGroup = null
+  const nextEvent = createEvent('next')
+  const prevEvent = createEvent('prev')
 
   /**
    * Merge default options with user options
@@ -657,6 +659,16 @@ export default function Tobii (userOptions) {
   }
 
   /**
+     * Create an event
+     *
+     *  @param {string} name - Name of event
+     *  @return {Event}
+     */
+  const createEvent = function createEvent (name) {
+    return new Event('tobi-' + name)
+  }
+
+  /**
    * Open Tobii
    *
    * @param {number} index - Index to load
@@ -816,6 +828,7 @@ export default function Tobii (userOptions) {
       if (callback) {
         callback.call(this)
       }
+      lightbox.dispatchEvent(prevEvent)
     }
   }
 
@@ -835,6 +848,7 @@ export default function Tobii (userOptions) {
       if (callback) {
         callback.call(this)
       }
+      lightbox.dispatchEvent(nextEvent)
     }
   }
 
