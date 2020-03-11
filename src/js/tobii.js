@@ -1403,6 +1403,14 @@ export default function Tobii (userOptions) {
   }
 
   /**
+   * Return elements length
+   *
+   */
+  const count = function count () {
+    return groups[activeGroup].elementsLength
+  }
+
+  /**
    * Return current group
    *
    */
@@ -1443,6 +1451,7 @@ export default function Tobii (userOptions) {
     destroy: destroy,
     isOpen: isOpen,
     currentSlide: currentSlide,
+    count: count,
     selectGroup: selectGroup,
     currentGroup: currentGroup
   }
