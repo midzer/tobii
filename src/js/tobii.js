@@ -434,9 +434,8 @@ export default function Tobii (userOptions) {
    * Check dependencies
    *
    * @param {HTMLElement} el - Element to add
-   * @param {function} callback - Optional callback to call after add
    */
-  const checkDependencies = function checkDependencies (el, callback) {
+  const checkDependencies = function checkDependencies (el) {
     // Check if there is a YouTube video and if the YouTube iframe-API is ready
     if (document.querySelector('[data-type="youtube"]') !== null && !isYouTubeDependencieLoaded) {
       if (document.getElementById('iframe_api') === null) {
@@ -455,13 +454,13 @@ export default function Tobii (userOptions) {
 
       window.onYouTubePlayerAPIReady = () => {
         Array.prototype.forEach.call(WAITING_ELS, waitingEl => {
-          add(waitingEl, callback)
+          add(waitingEl)
         })
 
         isYouTubeDependencieLoaded = true
       }
     } else {
-      add(el, callback)
+      add(el)
     }
   }
 
@@ -489,9 +488,8 @@ export default function Tobii (userOptions) {
    * Add element
    *
    * @param {HTMLElement} el - Element to add
-   * @param {function} callback - Optional callback to call after add
    */
-  const add = function add (el, callback) {
+  const add = function add (el) {
     newGroup = getGroupName(el)
 
     if (!Object.prototype.hasOwnProperty.call(groups, newGroup)) {
@@ -525,10 +523,6 @@ export default function Tobii (userOptions) {
         updateConfig()
         updateLightbox()
       }
-
-      if (callback) {
-        callback.call(this)
-      }
     } else {
       throw new Error('Ups, element already added.')
     }
@@ -538,9 +532,8 @@ export default function Tobii (userOptions) {
    * Remove element
    *
    * @param {HTMLElement} el - Element to remove
-   * @param {function} callback - Optional callback to call after remove
    */
-  const remove = function remove (el, callback) {
+  const remove = function remove (el) {
     const GROUP_NAME = getGroupName(el)
 
     // Check if element exists
@@ -586,10 +579,6 @@ export default function Tobii (userOptions) {
 
       // Remove slide
       SLIDE_EL.parentNode.removeChild(SLIDE_EL)
-
-      if (callback) {
-        callback.call(this)
-      }
     }
   }
 
@@ -691,9 +680,8 @@ export default function Tobii (userOptions) {
    * Open Tobii
    *
    * @param {number} index - Index to load
-   * @param {function} callback - Optional callback to call after open
    */
-  const open = function open (index, callback) {
+  const open = function open (index) {
     activeGroup = activeGroup !== null ? activeGroup : newGroup
 
     if (isOpen()) {
@@ -751,18 +739,13 @@ export default function Tobii (userOptions) {
     setTimeout(() => {
       groups[activeGroup].slider.classList.add('tobii__slider--animate')
     }, 1000)
-
-    if (callback) {
-      callback.call(this)
-    }
   }
 
   /**
    * Close Tobii
    *
-   * @param {function} callback - Optional callback to call after close
    */
-  const close = function close (callback) {
+  const close = function close () {
     if (!isOpen()) {
       throw new Error('Ups, I\'m already closed.')
     }
@@ -792,10 +775,6 @@ export default function Tobii (userOptions) {
 
     // Remove the hack to prevent animation during opening
     groups[activeGroup].slider.classList.remove('tobii__slider--animate')
-
-    if (callback) {
-      callback.call(this)
-    }
   }
 
   /**
@@ -839,9 +818,8 @@ export default function Tobii (userOptions) {
    * Select a slide
    *
    * @param {number} index - Index to select
-   * @param {function} callback - Optional callback function
    */
-  const select = function select (index, callback) {
+  const select = function select (index) {
     const currIndex = groups[activeGroup].currentIndex
 
     if (!isOpen()) {
@@ -879,18 +857,13 @@ export default function Tobii (userOptions) {
       cleanup(currIndex)
       preload(index + 1)
     }
-
-    if (callback) {
-      callback.call(this)
-    }
   }
 
   /**
    * Select the previous slide
    *
-   * @param {function} callback - Optional callback function
    */
-  const previous = function previous (callback) {
+  const previous = function previous () {
     if (!isOpen()) {
       throw new Error('Ups, I\'m closed.')
     }
@@ -901,19 +874,14 @@ export default function Tobii (userOptions) {
       updateLightbox('left')
       cleanup(groups[activeGroup].currentIndex + 1)
       preload(groups[activeGroup].currentIndex - 1)
-
-      if (callback) {
-        callback.call(this)
-      }
     }
   }
 
   /**
    * Select the next slide
    *
-   * @param {function} callback - Optional callback function
    */
-  const next = function next (callback) {
+  const next = function next () {
     if (!isOpen()) {
       throw new Error('Ups, I\'m closed.')
     }
@@ -924,10 +892,6 @@ export default function Tobii (userOptions) {
       updateLightbox('right')
       cleanup(groups[activeGroup].currentIndex - 1)
       preload(groups[activeGroup].currentIndex + 1)
-
-      if (callback) {
-        callback.call(this)
-      }
     }
   }
 
@@ -1467,9 +1431,8 @@ export default function Tobii (userOptions) {
   /**
    * Reset Tobii
    *
-   * @param {function} callback - Optional callback to call after reset
    */
-  const reset = function reset (callback) {
+  const reset = function reset () {
     if (isOpen()) {
       close()
     }
@@ -1491,25 +1454,16 @@ export default function Tobii (userOptions) {
     figcaptionId = 0
 
     // TODO
-
-    if (callback) {
-      callback.call(this)
-    }
   }
 
   /**
    * Destroy Tobii
    *
-   * @param {function} callback - Optional callback to call after destroy
    */
-  const destroy = function destroy (callback) {
+  const destroy = function destroy () {
     reset()
 
     lightbox.parentNode.removeChild(lightbox)
-
-    if (callback) {
-      callback.call(this)
-    }
   }
 
   /**

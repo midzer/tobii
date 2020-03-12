@@ -266,19 +266,19 @@ The following options are available:
 
 | Function | Description |
 | --- | --- |
-| `open(index, callback)` | Open Tobii. Optional `index` (Integer), zero-based index of the slide to open. Optional `callback` (function). |
-| `select(index, callback)` | Select a slide with `index` (Integer), zero-based index of the slide to select. Optional `callback` (function). |
-| `previous(callback)` | Select the previous slide. Optional `callback` (function). |
-| `next(callback)` | Select the next slide. Optional `callback` (function). |
+| `open(index)` | Open Tobii. Optional `index` (Integer), zero-based index of the slide to open. |
+| `select(index)` | Select a slide with `index` (Integer), zero-based index of the slide to select. |
+| `previous()` | Select the previous slide. |
+| `next()` | Select the next slide. |
 | `selectGroup(value)` | Select a group with `value` (string), name of the group to select. |
-| `close(callback)` | Close Tobii. Optional `callback` (function). |
-| `add(element, callback)` | Add `element` (DOM element). Optional `callback` (function). |
-| `remove(element, callback)` | Remove `element` (DOM element). Optional `callback` (function). |
+| `close()` | Close Tobii. |
+| `add(element)` | Add `element` (DOM element). |
+| `remove(element)` | Remove `element` (DOM element). |
 | `isOpen()` | Check if Tobii is open. |
 | `currentSlide()` | Return the current slide index. |
 | `currentGroup()` | Return the current group name. |
-| `reset(callback)` | Reset Tobii. Optional `callback` (function). |
-| `destroy(callback)` | Destroy Tobii. Optional `callback` (function). |
+| `reset()` | Reset Tobii. |
+| `destroy()` | Destroy Tobii. |
 
 ## Browser support
 
