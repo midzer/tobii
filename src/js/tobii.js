@@ -875,6 +875,8 @@ export default function Tobii (userOptions) {
       cleanup(groups[activeGroup].currentIndex + 1)
       preload(groups[activeGroup].currentIndex - 1)
     }
+
+    lightbox.dispatchEvent(new Event('tobii-prev'))
   }
 
   /**
@@ -893,6 +895,8 @@ export default function Tobii (userOptions) {
       cleanup(groups[activeGroup].currentIndex - 1)
       preload(groups[activeGroup].currentIndex + 1)
     }
+
+    lightbox.dispatchEvent(new Event('tobii-next'))
   }
 
   /**
@@ -1499,6 +1503,14 @@ export default function Tobii (userOptions) {
   }
 
   /**
+   * Return elements length
+   *
+   */
+  const count = function count () {
+    return groups[activeGroup].elementsLength
+  }
+
+  /**
    * Return current group
    *
    */
@@ -1520,6 +1532,7 @@ export default function Tobii (userOptions) {
     isOpen: isOpen,
     currentSlide: currentSlide,
     select: select,
+    count: count,
     selectGroup: selectGroup,
     currentGroup: currentGroup
   }
