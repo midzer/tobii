@@ -275,7 +275,8 @@ The following options are available:
 | `add(element)` | Add `element` (DOM element). |
 | `remove(element)` | Remove `element` (DOM element). |
 | `isOpen()` | Check if Tobii is open. |
-| `currentSlide()` | Return the current slide index. |
+| `slidesIndex()` | Return the current slide index. |
+| `slidesCount()` | Return the current number of slides. |
 | `currentGroup()` | Return the current group name. |
 | `reset()` | Reset Tobii. |
 | `destroy()` | Destroy Tobii. |
