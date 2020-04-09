@@ -1498,7 +1498,7 @@ export default function Tobii (userOptions) {
    * Return current index
    *
    */
-  const currentSlide = function currentSlide () {
+  const slidesIndex = function slidesIndex () {
     return groups[activeGroup].currentIndex
   }
 
@@ -1506,7 +1506,7 @@ export default function Tobii (userOptions) {
    * Return elements length
    *
    */
-  const count = function count () {
+  const slidesCount = function slidesCount () {
     return groups[activeGroup].elementsLength
   }
 
@@ -1530,9 +1530,9 @@ export default function Tobii (userOptions) {
     reset: reset,
     destroy: destroy,
     isOpen: isOpen,
-    currentSlide: currentSlide,
+    slidesIndex: slidesIndex,
     select: select,
-    count: count,
+    slidesCount: slidesCount,
     selectGroup: selectGroup,
     currentGroup: currentGroup
   }
