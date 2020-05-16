@@ -148,7 +148,7 @@
 
           container.appendChild(FIGURE); // Create loading indicator
 
-          LOADING_INDICATOR.className = 'tobii-loader';
+          LOADING_INDICATOR.className = 'tobii__loader';
           LOADING_INDICATOR.setAttribute('role', 'progressbar');
           LOADING_INDICATOR.setAttribute('aria-label', config.loadingIndicatorLabel); // Add loading indicator to container
 
@@ -168,7 +168,7 @@
           }
 
           var FIGURE = container.querySelector('figure');
-          var LOADING_INDICATOR = container.querySelector('.tobii-loader');
+          var LOADING_INDICATOR = container.querySelector('.tobii__loader');
 
           IMAGE.onload = function () {
             container.removeChild(LOADING_INDICATOR);
@@ -529,21 +529,21 @@
       lightbox.className = 'tobii'; // Create the previous button
 
       prevButton = document.createElement('button');
-      prevButton.className = 'tobii__prev';
+      prevButton.className = 'tobii__btn tobii__btn--previous';
       prevButton.setAttribute('type', 'button');
       prevButton.setAttribute('aria-label', config.navLabel[0]);
       prevButton.innerHTML = config.navText[0];
       lightbox.appendChild(prevButton); // Create the next button
 
       nextButton = document.createElement('button');
-      nextButton.className = 'tobii__next';
+      nextButton.className = 'tobii__btn tobii__btn--next';
       nextButton.setAttribute('type', 'button');
       nextButton.setAttribute('aria-label', config.navLabel[1]);
       nextButton.innerHTML = config.navText[1];
       lightbox.appendChild(nextButton); // Create the close button
 
       closeButton = document.createElement('button');
-      closeButton.className = 'tobii__close';
+      closeButton.className = 'tobii__btn tobii__btn--close';
       closeButton.setAttribute('type', 'button');
       closeButton.setAttribute('aria-label', config.closeLabel);
       closeButton.innerHTML = config.closeText;
@@ -581,7 +581,7 @@
             // Create slide elements
             var SLIDER_ELEMENT = document.createElement('div');
             var SLIDER_ELEMENT_CONTENT = document.createElement('div');
-            SLIDER_ELEMENT.className = 'tobii__slider-slide';
+            SLIDER_ELEMENT.className = 'tobii__slide';
             SLIDER_ELEMENT.style.position = 'absolute';
             SLIDER_ELEMENT.style.left = groups[newGroup].x * 100 + "%"; // Hide slide
 
@@ -719,7 +719,7 @@
       var CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       var TYPE = CONTAINER.getAttribute('data-type'); // Add active slide class
 
-      groups[activeGroup].sliderElements[index].classList.add('tobii__slider-slide--is-active');
+      groups[activeGroup].sliderElements[index].classList.add('tobii__slide--is-active');
       groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'false');
       SUPPORTED_ELEMENTS[TYPE].onLoad(CONTAINER);
     };
@@ -785,7 +785,10 @@
         updateLightbox('left');
         cleanup(groups[activeGroup].currentIndex + 1);
         preload(groups[activeGroup].currentIndex - 1);
-      }
+      } // Create and dispatch a new event
+
+
+      lightbox.dispatchEvent(new Event('tobii-prev'));
     };
     /**
      * Select the next slide
@@ -804,7 +807,10 @@
         updateLightbox('right');
         cleanup(groups[activeGroup].currentIndex - 1);
         preload(groups[activeGroup].currentIndex + 1);
-      }
+      } // Create and dispatch a new event
+
+
+      lightbox.dispatchEvent(new Event('tobii-next'));
     };
     /**
      * Select a group
@@ -844,7 +850,7 @@
       var CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       var TYPE = CONTAINER.getAttribute('data-type'); // Remove active slide class
 
-      groups[activeGroup].sliderElements[index].classList.remove('tobii__slider-slide--is-active');
+      groups[activeGroup].sliderElements[index].classList.remove('tobii__slide--is-active');
       groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'true');
       SUPPORTED_ELEMENTS[TYPE].onLeave(CONTAINER);
     };
@@ -1004,7 +1010,7 @@
         previous();
       } else if (event.target === nextButton) {
         next();
-      } else if (event.target === closeButton || event.target.classList.contains('tobii__slider-slide') && config.docClose) {
+      } else if (event.target === closeButton || event.target.classList.contains('tobii__slide') && config.docClose) {
         close();
       }
 
@@ -1018,7 +1024,7 @@
 
 
     var getFocusableChildren = function getFocusableChildren() {
-      return Array.prototype.slice.call(lightbox.querySelectorAll(".tobii__close:not([disabled]), .tobii__prev:not([disabled]), .tobii__next:not([disabled]), .tobii__slider-slide--is-active + " + FOCUSABLE_ELEMENTS.join(', .tobii__slider-slide--is-active '))).filter(function (child) {
+      return Array.prototype.slice.call(lightbox.querySelectorAll(".tobii__btn:not([disabled]), .tobii__slide--is-active + " + FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active '))).filter(function (child) {
         return !!(child.offsetWidth || child.offsetHeight || child.getClientRects().length);
       });
     };
@@ -1395,8 +1401,17 @@
      */
 
 
-    var currentSlide = function currentSlide() {
+    var slidesIndex = function slidesIndex() {
       return groups[activeGroup].currentIndex;
+    };
+    /**
+     * Return elements length
+     *
+     */
+
+
+    var slidesCount = function slidesCount() {
+      return groups[activeGroup].elementsLength;
     };
     /**
      * Return current group
@@ -1409,21 +1424,21 @@
     };
 
     init(userOptions);
-    return {
-      open: open,
-      previous: previous,
-      next: next,
-      close: close,
-      add: checkDependencies,
-      remove: remove,
-      reset: reset,
-      destroy: destroy,
-      isOpen: isOpen,
-      currentSlide: currentSlide,
-      select: select,
-      selectGroup: selectGroup,
-      currentGroup: currentGroup
-    };
+    Tobii.open = open;
+    Tobii.previous = previous;
+    Tobii.next = next;
+    Tobii.close = close;
+    Tobii.add = checkDependencies;
+    Tobii.remove = remove;
+    Tobii.reset = reset;
+    Tobii.destroy = destroy;
+    Tobii.isOpen = isOpen;
+    Tobii.slidesIndex = slidesIndex;
+    Tobii.select = select;
+    Tobii.slidesCount = slidesCount;
+    Tobii.selectGroup = selectGroup;
+    Tobii.currentGroup = currentGroup;
+    return Tobii;
   }
 
   return Tobii;

@@ -1,4 +1,7 @@
-/* Link */
+/**
+ * Lightbox link
+ *
+ */
 .tobii-zoom {
   border: 0;
   box-shadow: none;
@@ -14,35 +17,36 @@
 .tobii-zoom__icon {
   align-items: center;
   background-color: rgba(25, 41, 56, 0.94);
-  bottom: 0;
+  top: 0.44444em;
   color: #fff;
   display: flex;
-  height: 1.72222em;
+  height: 1.77778em;
   justify-content: center;
   line-height: 1;
   position: absolute;
-  right: 0;
-  width: 1.72222em;
+  right: 0.44444em;
+  width: 1.77778em;
 }
 
 .tobii-zoom__icon svg {
-  color: #fff;
   fill: none;
-  height: 1.11111em;
+  height: 1.33333em;
   pointer-events: none;
   stroke-linecap: square;
   stroke-linejoin: miter;
   stroke-width: 2;
-  stroke: #fff;
-  width: 1.11111em;
+  stroke: currentColor;
+  width: 1.33333em;
 }
 
-/* Hide scrollbar if lightbox is displayed */
 .tobii-is-open {
   overflow-y: hidden;
 }
 
-/* Lightbox */
+/**
+ * Lightbox
+ *
+ */
 .tobii {
   background-color: rgba(25, 41, 56, 0.94);
   bottom: 0;
@@ -50,7 +54,7 @@
   contain: strict;
   font-size: 18px;
   left: 0;
-  line-height: 1.5555555555555556;
+  line-height: 1.5;
   overflow: hidden;
   position: fixed;
   right: 0;
@@ -68,7 +72,10 @@
   box-sizing: inherit;
 }
 
-/* Slider */
+/**
+ * Slider
+ *
+ */
 .tobii__slider {
   bottom: 0;
   left: 0;
@@ -82,30 +89,29 @@
   display: none;
 }
 
-.tobii__slider--animate:not(.tobii__slider--is-dragging) {
-  transition-duration: 0.3s;
-  transition-property: transform;
-  transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
-}
-
-@media screen and (prefers-reduced-motion: reduce) {
+@media screen and (prefers-reduced-motion: no-preference) {
   .tobii__slider--animate:not(.tobii__slider--is-dragging) {
-    transition: none;
+    transition-duration: 0.3s;
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
   }
 }
 
-.tobii__slider--is-draggable .tobii__slider__slide__content {
+.tobii__slider--is-draggable [data-type] {
   cursor: -webkit-grab;
   cursor: grab;
 }
 
-.tobii__slider--is-dragging .tobii__slider__slide__content {
+.tobii__slider--is-dragging [data-type] {
   cursor: -webkit-grabbing;
   cursor: grabbing;
 }
 
-/* Slide */
-.tobii__slider-slide {
+/**
+ * Slide
+ *
+ */
+.tobii__slide {
   align-items: center;
   display: flex;
   height: 100%;
@@ -113,7 +119,7 @@
   width: 100%;
 }
 
-.tobii__slider-slide [data-type] {
+.tobii__slide [data-type] {
   max-height: 85vh;
   max-width: 85vw;
   overflow: hidden;
@@ -121,17 +127,17 @@
   overscroll-behavior: contain;
 }
 
-.tobii__slider-slide [data-type] iframe,
-.tobii__slider-slide [data-type] video {
+.tobii__slide iframe,
+.tobii__slide video {
   display: block;
 }
 
-.tobii__slider-slide [data-type] > figure {
+.tobii__slide figure {
   margin: 0;
   position: relative;
 }
 
-.tobii__slider-slide [data-type] > figure > img {
+.tobii__slide figure > img {
   display: block;
   height: auto;
   max-height: 85vh;
@@ -139,7 +145,7 @@
   width: auto;
 }
 
-.tobii__slider-slide [data-type] > figure > figcaption {
+.tobii__slide figure > figcaption {
   background-color: rgba(255, 255, 255, 0.94);
   bottom: 0;
   color: #192938;
@@ -152,25 +158,28 @@
   width: 100%;
 }
 
-.tobii__slider-slide [data-type="html"] video {
+.tobii__slide [data-type="html"] video {
   cursor: auto;
   max-height: 85vh;
   max-width: 85vw;
 }
 
-.tobii__slider-slide [data-type="iframe"] {
+.tobii__slide [data-type="iframe"] {
   /* Fix iframe scrolling on iOS */
   -webkit-overflow-scrolling: touch;
   transform: translate3d(0, 0, 0);
 }
 
-.tobii__slider-slide [data-type="iframe"] iframe {
+.tobii__slide [data-type="iframe"] iframe {
   height: 85vh;
   width: 85vw;
 }
 
-/* Buttons */
-.tobii > button {
+/**
+ * Buttons
+ *
+ */
+.tobii__btn {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -188,21 +197,20 @@
   padding-top: 0.22222em;
   position: absolute;
   touch-action: manipulation;
-  transition-duration: 0.3s;
-  transition-property: opacity, transform;
-  transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
-  will-change: opacity, transform;
+  will-change: opacity;
   z-index: 1;
 }
 
-@media screen and (prefers-reduced-motion: reduce) {
-  .tobii > button {
-    transition: none;
-    will-change: opacity;
+@media screen and (prefers-reduced-motion: no-preference) {
+  .tobii__btn {
+    transition-duration: 0.3s;
+    transition-property: opacity, transform;
+    transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+    will-change: opacity, transform;
   }
 }
 
-.tobii > button svg {
+.tobii__btn svg {
   pointer-events: none;
   stroke: #fff;
   stroke-width: 1;
@@ -212,50 +220,46 @@
   color: #fff;
 }
 
-.tobii > button:active, .tobii > button:focus, .tobii > button:hover {
+.tobii__btn:active, .tobii__btn:focus, .tobii__btn:hover {
   opacity: 1;
-  transform: scale(0.84);
 }
 
-@media screen and (prefers-reduced-motion: reduce) {
-  .tobii > button:active, .tobii > button:focus, .tobii > button:hover {
-    transform: none;
-  }
-}
-
-.tobii > button.tobii__prev, .tobii > button.tobii__next {
+.tobii__btn--previous, .tobii__btn--next {
   top: 50%;
-  top: calc(50% - 2.22222em);
+  transform: translateY(-50%);
 }
 
-.tobii > button.tobii__prev svg, .tobii > button.tobii__next svg {
+.tobii__btn--previous svg, .tobii__btn--next svg {
   height: 3.88889em;
   width: 3.88889em;
 }
 
-.tobii > button.tobii__prev {
+.tobii__btn--previous {
   left: 0;
 }
 
-.tobii > button.tobii__next {
+.tobii__btn--next {
   right: 0;
 }
 
-.tobii > button.tobii__close {
+.tobii__btn--close {
   right: 0.27778em;
   top: 1em;
 }
 
-.tobii > button.tobii__close svg {
+.tobii__btn--close svg {
   height: 3.33333em;
   width: 3.33333em;
 }
 
-.tobii > button:disabled, .tobii > button[aria-hidden="true"] {
+.tobii__btn:disabled, .tobii__btn[aria-hidden="true"] {
   display: none;
 }
 
-/* Counter */
+/**
+ * Counter
+ *
+ */
 .tobii__counter {
   background-color: transparent;
   color: #fff;
@@ -271,17 +275,21 @@
   display: none;
 }
 
-/* Loader */
-.tobii-loader {
+/**
+ * Loader
+ *
+ */
+.tobii__loader {
   display: inline-block;
   height: 5.55556em;
-  left: calc(50% - 2.77778em);
+  left: 50%;
   position: absolute;
-  top: calc(50% - 2.77778em);
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 5.55556em;
 }
 
-.tobii-loader::before {
+.tobii__loader::before {
   animation: spin 1s infinite;
   border-radius: 100%;
   border: 0.22222em solid #949ba3;

@@ -2,7 +2,10 @@
   'variables',
   'functions';
 
-/* Link */
+/**
+ * Lightbox link
+ *
+ */
 .tobii-zoom {
   border: 0;
   box-shadow: none;
@@ -18,37 +21,39 @@
   &__icon {
     align-items: center;
     background-color: $zoom-icon-background;
-    bottom: 0;
+    top: em(8);
     color: $zoom-icon-color;
     display: flex;
-    height: em(31);
+    height: em(32);
     justify-content: center;
     line-height: 1;
     position: absolute;
-    right: 0;
-    width: em(31);
+    right: em(8);
+    width: em(32);
 
 
     & svg {
-      color: $zoom-icon-color;
       fill: none;
-      height: em(20);
+      height: em(24);
       pointer-events: none;
       stroke-linecap: square;
       stroke-linejoin: miter;
       stroke-width: 2;
-      stroke: $zoom-icon-color;
-      width: em(20);
+      stroke: currentColor;
+      width: em(24);
     }
   }
 }
 
-/* Hide scrollbar if lightbox is displayed */
+// Hide scrollbar if lightbox is displayed
 .tobii-is-open {
   overflow-y: hidden;
 }
 
-/* Lightbox */
+/**
+ * Lightbox
+ *
+ */
 .tobii {
   background-color: $lightbox-background;
   bottom: 0;
@@ -56,7 +61,7 @@
   contain: strict;
   font-size: #{$base-font-size}px;
   left: 0;
-  line-height: 1.5555555555555556;
+  line-height: 1.5;
   overflow: hidden;
   position: fixed;
   right: 0;
@@ -75,7 +80,11 @@
   }
 }
 
-/* Slider */
+
+/**
+ * Slider
+ *
+ */
 .tobii__slider {
   bottom: 0;
   left: 0;
@@ -89,27 +98,28 @@
     display: none;
   }
 
-  &--animate:not(&--is-dragging) {
-    transition-duration: $transition-duration;
-    transition-property: transform;
-    transition-timing-function: $transition-timing-function;
-
-    @media screen and (prefers-reduced-motion: reduce) {
-      transition: none;
+  @media screen and (prefers-reduced-motion: no-preference) {
+    &--animate:not(&--is-dragging) {
+      transition-duration: $transition-duration;
+      transition-property: transform;
+      transition-timing-function: $transition-timing-function;
     }
   }
 
-  &--is-draggable &__slide__content {
+  &--is-draggable [data-type] {
     cursor: grab;
   }
 
-  &--is-dragging &__slide__content {
+  &--is-dragging [data-type] {
     cursor: grabbing;
   }
 }
 
-/* Slide */
-.tobii__slider-slide {
+/**
+ * Slide
+ *
+ */
+.tobii__slide {
   align-items: center;
   display: flex;
   height: 100%;
@@ -123,37 +133,37 @@
     overflow: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
+  }
 
-    & iframe,
-    & video {
+  & iframe,
+  & video {
+    display: block;
+  }
+
+  & figure {
+    margin: 0;
+    position: relative;
+
+
+    & > img {
       display: block;
+      height: auto;
+      max-height: $slide-max-height;
+      max-width: $slide-max-width;
+      width: auto;
     }
 
-    & > figure {
-      margin: 0;
-      position: relative;
-
-
-      & > img {
-        display: block;
-        height: auto;
-        max-height: $slide-max-height;
-        max-width: $slide-max-width;
-        width: auto;
-      }
-
-      & > figcaption {
-        background-color: $caption-background;
-        bottom: 0;
-        color: $caption-color;
-        padding-bottom: em(4);
-        padding-left: em(8);
-        padding-right: em(8);
-        padding-top: em(4);
-        position: absolute;
-        white-space: pre-wrap;
-        width: 100%;
-      }
+    & > figcaption {
+      background-color: $caption-background;
+      bottom: 0;
+      color: $caption-color;
+      padding-bottom: em(4);
+      padding-left: em(8);
+      padding-right: em(8);
+      padding-top: em(4);
+      position: absolute;
+      white-space: pre-wrap;
+      width: 100%;
     }
   }
 
@@ -181,8 +191,11 @@
   }
 }
 
-/* Buttons */
-.tobii > button {
+/**
+ * Buttons
+ *
+ */
+.tobii__btn {
   appearance: none;
   background-color: $button-background;
   border: em(1) solid transparent;
@@ -198,15 +211,14 @@
   padding-top: em(4);
   position: absolute;
   touch-action: manipulation;
-  transition-duration: $transition-duration;
-  transition-property: opacity, transform;
-  transition-timing-function: $transition-timing-function;
-  will-change: opacity, transform;
+  will-change: opacity;
   z-index: 1;
 
-  @media screen and (prefers-reduced-motion: reduce) {
-    transition: none;
-    will-change: opacity;
+  @media screen and (prefers-reduced-motion: no-preference) {
+    transition-duration: $transition-duration;
+    transition-property: opacity, transform;
+    transition-timing-function: $transition-timing-function;
+    will-change: opacity, transform;
   }
 
 
@@ -224,17 +236,12 @@
   &:focus,
   &:hover {
     opacity: 1;
-    transform: scale(.84);
-
-    @media screen and (prefers-reduced-motion: reduce) {
-      transform: none;
-    }
   }
 
-  &.tobii__prev,
-  &.tobii__next {
+  &--previous,
+  &--next {
     top: 50%;
-    top: calc(50% - #{em(40)});
+    transform: translateY(-50%);
 
 
     & svg {
@@ -243,15 +250,15 @@
     }
   }
 
-  &.tobii__prev {
+  &--previous {
     left: 0;
   }
 
-  &.tobii__next {
+  &--next {
     right: 0;
   }
 
-  &.tobii__close {
+  &--close {
     right: em(5);
     top: em(18);
 
@@ -268,7 +275,10 @@
   }
 }
 
-/* Counter */
+/**
+ * Counter
+ *
+ */
 .tobii__counter {
   background-color: $counter-background;
   color: $counter-color;
@@ -285,13 +295,17 @@
   }
 }
 
-/* Loader */
-.tobii-loader {
+/**
+ * Loader
+ *
+ */
+.tobii__loader {
   display: inline-block;
   height: em(100);
-  left: calc(50% - #{em(50)});
+  left: 50%;
   position: absolute;
-  top: calc(50% - #{em(50)});
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: em(100);
 
 
@@ -311,6 +325,7 @@
 }
 
 @keyframes spin {
+
   to {
     transform: rotate(360deg);
   }
