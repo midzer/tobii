@@ -5,22 +5,7 @@ import minify from 'rollup-plugin-babel-minify'
 
 export default [
   {
-    input: 'src/js/tobii.js',
-    plugins: [
-      resolve(),
-      commonjs(),
-      babel({
-        babelrc: false,
-        exclude: 'node_modules/**',
-        presets: [
-          [
-            '@babel/preset-env', {
-              loose: true
-            }
-          ]
-        ]
-      })
-    ],
+    input: './src/js/tobii.js',
     output: [
       {
         name: 'Tobii',
@@ -31,31 +16,46 @@ export default [
         file: './dist/js/tobii.cjs.js',
         format: 'cjs'
       }
+    ],
+    plugins: [
+      resolve(),
+      commonjs(),
+      babel({
+        exclude: 'node_modules/**',
+        presets: [
+          ['@babel/env', {
+            corejs: 3.6,
+            useBuiltIns: 'usage',
+            loose: true
+          }]
+        ]
+      })
     ]
   },
   // Minfied browser-friendly UMD build
   {
-    input: 'src/js/tobii.js',
+    input: './src/js/tobii.js',
+    output: {
+      name: 'Tobii',
+      file: './dist/js/tobii.min.js',
+      format: 'umd'
+    },
     plugins: [
+      resolve(),
+      commonjs(),
       babel({
-        babelrc: false,
         exclude: 'node_modules/**',
         presets: [
-          [
-            '@babel/preset-env', {
-              loose: true
-            }
-          ]
+          ['@babel/env', {
+            corejs: 3.6,
+            useBuiltIns: 'usage',
+            loose: true
+          }]
         ]
       }),
       minify({
         comments: false
       })
-    ],
-    output: {
-      name: 'Tobii',
-      file: './dist/js/tobii.min.js',
-      format: 'umd'
-    }
+    ]
   }
 ]

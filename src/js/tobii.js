@@ -111,6 +111,26 @@ export default function Tobii (userOptions) {
   }
 
   /**
+   * CustomEvent() polyfill
+   * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
+   *
+   */
+  if (typeof window.CustomEvent !== 'function') {
+    const CustomEvent = function CustomEvent (event, params) {
+      params = params || { bubbles: false, cancelable: false, detail: undefined }
+
+      const evt = document.createEvent('CustomEvent')
+
+      evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail)
+      return evt
+    }
+
+    CustomEvent.prototype = window.Event.prototype
+
+    window.CustomEvent = CustomEvent
+  }
+
+  /**
    * Types - you can add new type to support something new
    *
    */
@@ -877,7 +897,9 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    lightbox.dispatchEvent(new Event('tobii-prev'))
+    const previousEvent = new CustomEvent('tobii-previous')
+
+    lightbox.dispatchEvent(previousEvent)
   }
 
   /**
@@ -898,7 +920,9 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    lightbox.dispatchEvent(new Event('tobii-next'))
+    const nextEvent = new CustomEvent('tobii-next')
+
+    lightbox.dispatchEvent(nextEvent)
   }
 
   /**
