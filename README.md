@@ -26,6 +26,7 @@ An accessible, open-source lightbox with no dependencies.
 - [Grouping](#grouping)
 - [Options](#options)
 - [API](#api)
+- [Events](#events)
 - [Browser support](#browser-support)
 - [To do](#to-do)
 - [Contributing](#contributing)
@@ -280,6 +281,30 @@ The following options are available:
 | `currentGroup()` | Return the current group name. |
 | `reset()` | Reset Tobii. |
 | `destroy()` | Destroy Tobii. |
+
+## Events
+
+Bind events with the `.on()` and `.off()` methods.
+
+```js
+const tobii = new Tobii()
+
+const listener = function listener () {
+  console.log('eventName happened')
+}
+
+// bind event listener
+tobii.on(eventName, listener)
+
+// unbind event listener
+tobii.off(eventName, listener)
+```
+
+| eventName | Description |
+| --- | --- |
+| `open` | Triggered after Tobii has been opened. |
+| `previous` | Triggered after the previous slide is selected. |
+| `next` | Triggered after the next slide is selected. |
 
 ## Browser support
 

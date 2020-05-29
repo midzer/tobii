@@ -1827,7 +1827,7 @@ function Tobii(userOptions) {
 
 
   var createLightbox = function createLightbox() {
-    // Create the lightbox
+    // Create the lightbox container
     lightbox = document.createElement('div');
     lightbox.setAttribute('role', 'dialog');
     lightbox.setAttribute('aria-hidden', 'true');
@@ -1959,7 +1959,10 @@ function Tobii(userOptions) {
 
     setTimeout(function () {
       groups[activeGroup].slider.classList.add('tobii__slider--animate');
-    }, 1000);
+    }, 1000); // Create and dispatch a new event
+
+    var openEvent = new CustomEvent('open');
+    lightbox.dispatchEvent(openEvent);
   };
   /**
    * Close Tobii
@@ -2093,7 +2096,7 @@ function Tobii(userOptions) {
     } // Create and dispatch a new event
 
 
-    var previousEvent = new CustomEvent('tobii-previous');
+    var previousEvent = new CustomEvent('previous');
     lightbox.dispatchEvent(previousEvent);
   };
   /**
@@ -2116,7 +2119,7 @@ function Tobii(userOptions) {
     } // Create and dispatch a new event
 
 
-    var nextEvent = new CustomEvent('tobii-next');
+    var nextEvent = new CustomEvent('next');
     lightbox.dispatchEvent(nextEvent);
   };
   /**
@@ -2730,6 +2733,14 @@ function Tobii(userOptions) {
     return activeGroup !== null ? activeGroup : newGroup;
   };
 
+  var on = function on(eventName, callback) {
+    lightbox.addEventListener(eventName, callback);
+  };
+
+  var off = function off(eventName, callback) {
+    lightbox.removeEventListener(eventName, callback);
+  };
+
   init(userOptions);
   Tobii.open = open;
   Tobii.previous = previous;
@@ -2745,6 +2756,8 @@ function Tobii(userOptions) {
   Tobii.slidesCount = slidesCount;
   Tobii.selectGroup = selectGroup;
   Tobii.currentGroup = currentGroup;
+  Tobii.on = on;
+  Tobii.off = off;
   return Tobii;
 }
 

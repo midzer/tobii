@@ -589,7 +589,7 @@ export default function Tobii (userOptions) {
    *
    */
   const createLightbox = function createLightbox () {
-    // Create the lightbox
+    // Create the lightbox container
     lightbox = document.createElement('div')
     lightbox.setAttribute('role', 'dialog')
     lightbox.setAttribute('aria-hidden', 'true')
@@ -741,6 +741,11 @@ export default function Tobii (userOptions) {
     setTimeout(() => {
       groups[activeGroup].slider.classList.add('tobii__slider--animate')
     }, 1000)
+
+    // Create and dispatch a new event
+    const openEvent = new CustomEvent('open')
+
+    lightbox.dispatchEvent(openEvent)
   }
 
   /**
@@ -879,7 +884,7 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const previousEvent = new CustomEvent('tobii-previous')
+    const previousEvent = new CustomEvent('previous')
 
     lightbox.dispatchEvent(previousEvent)
   }
@@ -902,7 +907,7 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const nextEvent = new CustomEvent('tobii-next')
+    const nextEvent = new CustomEvent('next')
 
     lightbox.dispatchEvent(nextEvent)
   }
@@ -1526,6 +1531,14 @@ export default function Tobii (userOptions) {
     return activeGroup !== null ? activeGroup : newGroup
   }
 
+  const on = function on (eventName, callback) {
+    lightbox.addEventListener(eventName, callback)
+  }
+
+  const off = function off (eventName, callback) {
+    lightbox.removeEventListener(eventName, callback)
+  }
+
   init(userOptions)
 
   Tobii.open = open
@@ -1542,6 +1555,8 @@ export default function Tobii (userOptions) {
   Tobii.slidesCount = slidesCount
   Tobii.selectGroup = selectGroup
   Tobii.currentGroup = currentGroup
+  Tobii.on = on
+  Tobii.off = off
 
   return Tobii
 }
