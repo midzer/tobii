@@ -1313,7 +1313,7 @@ if (typeof window.CustomEvent !== 'function') {
  *
  * @author rqrauhvmra
  * @version 2.0.0-beta
- * @url https://github.com/rqrauhvmra/Tobii
+ * @url https://github.com/rqrauhvmra/tobii
  *
  * MIT License
  */
@@ -1633,29 +1633,9 @@ function Tobii(userOptions) {
     }
   };
   /**
-   * Add compatible Object.entries support for IE
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#Polyfill
-   *
-   */
-
-  if (!Object.entries) {
-    Object.entries = function (obj) {
-      var OWN_PROPS = Object.keys(obj);
-      var i = OWN_PROPS.length;
-      var RES_ARRAY = new Array(i);
-
-      while (i--) {
-        RES_ARRAY[i] = [OWN_PROPS[i], obj[OWN_PROPS[i]]];
-      }
-
-      return RES_ARRAY;
-    };
-  }
-  /**
    * Init
    *
    */
-
 
   var init = function init(userOptions) {
     // Merge user options into defaults
