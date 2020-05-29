@@ -2732,10 +2732,24 @@ function Tobii(userOptions) {
   var currentGroup = function currentGroup() {
     return activeGroup !== null ? activeGroup : newGroup;
   };
+  /**
+   * Bind events
+   * @param {String} eventName
+   * @param {function} callback - callback to call
+   *
+   */
+
 
   var on = function on(eventName, callback) {
     lightbox.addEventListener(eventName, callback);
   };
+  /**
+   * Unbind events
+   * @param {String} eventName
+   * @param {function} callback - callback to call
+   *
+   */
+
 
   var off = function off(eventName, callback) {
     lightbox.removeEventListener(eventName, callback);
