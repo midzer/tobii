@@ -1292,6 +1292,27 @@
 	}
 
 	/**
+	 * CustomEvent() polyfill
+	 * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
+	 *
+	 */
+	if (typeof window.CustomEvent !== 'function') {
+	  var CustomEvent$1 = function CustomEvent(event, params) {
+	    params = params || {
+	      bubbles: false,
+	      cancelable: false,
+	      detail: undefined
+	    };
+	    var evt = document.createEvent('CustomEvent');
+	    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+	    return evt;
+	  };
+
+	  CustomEvent$1.prototype = window.Event.prototype;
+	  window.CustomEvent = CustomEvent$1;
+	}
+
+	/**
 	 * Tobii
 	 *
 	 * @author rqrauhvmra
@@ -1300,6 +1321,7 @@
 	 *
 	 * MIT License
 	 */
+
 	function Tobii(userOptions) {
 	  /**
 	   * Global variables
@@ -1388,28 +1410,6 @@
 
 	    return OPTIONS;
 	  };
-	  /**
-	   * CustomEvent() polyfill
-	   * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
-	   *
-	   */
-
-
-	  if (typeof window.CustomEvent !== 'function') {
-	    var _CustomEvent = function CustomEvent(event, params) {
-	      params = params || {
-	        bubbles: false,
-	        cancelable: false,
-	        detail: undefined
-	      };
-	      var evt = document.createEvent('CustomEvent');
-	      evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-	      return evt;
-	    };
-
-	    _CustomEvent.prototype = window.Event.prototype;
-	    window.CustomEvent = _CustomEvent;
-	  }
 	  /**
 	   * Types - you can add new type to support something new
 	   *
@@ -1677,7 +1677,7 @@
 	    } // Execute a few things once per element
 
 
-	    Array.prototype.forEach.call(LIGHTBOX_TRIGGER_ELS, function (lightboxTriggerEl) {
+	    LIGHTBOX_TRIGGER_ELS.forEach(function (lightboxTriggerEl) {
 	      checkDependencies(lightboxTriggerEl);
 	    });
 	  };
@@ -1704,7 +1704,7 @@
 	      }
 
 	      window.onYouTubePlayerAPIReady = function () {
-	        Array.prototype.forEach.call(WAITING_ELS, function (waitingEl) {
+	        WAITING_ELS.forEach(function (waitingEl) {
 	          add(waitingEl);
 	        });
 	        isYouTubeDependencieLoaded = true;
@@ -2597,7 +2597,7 @@
 	    var SOURCES = el.querySelectorAll('src');
 
 	    if (SOURCES) {
-	      Array.prototype.forEach.call(SOURCES, function (source) {
+	      SOURCES.forEach(function (source) {
 	        source.setAttribute('src', '');
 	      });
 	    }
@@ -2658,10 +2658,10 @@
 
 
 	    var GROUPS_ENTRIES = Object.entries(groups);
-	    Array.prototype.forEach.call(GROUPS_ENTRIES, function (groupsEntrie) {
+	    GROUPS_ENTRIES.forEach(function (groupsEntrie) {
 	      var SLIDE_ELS = groupsEntrie[1].gallery; // Remove slides
 
-	      Array.prototype.forEach.call(SLIDE_ELS, function (slideEl) {
+	      SLIDE_ELS.forEach(function (slideEl) {
 	        remove(slideEl);
 	      });
 	    });

@@ -1,3 +1,5 @@
+import './polyfill/CustomEvent'
+
 /**
  * Tobii
  *
@@ -108,26 +110,6 @@ export default function Tobii (userOptions) {
     }
 
     return OPTIONS
-  }
-
-  /**
-   * CustomEvent() polyfill
-   * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
-   *
-   */
-  if (typeof window.CustomEvent !== 'function') {
-    const CustomEvent = function CustomEvent (event, params) {
-      params = params || { bubbles: false, cancelable: false, detail: undefined }
-
-      const evt = document.createEvent('CustomEvent')
-
-      evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail)
-      return evt
-    }
-
-    CustomEvent.prototype = window.Event.prototype
-
-    window.CustomEvent = CustomEvent
   }
 
   /**
@@ -445,7 +427,7 @@ export default function Tobii (userOptions) {
     }
 
     // Execute a few things once per element
-    Array.prototype.forEach.call(LIGHTBOX_TRIGGER_ELS, lightboxTriggerEl => {
+    LIGHTBOX_TRIGGER_ELS.forEach(lightboxTriggerEl => {
       checkDependencies(lightboxTriggerEl)
     })
   }
@@ -473,7 +455,7 @@ export default function Tobii (userOptions) {
       }
 
       window.onYouTubePlayerAPIReady = () => {
-        Array.prototype.forEach.call(WAITING_ELS, waitingEl => {
+        WAITING_ELS.forEach(waitingEl => {
           add(waitingEl)
         })
 
@@ -1411,7 +1393,7 @@ export default function Tobii (userOptions) {
     const SOURCES = el.querySelectorAll('src')
 
     if (SOURCES) {
-      Array.prototype.forEach.call(SOURCES, source => {
+      SOURCES.forEach(source => {
         source.setAttribute('src', '')
       })
     }
@@ -1470,11 +1452,11 @@ export default function Tobii (userOptions) {
     // TODO Cleanup
     const GROUPS_ENTRIES = Object.entries(groups)
 
-    Array.prototype.forEach.call(GROUPS_ENTRIES, groupsEntrie => {
+    GROUPS_ENTRIES.forEach(groupsEntrie => {
       const SLIDE_ELS = groupsEntrie[1].gallery
 
       // Remove slides
-      Array.prototype.forEach.call(SLIDE_ELS, slideEl => {
+      SLIDE_ELS.forEach(slideEl => {
         remove(slideEl)
       })
     })
