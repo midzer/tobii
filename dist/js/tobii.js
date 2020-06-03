@@ -1,3 +1,7 @@
+/**
+ * tobii 2.0.0-beta 
+ *
+ */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
@@ -524,33 +528,10 @@
 	  }
 	};
 
-	var aFunction$1 = function (it) {
-	  if (typeof it != 'function') {
-	    throw TypeError(String(it) + ' is not a function');
-	  } return it;
-	};
-
-	// optional / simple context binding
-	var functionBindContext = function (fn, that, length) {
-	  aFunction$1(fn);
-	  if (that === undefined) return fn;
-	  switch (length) {
-	    case 0: return function () {
-	      return fn.call(that);
-	    };
-	    case 1: return function (a) {
-	      return fn.call(that, a);
-	    };
-	    case 2: return function (a, b) {
-	      return fn.call(that, a, b);
-	    };
-	    case 3: return function (a, b, c) {
-	      return fn.call(that, a, b, c);
-	    };
-	  }
-	  return function (/* ...args */) {
-	    return fn.apply(that, arguments);
-	  };
+	// `IsArray` abstract operation
+	// https://tc39.github.io/ecma262/#sec-isarray
+	var isArray = Array.isArray || function isArray(arg) {
+	  return classofRaw(arg) == 'Array';
 	};
 
 	// `ToObject` abstract operation
@@ -559,10 +540,10 @@
 	  return Object(requireObjectCoercible(argument));
 	};
 
-	// `IsArray` abstract operation
-	// https://tc39.github.io/ecma262/#sec-isarray
-	var isArray = Array.isArray || function isArray(arg) {
-	  return classofRaw(arg) == 'Array';
+	var createProperty = function (object, key, value) {
+	  var propertyKey = toPrimitive(key);
+	  if (propertyKey in object) objectDefineProperty.f(object, propertyKey, createPropertyDescriptor(0, value));
+	  else object[propertyKey] = value;
 	};
 
 	var nativeSymbol = !!Object.getOwnPropertySymbols && !fails(function () {
@@ -603,6 +584,119 @@
 	      if (C === null) C = undefined;
 	    }
 	  } return new (C === undefined ? Array : C)(length === 0 ? 0 : length);
+	};
+
+	var engineUserAgent = getBuiltIn('navigator', 'userAgent') || '';
+
+	var process = global_1.process;
+	var versions = process && process.versions;
+	var v8 = versions && versions.v8;
+	var match, version;
+
+	if (v8) {
+	  match = v8.split('.');
+	  version = match[0] + match[1];
+	} else if (engineUserAgent) {
+	  match = engineUserAgent.match(/Edge\/(\d+)/);
+	  if (!match || match[1] >= 74) {
+	    match = engineUserAgent.match(/Chrome\/(\d+)/);
+	    if (match) version = match[1];
+	  }
+	}
+
+	var engineV8Version = version && +version;
+
+	var SPECIES$1 = wellKnownSymbol('species');
+
+	var arrayMethodHasSpeciesSupport = function (METHOD_NAME) {
+	  // We can't use this feature detection in V8 since it causes
+	  // deoptimization and serious performance degradation
+	  // https://github.com/zloirock/core-js/issues/677
+	  return engineV8Version >= 51 || !fails(function () {
+	    var array = [];
+	    var constructor = array.constructor = {};
+	    constructor[SPECIES$1] = function () {
+	      return { foo: 1 };
+	    };
+	    return array[METHOD_NAME](Boolean).foo !== 1;
+	  });
+	};
+
+	var IS_CONCAT_SPREADABLE = wellKnownSymbol('isConcatSpreadable');
+	var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF;
+	var MAXIMUM_ALLOWED_INDEX_EXCEEDED = 'Maximum allowed index exceeded';
+
+	// We can't use this feature detection in V8 since it causes
+	// deoptimization and serious performance degradation
+	// https://github.com/zloirock/core-js/issues/679
+	var IS_CONCAT_SPREADABLE_SUPPORT = engineV8Version >= 51 || !fails(function () {
+	  var array = [];
+	  array[IS_CONCAT_SPREADABLE] = false;
+	  return array.concat()[0] !== array;
+	});
+
+	var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('concat');
+
+	var isConcatSpreadable = function (O) {
+	  if (!isObject(O)) return false;
+	  var spreadable = O[IS_CONCAT_SPREADABLE];
+	  return spreadable !== undefined ? !!spreadable : isArray(O);
+	};
+
+	var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
+
+	// `Array.prototype.concat` method
+	// https://tc39.github.io/ecma262/#sec-array.prototype.concat
+	// with adding support of @@isConcatSpreadable and @@species
+	_export({ target: 'Array', proto: true, forced: FORCED }, {
+	  concat: function concat(arg) { // eslint-disable-line no-unused-vars
+	    var O = toObject(this);
+	    var A = arraySpeciesCreate(O, 0);
+	    var n = 0;
+	    var i, k, length, len, E;
+	    for (i = -1, length = arguments.length; i < length; i++) {
+	      E = i === -1 ? O : arguments[i];
+	      if (isConcatSpreadable(E)) {
+	        len = toLength(E.length);
+	        if (n + len > MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
+	        for (k = 0; k < len; k++, n++) if (k in E) createProperty(A, n, E[k]);
+	      } else {
+	        if (n >= MAX_SAFE_INTEGER) throw TypeError(MAXIMUM_ALLOWED_INDEX_EXCEEDED);
+	        createProperty(A, n++, E);
+	      }
+	    }
+	    A.length = n;
+	    return A;
+	  }
+	});
+
+	var aFunction$1 = function (it) {
+	  if (typeof it != 'function') {
+	    throw TypeError(String(it) + ' is not a function');
+	  } return it;
+	};
+
+	// optional / simple context binding
+	var functionBindContext = function (fn, that, length) {
+	  aFunction$1(fn);
+	  if (that === undefined) return fn;
+	  switch (length) {
+	    case 0: return function () {
+	      return fn.call(that);
+	    };
+	    case 1: return function (a) {
+	      return fn.call(that, a);
+	    };
+	    case 2: return function (a, b) {
+	      return fn.call(that, a, b);
+	    };
+	    case 3: return function (a, b, c) {
+	      return fn.call(that, a, b, c);
+	    };
+	  }
+	  return function (/* ...args */) {
+	    return fn.apply(that, arguments);
+	  };
 	};
 
 	var push = [].push;
@@ -663,42 +757,6 @@
 	  // `Array.prototype.findIndex` method
 	  // https://tc39.github.io/ecma262/#sec-array.prototype.findIndex
 	  findIndex: createMethod$1(6)
-	};
-
-	var engineUserAgent = getBuiltIn('navigator', 'userAgent') || '';
-
-	var process = global_1.process;
-	var versions = process && process.versions;
-	var v8 = versions && versions.v8;
-	var match, version;
-
-	if (v8) {
-	  match = v8.split('.');
-	  version = match[0] + match[1];
-	} else if (engineUserAgent) {
-	  match = engineUserAgent.match(/Edge\/(\d+)/);
-	  if (!match || match[1] >= 74) {
-	    match = engineUserAgent.match(/Chrome\/(\d+)/);
-	    if (match) version = match[1];
-	  }
-	}
-
-	var engineV8Version = version && +version;
-
-	var SPECIES$1 = wellKnownSymbol('species');
-
-	var arrayMethodHasSpeciesSupport = function (METHOD_NAME) {
-	  // We can't use this feature detection in V8 since it causes
-	  // deoptimization and serious performance degradation
-	  // https://github.com/zloirock/core-js/issues/677
-	  return engineV8Version >= 51 || !fails(function () {
-	    var array = [];
-	    var constructor = array.constructor = {};
-	    constructor[SPECIES$1] = function () {
-	      return { foo: 1 };
-	    };
-	    return array[METHOD_NAME](Boolean).foo !== 1;
-	  });
 	};
 
 	var defineProperty = Object.defineProperty;
@@ -802,12 +860,6 @@
 	    return nativeJoin.call(toIndexedObject(this), separator === undefined ? ',' : separator);
 	  }
 	});
-
-	var createProperty = function (object, key, value) {
-	  var propertyKey = toPrimitive(key);
-	  if (propertyKey in object) objectDefineProperty.f(object, propertyKey, createPropertyDescriptor(0, value));
-	  else object[propertyKey] = value;
-	};
 
 	var HAS_SPECIES_SUPPORT$1 = arrayMethodHasSpeciesSupport('slice');
 	var USES_TO_LENGTH$3 = arrayMethodUsesToLength('slice', { ACCESSORS: true, 0: 0, 1: 2 });
@@ -1447,7 +1499,7 @@
 	          }
 
 	          if (FIGCAPTION.textContent) {
-	            FIGCAPTION.id = "tobii-figcaption-" + figcaptionId;
+	            FIGCAPTION.id = "tobii-figcaption-".concat(figcaptionId);
 	            FIGURE.appendChild(FIGCAPTION);
 	            IMAGE.setAttribute('aria-labelledby', FIGCAPTION.id);
 	            ++figcaptionId;
@@ -1501,7 +1553,7 @@
 	        var TARGET = document.querySelector(TARGET_SELECTOR);
 
 	        if (!TARGET) {
-	          throw new Error("Ups, I can't find the target " + TARGET_SELECTOR + ".");
+	          throw new Error("Ups, I can't find the target ".concat(TARGET_SELECTOR, "."));
 	        } // Add content to container
 
 
@@ -1569,11 +1621,11 @@
 	        IFRAME.setAttribute('data-src', HREF);
 
 	        if (el.getAttribute('data-width')) {
-	          IFRAME.style.maxWidth = el.getAttribute('data-width') + "px";
+	          IFRAME.style.maxWidth = "".concat(el.getAttribute('data-width'), "px");
 	        }
 
 	        if (el.getAttribute('data-height')) {
-	          IFRAME.style.maxHeight = el.getAttribute('data-height') + "px";
+	          IFRAME.style.maxHeight = "".concat(el.getAttribute('data-height'), "px");
 	        } // Add iframe to container
 
 
@@ -1653,7 +1705,7 @@
 	    var LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(config.selector);
 
 	    if (!LIGHTBOX_TRIGGER_ELS) {
-	      throw new Error("Ups, I can't find the selector " + config.selector + " on this website.");
+	      throw new Error("Ups, I can't find the selector ".concat(config.selector, " on this website."));
 	    } // Execute a few things once per element
 
 
@@ -1766,7 +1818,7 @@
 	    var GROUP_NAME = getGroupName(el); // Check if element exists
 
 	    if (groups[GROUP_NAME].gallery.indexOf(el) === -1) {
-	      throw new Error("Ups, I can't find a slide for the element " + el + ".");
+	      throw new Error("Ups, I can't find a slide for the element ".concat(el, "."));
 	    } else {
 	      var SLIDE_INDEX = groups[GROUP_NAME].gallery.indexOf(el);
 	      var SLIDE_EL = groups[GROUP_NAME].sliderElements[SLIDE_INDEX]; // If the element to be removed is the currently visible slide
@@ -1872,7 +1924,7 @@
 	          var SLIDER_ELEMENT_CONTENT = document.createElement('div');
 	          SLIDER_ELEMENT.className = 'tobii__slide';
 	          SLIDER_ELEMENT.style.position = 'absolute';
-	          SLIDER_ELEMENT.style.left = groups[newGroup].x * 100 + "%"; // Hide slide
+	          SLIDER_ELEMENT.style.left = "".concat(groups[newGroup].x * 100, "%"); // Hide slide
 
 	          SLIDER_ELEMENT.setAttribute('aria-hidden', 'true'); // Create type elements
 
@@ -1908,7 +1960,7 @@
 	      }
 
 	      if (index === -1 || index >= groups[activeGroup].elementsLength) {
-	        throw new Error("Ups, I can't find slide " + index + ".");
+	        throw new Error("Ups, I can't find slide ".concat(index, "."));
 	      }
 	    }
 
@@ -2035,11 +2087,11 @@
 	      }
 
 	      if (index === groups[activeGroup].currentIndex) {
-	        throw new Error("Ups, slide " + index + " is already selected.");
+	        throw new Error("Ups, slide ".concat(index, " is already selected."));
 	      }
 
 	      if (index === -1 || index >= groups[activeGroup].elementsLength) {
-	        throw new Error("Ups, I can't find slide " + index + ".");
+	        throw new Error("Ups, I can't find slide ".concat(index, "."));
 	      }
 	    } // Set current index
 
@@ -2123,7 +2175,7 @@
 	    }
 
 	    if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {
-	      throw new Error("Ups, I don't have a group called \"" + name + "\".");
+	      throw new Error("Ups, I don't have a group called \"".concat(name, "\"."));
 	    }
 
 	    activeGroup = name;
@@ -2174,7 +2226,7 @@
 	  var updateOffset = function updateOffset() {
 	    activeGroup = activeGroup !== null ? activeGroup : newGroup;
 	    offset = -groups[activeGroup].currentIndex * lightbox.offsetWidth;
-	    groups[activeGroup].slider.style.transform = "translate3d(" + offset + "px, 0, 0)";
+	    groups[activeGroup].slider.style.transform = "translate3d(".concat(offset, "px, 0, 0)");
 	    offsetTmp = offset;
 	  };
 	  /**
@@ -2184,7 +2236,7 @@
 
 
 	  var updateCounter = function updateCounter() {
-	    counter.textContent = groups[activeGroup].currentIndex + 1 + "/" + groups[activeGroup].elementsLength;
+	    counter.textContent = "".concat(groups[activeGroup].currentIndex + 1, "/").concat(groups[activeGroup].elementsLength);
 	  };
 	  /**
 	   * Update focus
@@ -2318,7 +2370,7 @@
 
 
 	  var getFocusableChildren = function getFocusableChildren() {
-	    return Array.prototype.slice.call(lightbox.querySelectorAll(".tobii__btn:not([disabled]), .tobii__slide--is-active + " + FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active '))).filter(function (child) {
+	    return Array.prototype.slice.call(lightbox.querySelectorAll(".tobii__btn:not([disabled]), .tobii__slide--is-active + ".concat(FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active ')))).filter(function (child) {
 	      return !!(child.offsetWidth || child.offsetHeight || child.getClientRects().length);
 	    });
 	  };
@@ -2488,12 +2540,12 @@
 	  var doSwipe = function doSwipe() {
 	    if (Math.abs(drag.startX - drag.endX) > 0 && !isDraggingY && groups[activeGroup].elementsLength > 1) {
 	      // Horizontal swipe
-	      groups[activeGroup].slider.style.transform = "translate3d(" + (offsetTmp - Math.round(drag.startX - drag.endX)) + "px, 0, 0)";
+	      groups[activeGroup].slider.style.transform = "translate3d(".concat(offsetTmp - Math.round(drag.startX - drag.endX), "px, 0, 0)");
 	      isDraggingX = true;
 	      isDraggingY = false;
 	    } else if (Math.abs(drag.startY - drag.endY) > 0 && !isDraggingX && config.swipeClose) {
 	      // Vertical swipe
-	      groups[activeGroup].slider.style.transform = "translate3d(" + offsetTmp + "px, -" + Math.round(drag.startY - drag.endY) + "px, 0)";
+	      groups[activeGroup].slider.style.transform = "translate3d(".concat(offsetTmp, "px, -").concat(Math.round(drag.startY - drag.endY), "px, 0)");
 	      isDraggingX = false;
 	      isDraggingY = true;
 	    }

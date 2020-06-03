@@ -6,6 +6,7 @@
  * Lightbox link
  *
  */
+
 .tobii-zoom {
   border: 0;
   box-shadow: none;
@@ -46,6 +47,7 @@
 }
 
 // Hide scrollbar if lightbox is displayed
+
 .tobii-is-open {
   overflow-y: hidden;
 }
@@ -54,6 +56,7 @@
  * Lightbox
  *
  */
+
 .tobii {
   background-color: $lightbox-background;
   bottom: 0;
@@ -69,7 +72,7 @@
   z-index: 1337;
 
 
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: none;
   }
 
@@ -85,6 +88,7 @@
  * Slider
  *
  */
+
 .tobii__slider {
   bottom: 0;
   left: 0;
@@ -94,11 +98,12 @@
   will-change: transform;
 
 
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: none;
   }
 
   @media screen and (prefers-reduced-motion: no-preference) {
+
     &--animate:not(&--is-dragging) {
       transition-duration: $transition-duration;
       transition-property: transform;
@@ -119,6 +124,7 @@
  * Slide
  *
  */
+
 .tobii__slide {
   align-items: center;
   display: flex;
@@ -167,7 +173,7 @@
     }
   }
 
-  & [data-type="html"] {
+  & [data-type='html'] {
 
 
 
@@ -178,7 +184,8 @@
     }
   }
 
-  & [data-type="iframe"] {
+  & [data-type='iframe'] {
+
     /* Fix iframe scrolling on iOS */
     -webkit-overflow-scrolling: touch;
     transform: translate3d(0, 0, 0);
@@ -195,6 +202,7 @@
  * Buttons
  *
  */
+
 .tobii__btn {
   appearance: none;
   background-color: $button-background;
@@ -270,7 +278,7 @@
   }
 
   &:disabled,
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: none;
   }
 }
@@ -279,6 +287,7 @@
  * Counter
  *
  */
+
 .tobii__counter {
   background-color: $counter-background;
   color: $counter-color;
@@ -290,7 +299,7 @@
   z-index: 1;
 
 
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: none;
   }
 }
@@ -299,6 +308,7 @@
  * Loader
  *
  */
+
 .tobii__loader {
   display: inline-block;
   height: em(100);
@@ -315,7 +325,7 @@
     border: em(4) solid #949ba3;
     border-top-color: $loader-color;
     bottom: 0;
-    content: "";
+    content: '';
     left: 0;
     position: absolute;
     right: 0;
