@@ -21,9 +21,9 @@
 
   &__icon {
     align-items: center;
-    background-color: $zoom-icon-background;
+    background-color: var(--zoom-icon-background);
     top: em(8);
-    color: $zoom-icon-color;
+    color: var(--zoom-icon-color);
     display: flex;
     height: em(32);
     justify-content: center;
@@ -58,11 +58,11 @@
  */
 
 .tobii {
-  background-color: $lightbox-background;
+  background-color: var(--lightbox-background);
   bottom: 0;
   box-sizing: border-box;
   contain: strict;
-  font-size: #{$base-font-size}px;
+  font-size: var(--base-font-size)px;
   left: 0;
   line-height: 1.5;
   overflow: hidden;
@@ -105,9 +105,9 @@
   @media screen and (prefers-reduced-motion: no-preference) {
 
     &--animate:not(&--is-dragging) {
-      transition-duration: $transition-duration;
+      transition-duration: var(--transition-duration);
       transition-property: transform;
-      transition-timing-function: $transition-timing-function;
+      transition-timing-function: var(--transition-timing-function);
     }
   }
 
@@ -134,8 +134,8 @@
 
 
   & [data-type] {
-    max-height: $slide-max-height;
-    max-width: $slide-max-width;
+    max-height: var(--slide-max-height);
+    max-width: var(--slide-max-width);
     overflow: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
@@ -154,19 +154,19 @@
     & > img {
       display: block;
       height: auto;
-      max-height: $slide-max-height;
-      max-width: $slide-max-width;
+      max-height: var(--slide-max-height);
+      max-width: var(--slide-max-width);
       width: auto;
     }
 
     & > figcaption {
-      background-color: $caption-background;
+      background-color: var(--caption-background);
       bottom: 0;
-      color: $caption-color;
-      padding-bottom: em(4);
-      padding-left: em(8);
-      padding-right: em(8);
-      padding-top: em(4);
+      color: var(--caption-color);
+      padding-block-end: em(4);
+      padding-inline-start: em(8);
+      padding-inline-end: em(8);
+      padding-block-start: em(4);
       position: absolute;
       white-space: pre-wrap;
       width: 100%;
@@ -179,8 +179,8 @@
 
     & video {
       cursor: auto;
-      max-height: $slide-max-height;
-      max-width: $slide-max-width;
+      max-height: var(--slide-max-height);
+      max-width: var(--slide-max-width);
     }
   }
 
@@ -192,8 +192,8 @@
 
 
     & iframe {
-      height: $slide-max-height;
-      width: $slide-max-width;
+      height: var(--slide-max-height);
+      width: var(--slide-max-width);
     }
   }
 }
@@ -205,27 +205,27 @@
 
 .tobii__btn {
   appearance: none;
-  background-color: $button-background;
+  background-color: var(--button-background);
   border: em(1) solid transparent;
-  color: $button-color;
+  color: var(--button-color);
   cursor: pointer;
   font: inherit;
   line-height: 1;
   margin: 0;
   opacity: 0.5;
-  padding-bottom: em(4);
-  padding-left: em(4);
-  padding-right: em(4);
-  padding-top: em(4);
+  padding-block-end: em(4);
+  padding-inline-start: em(4);
+  padding-inline-end: em(4);
+  padding-block-start: em(4);
   position: absolute;
   touch-action: manipulation;
   will-change: opacity;
   z-index: 1;
 
   @media screen and (prefers-reduced-motion: no-preference) {
-    transition-duration: $transition-duration;
+    transition-duration: var(--transition-duration);
     transition-property: opacity, transform;
-    transition-timing-function: $transition-timing-function;
+    transition-timing-function: var(--transition-timing-function);
     will-change: opacity, transform;
   }
 
@@ -289,8 +289,8 @@
  */
 
 .tobii__counter {
-  background-color: $counter-background;
-  color: $counter-color;
+  background-color: var(--counter-background);
+  color: var(--counter-color);
   font-size: em(20);
   left: em(18);
   line-height: 1;
@@ -323,7 +323,7 @@
     animation: spin 1s infinite;
     border-radius: 100%;
     border: em(4) solid #949ba3;
-    border-top-color: $loader-color;
+    border-top-color: var(--loader-color);
     bottom: 0;
     content: '';
     left: 0;

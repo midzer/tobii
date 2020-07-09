@@ -1,23 +1,25 @@
-$base-font-size: 18 !default;
+:root {
+  --base-font-size: 18;
 
-$transition-duration: 0.3s !default;
-$transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1) !default;
+  --transition-duration: 0.3s;
+  --transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
 
-$zoom-icon-background: hsla(210, 38%, 16%, 0.94) !default;
-$zoom-icon-color: #fff !default;
+  --zoom-icon-background: hsla(210, 38%, 16%, 0.94);
+  --zoom-icon-color: #fff;
 
-$lightbox-background: hsla(210, 38%, 16%, 0.94) !default;
+  --lightbox-background: hsla(210, 38%, 16%, 0.94);
 
-$caption-background: rgba(255, 255, 255, 0.94) !default;
-$caption-color: hsl(210, 38%, 16%) !default;
+  --caption-background: rgba(255, 255, 255, 0.94);
+  --caption-color: hsl(210, 38%, 16%);
 
-$counter-background: transparent !default;
-$counter-color: #fff !default;
+  --counter-background: transparent;
+  --counter-color: #fff;
 
-$button-background: transparent !default;
-$button-color: #fff !default;
+  --button-background: transparent;
+  --button-color: #fff;
 
-$loader-color: #fff !default;
+  --loader-color: #fff;
 
-$slide-max-height: 85vh !default;
-$slide-max-width: 85vw !default;
+  --slide-max-height: 85vh;
+  --slide-max-width: 85vw;
+}
