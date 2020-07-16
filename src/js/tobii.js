@@ -1119,7 +1119,7 @@ export default function Tobii (userOptions) {
       previous()
     } else if (event.target === nextButton) {
       next()
-    } else if (event.target === closeButton || (event.target.classList.contains('tobii__slide') && config.docClose)) {
+    } else if (event.target === closeButton || (isDraggingX === false && isDraggingY === false && event.target.classList.contains('tobii__slide') && config.docClose)) {
       close()
     }
 
@@ -1192,6 +1192,9 @@ export default function Tobii (userOptions) {
 
     event.stopPropagation()
 
+    isDraggingX = false
+    isDraggingY = false
+
     pointerDown = true
 
     drag.startX = event.touches[0].pageX
@@ -1229,9 +1232,6 @@ export default function Tobii (userOptions) {
     groups[activeGroup].slider.classList.remove('tobii__slider--is-dragging')
 
     if (drag.endX) {
-      isDraggingX = false
-      isDraggingY = false
-
       updateAfterDrag()
     }
 
@@ -1250,6 +1250,9 @@ export default function Tobii (userOptions) {
 
     event.preventDefault()
     event.stopPropagation()
+
+    isDraggingX = false
+    isDraggingY = false
 
     pointerDown = true
 
@@ -1275,17 +1278,6 @@ export default function Tobii (userOptions) {
   }
 
   /**
-   * Contextmenu event handler
-   * This is a fix for chromium based browser on mac.
-   * The 'contextmenu' terminates a mouse event sequence.
-   * https://bugs.chromium.org/p/chromium/issues/detail?id=506801
-   *
-   */
-  const contextmenuHandler = function contextmenuHandler () {
-    pointerDown = false
-  }
-
-  /**
    * Mouseup event handler
    *
    */
@@ -1297,13 +1289,21 @@ export default function Tobii (userOptions) {
     groups[activeGroup].slider.classList.remove('tobii__slider--is-dragging')
 
     if (drag.endX) {
-      isDraggingX = false
-      isDraggingY = false
-
       updateAfterDrag()
     }
 
     clearDrag()
+  }
+
+  /**
+   * Contextmenu event handler
+   * This is a fix for chromium based browser on mac.
+   * The 'contextmenu' terminates a mouse event sequence.
+   * https://bugs.chromium.org/p/chromium/issues/detail?id=506801
+   *
+   */
+  const contextmenuHandler = function contextmenuHandler () {
+    pointerDown = false
   }
 
   /**
