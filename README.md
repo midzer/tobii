@@ -56,7 +56,7 @@ An accessible, open-source lightbox with no dependencies.
 
 ### Download
 
-CSS: `css/tobii.min.css` minified, or `css/Totii.css` un-minified
+CSS: `css/tobii.min.css` minified, or `css/tobii.css` un-minified
 
 JavaScript: `js/tobii.min.js` minified, or `js/tobii.js` un-minified
 
