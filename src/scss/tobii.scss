@@ -37,9 +37,9 @@
       fill: none;
       height: em(24);
       pointer-events: none;
-      stroke-linecap: square;
-      stroke-linejoin: miter;
-      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.5;
       stroke: currentColor;
       width: em(24);
     }
@@ -133,6 +133,10 @@
   width: 100%;
 
 
+  &:not(.tobii__slide--is-active) {
+    visibility: hidden;
+  }
+
   & [data-type] {
     max-height: var(--slide-max-height);
     max-width: var(--slide-max-width);
@@ -213,10 +217,7 @@
   line-height: 1;
   margin: 0;
   opacity: 0.5;
-  padding-block-end: em(4);
-  padding-inline-start: em(4);
-  padding-inline-end: em(4);
-  padding-block-start: em(4);
+  padding: 0;
   position: absolute;
   touch-action: manipulation;
   will-change: opacity;
@@ -231,13 +232,14 @@
 
 
   & svg {
-    pointer-events: none;
-    stroke: #fff;
-    stroke-width: 1;
-    stroke-linecap: square;
-    stroke-linejoin: miter;
     fill: none;
-    color: #fff;
+    height: em(60);
+    pointer-events: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1;
+    stroke: currentColor;
+    width: em(60);
   }
 
   &:active,
@@ -250,31 +252,19 @@
   &--next {
     top: 50%;
     transform: translateY(-50%);
-
-
-    & svg {
-      height: em(70);
-      width: em(70);
-    }
   }
 
   &--previous {
-    left: 0;
+    left: em(16);
   }
 
   &--next {
-    right: 0;
+    right: em(16);
   }
 
   &--close {
-    right: em(5);
-    top: em(18);
-
-
-    & svg {
-      height: em(60);
-      width: em(60);
-    }
+    right: em(16);
+    top: em(16);
   }
 
   &:disabled,

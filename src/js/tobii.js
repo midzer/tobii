@@ -76,15 +76,27 @@ export default function Tobii (userOptions) {
       captionAttribute: 'alt',
       nav: 'auto',
       navText: [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 18l-6-6 6-6"/></svg>',
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 6l6 6-6 6"/></svg>'
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <polyline points="15 6 9 12 15 18" />
+        </svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <polyline points="9 6 15 12 9 18" />
+        </svg>`
       ],
       navLabel: [
         'Previous image',
         'Next image'
       ],
       close: true,
-      closeText: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M6 18L18 6"/></svg>',
+      closeText: `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      `,
       closeLabel: 'Close lightbox',
       loadingIndicatorLabel: 'Image loading',
       counter: true,
@@ -93,7 +105,19 @@ export default function Tobii (userOptions) {
       downloadLabel: 'Download image', // TODO
       keyboard: true,
       zoom: true,
-      zoomText: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 16v5h-5"/><path d="M8 21H3v-5"/><path d="M16 3h5v5"/><path d="M3 8V3h5"/></svg>',
+      zoomText: `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <polyline points="16 4 20 4 20 8" />
+          <line x1="14" y1="10" x2="20" y2="4" />
+          <polyline points="8 20 4 20 4 16" />
+          <line x1="4" y1="20" x2="10" y2="14" />
+          <polyline points="16 20 20 20 20 16" />
+          <line x1="14" y1="14" x2="20" y2="20" />
+          <polyline points="8 4 4 4 4 8" />
+          <line x1="4" y1="4" x2="10" y2="10" />
+        </svg>
+      `,
       docClose: true,
       swipeClose: true,
       hideScrollbar: true,
@@ -101,7 +125,8 @@ export default function Tobii (userOptions) {
       threshold: 100,
       rtl: false, // TODO
       loop: false, // TODO
-      autoplayVideo: false
+      autoplayVideo: false,
+      modal: false
     }
 
     if (userOptions) {

@@ -1426,10 +1426,10 @@
 	      captionsSelector: 'img',
 	      captionAttribute: 'alt',
 	      nav: 'auto',
-	      navText: ['<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 18l-6-6 6-6"/></svg>', '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 6l6 6-6 6"/></svg>'],
+	      navText: ["<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\">\n          <path stroke=\"none\" d=\"M0 0h24v24H0z\"/>\n          <polyline points=\"15 6 9 12 15 18\" />\n        </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\">\n          <path stroke=\"none\" d=\"M0 0h24v24H0z\"/>\n          <polyline points=\"9 6 15 12 9 18\" />\n        </svg>"],
 	      navLabel: ['Previous image', 'Next image'],
 	      close: true,
-	      closeText: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M6 18L18 6"/></svg>',
+	      closeText: "\n        <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\">\n          <path stroke=\"none\" d=\"M0 0h24v24H0z\"/>\n          <line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\" />\n          <line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\" />\n        </svg>\n      ",
 	      closeLabel: 'Close lightbox',
 	      loadingIndicatorLabel: 'Image loading',
 	      counter: true,
@@ -1441,7 +1441,7 @@
 	      // TODO
 	      keyboard: true,
 	      zoom: true,
-	      zoomText: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 16v5h-5"/><path d="M8 21H3v-5"/><path d="M16 3h5v5"/><path d="M3 8V3h5"/></svg>',
+	      zoomText: "\n        <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\">\n          <path stroke=\"none\" d=\"M0 0h24v24H0z\"/>\n          <polyline points=\"16 4 20 4 20 8\" />\n          <line x1=\"14\" y1=\"10\" x2=\"20\" y2=\"4\" />\n          <polyline points=\"8 20 4 20 4 16\" />\n          <line x1=\"4\" y1=\"20\" x2=\"10\" y2=\"14\" />\n          <polyline points=\"16 20 20 20 20 16\" />\n          <line x1=\"14\" y1=\"14\" x2=\"20\" y2=\"20\" />\n          <polyline points=\"8 4 4 4 4 8\" />\n          <line x1=\"4\" y1=\"4\" x2=\"10\" y2=\"10\" />\n        </svg>\n      ",
 	      docClose: true,
 	      swipeClose: true,
 	      hideScrollbar: true,
@@ -1451,7 +1451,8 @@
 	      // TODO
 	      loop: false,
 	      // TODO
-	      autoplayVideo: false
+	      autoplayVideo: false,
+	      modal: false
 	    };
 
 	    if (userOptions) {

@@ -45,9 +45,9 @@
       fill: none;
       height: 1.33333em;
       pointer-events: none;
-      stroke-linecap: square;
-      stroke-linejoin: miter;
-      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.5;
       stroke: currentColor;
       width: 1.33333em; }
 
@@ -115,6 +115,8 @@
   height: 100%;
   justify-content: center;
   width: 100%; }
+  .tobii__slide:not(.tobii__slide--is-active) {
+    visibility: hidden; }
   .tobii__slide [data-type] {
     max-height: 85vh;
     max-height: var(--slide-max-height);
@@ -177,14 +179,6 @@
  * Buttons
  *
  */
-[dir="ltr"] .tobii__btn {
-  padding-left: 0.22222em; }
-[dir="rtl"] .tobii__btn {
-  padding-right: 0.22222em; }
-[dir="ltr"] .tobii__btn {
-  padding-right: 0.22222em; }
-[dir="rtl"] .tobii__btn {
-  padding-left: 0.22222em; }
 .tobii__btn {
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -199,8 +193,7 @@
   line-height: 1;
   margin: 0;
   opacity: 0.5;
-  padding-bottom: 0.22222em;
-  padding-top: 0.22222em;
+  padding: 0;
   position: absolute;
   touch-action: manipulation;
   will-change: opacity;
@@ -214,31 +207,26 @@
       transition-timing-function: var(--transition-timing-function);
       will-change: opacity, transform; } }
   .tobii__btn svg {
-    pointer-events: none;
-    stroke: #fff;
-    stroke-width: 1;
-    stroke-linecap: square;
-    stroke-linejoin: miter;
     fill: none;
-    color: #fff; }
+    height: 3.33333em;
+    pointer-events: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1;
+    stroke: currentColor;
+    width: 3.33333em; }
   .tobii__btn:active, .tobii__btn:focus, .tobii__btn:hover {
     opacity: 1; }
   .tobii__btn--previous, .tobii__btn--next {
     top: 50%;
     transform: translateY(-50%); }
-    .tobii__btn--previous svg, .tobii__btn--next svg {
-      height: 3.88889em;
-      width: 3.88889em; }
   .tobii__btn--previous {
-    left: 0; }
+    left: 0.88889em; }
   .tobii__btn--next {
-    right: 0; }
+    right: 0.88889em; }
   .tobii__btn--close {
-    right: 0.27778em;
-    top: 1em; }
-    .tobii__btn--close svg {
-      height: 3.33333em;
-      width: 3.33333em; }
+    right: 0.88889em;
+    top: 0.88889em; }
   .tobii__btn:disabled, .tobii__btn[aria-hidden='true'] {
     display: none; }
 
