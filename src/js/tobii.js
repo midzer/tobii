@@ -1021,7 +1021,7 @@ export default function Tobii (userOptions) {
    * @param {string} dir - Current slide direction
    */
   const updateFocus = function updateFocus (dir) {
-    if (config.nav) {
+    if ((config.nav || (config.nav !== 'auto' && !isTouchDevice())) && groups[activeGroup].elementsLength > 1) {
       prevButton.setAttribute('aria-hidden', 'true')
       prevButton.disabled = true
       nextButton.setAttribute('aria-hidden', 'true')
