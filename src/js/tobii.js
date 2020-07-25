@@ -723,6 +723,15 @@ export default function Tobii (userOptions) {
     // Save user’s focus
     lastFocus = document.activeElement
 
+    // Use `history.pushState()` to make sure the "Back" button behavior
+    // that aligns with the user's expectations
+    const stateObj = {
+      tobii: 'close'
+    }
+    const url = window.location.href
+
+    history.pushState(stateObj, 'Image', url)
+
     // Set current index
     groups[activeGroup].currentIndex = index
 
@@ -770,6 +779,13 @@ export default function Tobii (userOptions) {
     }
 
     unbindEvents()
+
+    // Remove entry in browser history
+    if (history.state !== null) {
+      if (history.state.tobii === 'close') {
+        history.back()
+      }
+    }
 
     // Reenable the user’s focus
     lastFocus.focus()
@@ -1338,6 +1354,9 @@ export default function Tobii (userOptions) {
     // Resize event
     BROWSER_WINDOW.addEventListener('resize', resizeHandler)
 
+    // Popstate event
+    BROWSER_WINDOW.addEventListener('popstate', close)
+
     // Click event
     lightbox.addEventListener('click', clickHandler)
 
@@ -1368,6 +1387,9 @@ export default function Tobii (userOptions) {
 
     // Resize event
     BROWSER_WINDOW.removeEventListener('resize', resizeHandler)
+
+    // Popstate event
+    BROWSER_WINDOW.removeEventListener('popstate', close)
 
     // Click event
     lightbox.removeEventListener('click', clickHandler)

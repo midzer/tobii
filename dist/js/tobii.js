@@ -1978,7 +1978,14 @@
 	    } // Save user’s focus
 
 
-	    lastFocus = document.activeElement; // Set current index
+	    lastFocus = document.activeElement; // Use `history.pushState()` to make sure the "Back" button behavior
+	    // that aligns with the user's expectations
+
+	    var stateObj = {
+	      tobii: 'close'
+	    };
+	    var url = window.location.href;
+	    history.pushState(stateObj, 'Image', url); // Set current index
 
 	    groups[activeGroup].currentIndex = index;
 	    clearDrag();
@@ -2017,7 +2024,14 @@
 	      document.body.classList.remove('tobii-is-open');
 	    }
 
-	    unbindEvents(); // Reenable the user’s focus
+	    unbindEvents(); // Remove entry in browser history
+
+	    if (history.state !== null) {
+	      if (history.state.tobii === 'close') {
+	        history.back();
+	      }
+	    } // Reenable the user’s focus
+
 
 	    lastFocus.focus(); // Don't forget to cleanup our current element
 
@@ -2563,7 +2577,9 @@
 	    } // Resize event
 
 
-	    BROWSER_WINDOW.addEventListener('resize', resizeHandler); // Click event
+	    BROWSER_WINDOW.addEventListener('resize', resizeHandler); // Popstate event
+
+	    BROWSER_WINDOW.addEventListener('popstate', close); // Click event
 
 	    lightbox.addEventListener('click', clickHandler);
 
@@ -2594,7 +2610,9 @@
 	    } // Resize event
 
 
-	    BROWSER_WINDOW.removeEventListener('resize', resizeHandler); // Click event
+	    BROWSER_WINDOW.removeEventListener('resize', resizeHandler); // Popstate event
+
+	    BROWSER_WINDOW.removeEventListener('popstate', close); // Click event
 
 	    lightbox.removeEventListener('click', clickHandler);
 
