@@ -2257,7 +2257,7 @@ function Tobii(userOptions) {
 
 
   var updateFocus = function updateFocus(dir) {
-    if ((config.nav || config.nav !== 'auto' && !isTouchDevice()) && groups[activeGroup].elementsLength > 1) {
+    if ((config.nav === true || config.nav === 'auto') && !isTouchDevice() && groups[activeGroup].elementsLength > 1) {
       prevButton.setAttribute('aria-hidden', 'true');
       prevButton.disabled = true;
       nextButton.setAttribute('aria-hidden', 'true');
