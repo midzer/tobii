@@ -133,8 +133,14 @@
   width: 100%;
 
 
-  &:not(.tobii__slide--is-active) {
+  &:not(&--is-active) {
     visibility: hidden;
+
+    @media screen and (prefers-reduced-motion: no-preference) {
+      transition-duration: var(--transition-duration);
+      transition-property: visibility;
+      transition-timing-function: var(--transition-timing-function);
+    }
   }
 
   & [data-type] {
@@ -167,10 +173,7 @@
       background-color: var(--caption-background);
       bottom: 0;
       color: var(--caption-color);
-      padding-block-end: em(4);
-      padding-inline-start: em(8);
-      padding-inline-end: em(8);
-      padding-block-start: em(4);
+      padding: em(4) em(8);
       position: absolute;
       white-space: pre-wrap;
       width: 100%;

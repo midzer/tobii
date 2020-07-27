@@ -1448,7 +1448,8 @@ function Tobii(userOptions) {
       loop: false,
       // TODO
       autoplayVideo: false,
-      modal: false
+      modal: false,
+      theme: 'tobii--theme-default'
     };
 
     if (userOptions) {
@@ -1864,7 +1865,9 @@ function Tobii(userOptions) {
     lightbox = document.createElement('div');
     lightbox.setAttribute('role', 'dialog');
     lightbox.setAttribute('aria-hidden', 'true');
-    lightbox.className = 'tobii'; // Create the previous button
+    lightbox.classList.add('tobii'); // Adc theme class
+
+    lightbox.classList.add(config.theme); // Create the previous button
 
     prevButton = document.createElement('button');
     prevButton.className = 'tobii__btn tobii__btn--previous';
