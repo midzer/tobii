@@ -1,9 +1,12 @@
+import '../scss/tobii.scss'
+import './polyfill/CustomEvent'
+
 /**
  * Tobii
  *
  * @author rqrauhvmra
- * @version 2.0.0-alpha
- * @url https://github.com/rqrauhvmra/Tobii
+ * @version 2.0.0-beta
+ * @url https://github.com/rqrauhvmra/tobii
  *
  * MIT License
  */
@@ -12,8 +15,32 @@ export default function Tobii (userOptions) {
    * Global variables
    *
    */
+  const BROWSER_WINDOW = window
+  const FOCUSABLE_ELEMENTS = [
+    'a[href]:not([tabindex^="-"]):not([inert])',
+    'area[href]:not([tabindex^="-"]):not([inert])',
+    'input:not([disabled]):not([inert])',
+    'select:not([disabled]):not([inert])',
+    'textarea:not([disabled]):not([inert])',
+    'button:not([disabled]):not([inert])',
+    'iframe:not([tabindex^="-"]):not([inert])',
+    'audio:not([tabindex^="-"]):not([inert])',
+    'video:not([tabindex^="-"]):not([inert])',
+    '[contenteditable]:not([tabindex^="-"]):not([inert])',
+    '[tabindex]:not([tabindex^="-"]):not([inert])'
+  ]
+  const WAITING_ELS = []
+  const GROUP_ATTS = {
+    gallery: [],
+    slider: null,
+    sliderElements: [],
+    elementsLength: 0,
+    currentIndex: 0,
+    x: 0
+  }
+  const PLAYER = []
+
   let config = {}
-  const browserWindow = window
   let figcaptionId = 0
   let lightbox = null
   let prevButton = null
@@ -25,23 +52,11 @@ export default function Tobii (userOptions) {
   let isDraggingY = false
   let pointerDown = false
   let lastFocus = null
-  let firstFocusableEl = null
-  let lastFocusableEl = null
   let offset = null
   let offsetTmp = null
   let resizeTicking = false
   let isYouTubeDependencieLoaded = false
-  const waitingEls = []
-  const player = []
   let playerId = 0
-  const groupAtts = {
-    gallery: [],
-    slider: null,
-    sliderElements: [],
-    elementsLength: 0,
-    currentIndex: 0,
-    x: 0
-  }
   let groups = {}
   let newGroup = null
   let activeGroup = null
@@ -54,22 +69,34 @@ export default function Tobii (userOptions) {
    */
   const mergeOptions = function mergeOptions (userOptions) {
     // Default options
-    const options = {
+    const OPTIONS = {
       selector: '.lightbox',
       captions: true,
       captionsSelector: 'img',
       captionAttribute: 'alt',
       nav: 'auto',
       navText: [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 18l-6-6 6-6"/></svg>',
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 6l6 6-6 6"/></svg>'
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <polyline points="15 6 9 12 15 18" />
+        </svg>`,
+        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <polyline points="9 6 15 12 9 18" />
+        </svg>`
       ],
       navLabel: [
         'Previous image',
         'Next image'
       ],
       close: true,
-      closeText: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewbox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M6 18L18 6"/></svg>',
+      closeText: `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      `,
       closeLabel: 'Close lightbox',
       loadingIndicatorLabel: 'Image loading',
       counter: true,
@@ -78,7 +105,19 @@ export default function Tobii (userOptions) {
       downloadLabel: 'Download image', // TODO
       keyboard: true,
       zoom: true,
-      zoomText: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 16v5h-5"/><path d="M8 21H3v-5"/><path d="M16 3h5v5"/><path d="M3 8V3h5"/></svg>',
+      zoomText: `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <polyline points="16 4 20 4 20 8" />
+          <line x1="14" y1="10" x2="20" y2="4" />
+          <polyline points="8 20 4 20 4 16" />
+          <line x1="4" y1="20" x2="10" y2="14" />
+          <polyline points="16 20 20 20 20 16" />
+          <line x1="14" y1="14" x2="20" y2="20" />
+          <polyline points="8 4 4 4 4 8" />
+          <line x1="4" y1="4" x2="10" y2="10" />
+        </svg>
+      `,
       docClose: true,
       swipeClose: true,
       hideScrollbar: true,
@@ -86,76 +125,78 @@ export default function Tobii (userOptions) {
       threshold: 100,
       rtl: false, // TODO
       loop: false, // TODO
-      autoplayVideo: false
+      autoplayVideo: false,
+      modal: false,
+      theme: 'tobii--theme-default'
     }
 
     if (userOptions) {
       Object.keys(userOptions).forEach(key => {
-        options[key] = userOptions[key]
+        OPTIONS[key] = userOptions[key]
       })
     }
 
-    return options
+    return OPTIONS
   }
 
   /**
    * Types - you can add new type to support something new
    *
    */
-  const supportedElements = {
+  const SUPPORTED_ELEMENTS = {
     image: {
       checkSupport (el) {
         return !el.hasAttribute('data-type') && el.href.match(/\.(png|jpe?g|tiff|tif|gif|bmp|webp|svg|ico)(\?.*)?$/i)
       },
 
       init (el, container) {
-        const figure = document.createElement('figure')
-        const figcaption = document.createElement('figcaption')
-        const image = document.createElement('img')
-        const thumbnail = el.querySelector('img')
-        const loadingIndicator = document.createElement('div')
+        const FIGURE = document.createElement('figure')
+        const FIGCAPTION = document.createElement('figcaption')
+        const IMAGE = document.createElement('img')
+        const THUMBNAIL = el.querySelector('img')
+        const LOADING_INDICATOR = document.createElement('div')
 
         // Hide figure until the image is loaded
-        figure.style.opacity = '0'
+        FIGURE.style.opacity = '0'
 
-        if (thumbnail) {
-          image.alt = thumbnail.alt || ''
+        if (THUMBNAIL) {
+          IMAGE.alt = THUMBNAIL.alt || ''
         }
 
-        image.setAttribute('src', '')
-        image.setAttribute('data-src', el.href)
+        IMAGE.setAttribute('src', '')
+        IMAGE.setAttribute('data-src', el.href)
 
         // Add image to figure
-        figure.appendChild(image)
+        FIGURE.appendChild(IMAGE)
 
         // Create figcaption
         if (config.captions) {
           if (config.captionsSelector === 'self' && el.getAttribute(config.captionAttribute)) {
-            figcaption.textContent = el.getAttribute(config.captionAttribute)
-          } else if (config.captionsSelector === 'img' && thumbnail && thumbnail.getAttribute(config.captionAttribute)) {
-            figcaption.textContent = thumbnail.getAttribute(config.captionAttribute)
+            FIGCAPTION.textContent = el.getAttribute(config.captionAttribute)
+          } else if (config.captionsSelector === 'img' && THUMBNAIL && THUMBNAIL.getAttribute(config.captionAttribute)) {
+            FIGCAPTION.textContent = THUMBNAIL.getAttribute(config.captionAttribute)
           }
 
-          if (figcaption.textContent) {
-            figcaption.id = `tobii-figcaption-${figcaptionId}`
-            figure.appendChild(figcaption)
+          if (FIGCAPTION.textContent) {
+            FIGCAPTION.id = `tobii-figcaption-${figcaptionId}`
+            FIGURE.appendChild(FIGCAPTION)
 
-            image.setAttribute('aria-labelledby', figcaption.id)
+            IMAGE.setAttribute('aria-labelledby', FIGCAPTION.id)
 
             ++figcaptionId
           }
         }
 
         // Add figure to container
-        container.appendChild(figure)
+        container.appendChild(FIGURE)
 
         // Create loading indicator
-        loadingIndicator.className = 'tobii-loader'
-        loadingIndicator.setAttribute('role', 'progressbar')
-        loadingIndicator.setAttribute('aria-label', config.loadingIndicatorLabel)
+        LOADING_INDICATOR.className = 'tobii__loader'
+        LOADING_INDICATOR.setAttribute('role', 'progressbar')
+        LOADING_INDICATOR.setAttribute('aria-label', config.loadingIndicatorLabel)
 
         // Add loading indicator to container
-        container.appendChild(loadingIndicator)
+        container.appendChild(LOADING_INDICATOR)
 
         // Register type
         container.setAttribute('data-type', 'image')
@@ -163,26 +204,26 @@ export default function Tobii (userOptions) {
 
       onPreload (container) {
         // Same as preload
-        supportedElements.image.onLoad(container)
+        SUPPORTED_ELEMENTS.image.onLoad(container)
       },
 
       onLoad (container) {
-        const image = container.querySelector('img')
+        const IMAGE = container.querySelector('img')
 
-        if (!image.hasAttribute('data-src')) {
+        if (!IMAGE.hasAttribute('data-src')) {
           return
         }
 
-        const figure = container.querySelector('figure')
-        const loadingIndicator = container.querySelector('.tobii-loader')
+        const FIGURE = container.querySelector('figure')
+        const LOADING_INDICATOR = container.querySelector('.tobii__loader')
 
-        image.onload = () => {
-          container.removeChild(loadingIndicator)
-          figure.style.opacity = '1'
+        IMAGE.onload = () => {
+          container.removeChild(LOADING_INDICATOR)
+          FIGURE.style.opacity = '1'
         }
 
-        image.setAttribute('src', image.getAttribute('data-src'))
-        image.removeAttribute('data-src')
+        IMAGE.setAttribute('src', IMAGE.getAttribute('data-src'))
+        IMAGE.removeAttribute('data-src')
       },
 
       onLeave (container) {
@@ -200,15 +241,15 @@ export default function Tobii (userOptions) {
       },
 
       init (el, container) {
-        const targetSelector = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
-        const target = document.querySelector(targetSelector)
+        const TARGET_SELECTOR = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
+        const TARGET = document.querySelector(TARGET_SELECTOR)
 
-        if (!target) {
-          throw new Error(`Ups, I can't find the target ${targetSelector}.`)
+        if (!TARGET) {
+          throw new Error(`Ups, I can't find the target ${TARGET_SELECTOR}.`)
         }
 
         // Add content to container
-        container.appendChild(target)
+        container.appendChild(TARGET)
 
         // Register type
         container.setAttribute('data-type', 'html')
@@ -219,52 +260,52 @@ export default function Tobii (userOptions) {
       },
 
       onLoad (container) {
-        const video = container.querySelector('video')
+        const VIDEO = container.querySelector('video')
 
-        if (video) {
-          if (video.hasAttribute('data-time') && video.readyState > 0) {
+        if (VIDEO) {
+          if (VIDEO.hasAttribute('data-time') && VIDEO.readyState > 0) {
             // Continue where video was stopped
-            video.currentTime = video.getAttribute('data-time')
+            VIDEO.currentTime = VIDEO.getAttribute('data-time')
           }
 
           if (config.autoplayVideo) {
             // Start playback (and loading if necessary)
-            video.play()
+            VIDEO.play()
           }
         }
       },
 
       onLeave (container) {
-        const video = container.querySelector('video')
+        const VIDEO = container.querySelector('video')
 
-        if (video) {
-          if (!video.paused) {
+        if (VIDEO) {
+          if (!VIDEO.paused) {
             // Stop if video is playing
-            video.pause()
+            VIDEO.pause()
           }
 
           // Backup currentTime (needed for revisit)
-          if (video.readyState > 0) {
-            video.setAttribute('data-time', video.currentTime)
+          if (VIDEO.readyState > 0) {
+            VIDEO.setAttribute('data-time', VIDEO.currentTime)
           }
         }
       },
 
       onCleanup (container) {
-        const video = container.querySelector('video')
+        const VIDEO = container.querySelector('video')
 
-        if (video) {
-          if (video.readyState > 0 && video.readyState < 3 && video.duration !== video.currentTime) {
+        if (VIDEO) {
+          if (VIDEO.readyState > 0 && VIDEO.readyState < 3 && VIDEO.duration !== VIDEO.currentTime) {
             // Some data has been loaded but not the whole package.
             // In order to save bandwidth, stop downloading as soon as possible.
-            const videoClone = video.cloneNode(true)
+            const VIDEO_CLONE = VIDEO.cloneNode(true)
 
-            removeSources(video)
-            video.load()
+            removeSources(VIDEO)
+            VIDEO.load()
 
-            video.parentNode.removeChild(video)
+            VIDEO.parentNode.removeChild(VIDEO)
 
-            container.appendChild(videoClone)
+            container.appendChild(VIDEO_CLONE)
           }
         }
       }
@@ -276,23 +317,23 @@ export default function Tobii (userOptions) {
       },
 
       init (el, container) {
-        const iframe = document.createElement('iframe')
-        const href = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
+        const IFRAME = document.createElement('iframe')
+        const HREF = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
 
-        iframe.setAttribute('frameborder', '0')
-        iframe.setAttribute('src', '')
-        iframe.setAttribute('data-src', href)
+        IFRAME.setAttribute('frameborder', '0')
+        IFRAME.setAttribute('src', '')
+        IFRAME.setAttribute('data-src', HREF)
 
         if (el.getAttribute('data-width')) {
-          iframe.style.maxWidth = `${el.getAttribute('data-width')}px`
+          IFRAME.style.maxWidth = `${el.getAttribute('data-width')}px`
         }
 
         if (el.getAttribute('data-height')) {
-          iframe.style.maxHeight = `${el.getAttribute('data-height')}px`
+          IFRAME.style.maxHeight = `${el.getAttribute('data-height')}px`
         }
 
         // Add iframe to container
-        container.appendChild(iframe)
+        container.appendChild(IFRAME)
 
         // Register type
         container.setAttribute('data-type', 'iframe')
@@ -303,9 +344,9 @@ export default function Tobii (userOptions) {
       },
 
       onLoad (container) {
-        const iframe = container.querySelector('iframe')
+        const IFRAME = container.querySelector('iframe')
 
-        iframe.setAttribute('src', iframe.getAttribute('data-src'))
+        IFRAME.setAttribute('src', IFRAME.getAttribute('data-src'))
       },
 
       onLeave (container) {
@@ -323,12 +364,12 @@ export default function Tobii (userOptions) {
       },
 
       init (el, container) {
-        const iframePlaceholder = document.createElement('div')
+        const IFRAME_PLACEHOLDER = document.createElement('div')
 
         // Add iframePlaceholder to container
-        container.appendChild(iframePlaceholder)
+        container.appendChild(IFRAME_PLACEHOLDER)
 
-        player[playerId] = new window.YT.Player(iframePlaceholder, {
+        PLAYER[playerId] = new window.YT.Player(IFRAME_PLACEHOLDER, {
           host: 'https://www.youtube-nocookie.com',
           height: el.getAttribute('data-height') || '360',
           width: el.getAttribute('data-width') || '640',
@@ -355,40 +396,21 @@ export default function Tobii (userOptions) {
 
       onLoad (container) {
         if (config.autoplayVideo) {
-          player[container.getAttribute('data-player')].playVideo()
+          PLAYER[container.getAttribute('data-player')].playVideo()
         }
       },
 
       onLeave (container) {
-        if (player[container.getAttribute('data-player')].getPlayerState() === 1) {
-          player[container.getAttribute('data-player')].pauseVideo()
+        if (PLAYER[container.getAttribute('data-player')].getPlayerState() === 1) {
+          PLAYER[container.getAttribute('data-player')].pauseVideo()
         }
       },
 
       onCleanup (container) {
-        if (player[container.getAttribute('data-player')].getPlayerState() === 1) {
-          player[container.getAttribute('data-player')].pauseVideo()
+        if (PLAYER[container.getAttribute('data-player')].getPlayerState() === 1) {
+          PLAYER[container.getAttribute('data-player')].pauseVideo()
         }
       }
-    }
-  }
-
-  /**
-   * Add compatible Object.entries support for IE
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries#Polyfill
-   *
-   */
-  if (!Object.entries) {
-    Object.entries = function (obj) {
-      const ownProps = Object.keys(obj)
-      let i = ownProps.length
-      const resArray = new Array(i)
-
-      while (i--) {
-        resArray[i] = [ownProps[i], obj[ownProps[i]]]
-      }
-
-      return resArray
     }
   }
 
@@ -406,15 +428,15 @@ export default function Tobii (userOptions) {
     }
 
     // Get a list of all elements within the document
-    const els = document.querySelectorAll(config.selector)
+    const LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(config.selector)
 
-    if (!els) {
-      throw new Error(`Ups, I can't find the selector ${config.selector}.`)
+    if (!LIGHTBOX_TRIGGER_ELS) {
+      throw new Error(`Ups, I can't find the selector ${config.selector} on this website.`)
     }
 
     // Execute a few things once per element
-    Array.prototype.forEach.call(els, el => {
-      checkDependencies(el)
+    LIGHTBOX_TRIGGER_ELS.forEach(lightboxTriggerEl => {
+      checkDependencies(lightboxTriggerEl)
     })
   }
 
@@ -422,34 +444,33 @@ export default function Tobii (userOptions) {
    * Check dependencies
    *
    * @param {HTMLElement} el - Element to add
-   * @param {function} callback - Optional callback to call after add
    */
-  const checkDependencies = function checkDependencies (el, callback) {
+  const checkDependencies = function checkDependencies (el) {
     // Check if there is a YouTube video and if the YouTube iframe-API is ready
     if (document.querySelector('[data-type="youtube"]') !== null && !isYouTubeDependencieLoaded) {
       if (document.getElementById('iframe_api') === null) {
-        const tag = document.createElement('script')
-        const firstScriptTag = document.getElementsByTagName('script')[0]
+        const TAG = document.createElement('script')
+        const FIRST_SCRIPT_TAG = document.getElementsByTagName('script')[0]
 
-        tag.id = 'iframe_api'
-        tag.src = 'https://www.youtube.com/iframe_api'
+        TAG.id = 'iframe_api'
+        TAG.src = 'https://www.youtube.com/iframe_api'
 
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+        FIRST_SCRIPT_TAG.parentNode.insertBefore(TAG, FIRST_SCRIPT_TAG)
       }
 
-      if (waitingEls.indexOf(el) === -1) {
-        waitingEls.push(el)
+      if (WAITING_ELS.indexOf(el) === -1) {
+        WAITING_ELS.push(el)
       }
 
       window.onYouTubePlayerAPIReady = () => {
-        Array.prototype.forEach.call(waitingEls, waitingEl => {
-          add(waitingEl, callback)
+        WAITING_ELS.forEach(waitingEl => {
+          add(waitingEl)
         })
 
         isYouTubeDependencieLoaded = true
       }
     } else {
-      add(el, callback)
+      add(el)
     }
   }
 
@@ -477,13 +498,12 @@ export default function Tobii (userOptions) {
    * Add element
    *
    * @param {HTMLElement} el - Element to add
-   * @param {function} callback - Optional callback to call after add
    */
-  const add = function add (el, callback) {
+  const add = function add (el) {
     newGroup = getGroupName(el)
 
     if (!Object.prototype.hasOwnProperty.call(groups, newGroup)) {
-      groups[newGroup] = copyObject(groupAtts)
+      groups[newGroup] = copyObject(GROUP_ATTS)
 
       createSlider()
     }
@@ -495,13 +515,13 @@ export default function Tobii (userOptions) {
 
       // Set zoom icon if necessary
       if (config.zoom && el.querySelector('img')) {
-        const TobiiZoom = document.createElement('div')
+        const TOBII_ZOOM = document.createElement('div')
 
-        TobiiZoom.className = 'tobii-zoom__icon'
-        TobiiZoom.innerHTML = config.zoomText
+        TOBII_ZOOM.className = 'tobii-zoom__icon'
+        TOBII_ZOOM.innerHTML = config.zoomText
 
         el.classList.add('tobii-zoom')
-        el.appendChild(TobiiZoom)
+        el.appendChild(TOBII_ZOOM)
       }
 
       // Bind click event handler
@@ -513,12 +533,8 @@ export default function Tobii (userOptions) {
         updateConfig()
         updateLightbox()
       }
-
-      if (callback) {
-        callback.call(this)
-      }
     } else {
-      throw new Error('Ups, element already added to the lightbox.')
+      throw new Error('Ups, element already added.')
     }
   }
 
@@ -526,46 +542,53 @@ export default function Tobii (userOptions) {
    * Remove element
    *
    * @param {HTMLElement} el - Element to remove
-   * @param {function} callback - Optional callback to call after remove
    */
-  const remove = function add (el, callback) {
-    const groupName = getGroupName(el)
+  const remove = function remove (el) {
+    const GROUP_NAME = getGroupName(el)
 
     // Check if element exists
-    if (groups[groupName].gallery.indexOf(el) === -1) {
-      // TODO
+    if (groups[GROUP_NAME].gallery.indexOf(el) === -1) {
+      throw new Error(`Ups, I can't find a slide for the element ${el}.`)
     } else {
-      const slideIndex = groups[groupName].gallery.indexOf(el)
-      const slideEl = groups[groupName].sliderElements[slideIndex]
+      const SLIDE_INDEX = groups[GROUP_NAME].gallery.indexOf(el)
+      const SLIDE_EL = groups[GROUP_NAME].sliderElements[SLIDE_INDEX]
 
-      // TODO If the element to be removed is the currently visible slide
+      // If the element to be removed is the currently visible slide
+      if (isOpen() && GROUP_NAME === activeGroup && SLIDE_INDEX === groups[GROUP_NAME].currentIndex) {
+        if (groups[GROUP_NAME].elementsLength === 1) {
+          close()
+          throw new Error('Ups, I\'ve closed. There are no slides more to show.')
+        } else {
+          // TODO If there is only one slide left, deactivate horizontal dragging/ swiping
+          // TODO Recalculate counter
+          // TODO Set new absolute position per slide
+
+          // If the first slide is displayed
+          if (groups[GROUP_NAME].currentIndex === 0) {
+            next()
+          } else {
+            previous()
+          }
+        }
+      }
 
       // TODO Remove element
-      // groups[groupName].gallery.splice(groups[groupName].gallery.indexOf(el)) don't work
-      groups[groupName].elementsLength--
+      // groups[GROUP_NAME].gallery.splice(groups[GROUP_NAME].gallery.indexOf(el)) don't work
+      groups[GROUP_NAME].elementsLength--
 
       // Remove zoom icon if necessary
       if (config.zoom && el.querySelector('.tobii-zoom__icon')) {
-        const zoomIcon = el.querySelector('.tobii-zoom__icon')
+        const ZOOM_ICON = el.querySelector('.tobii-zoom__icon')
 
-        zoomIcon.parentNode.classList.remove('tobii-zoom')
-        zoomIcon.parentNode.removeChild(zoomIcon)
+        ZOOM_ICON.parentNode.classList.remove('tobii-zoom')
+        ZOOM_ICON.parentNode.removeChild(ZOOM_ICON)
       }
 
       // Unbind click event handler
       el.removeEventListener('click', triggerTobii)
 
       // Remove slide
-      slideEl.parentNode.removeChild(slideEl)
-
-      if (isOpen() && groupName === activeGroup) {
-        updateConfig()
-        updateLightbox()
-      }
-
-      if (callback) {
-        callback.call(this)
-      }
+      SLIDE_EL.parentNode.removeChild(SLIDE_EL)
     }
   }
 
@@ -574,15 +597,18 @@ export default function Tobii (userOptions) {
    *
    */
   const createLightbox = function createLightbox () {
-    // Create the lightbox
+    // Create the lightbox container
     lightbox = document.createElement('div')
     lightbox.setAttribute('role', 'dialog')
     lightbox.setAttribute('aria-hidden', 'true')
-    lightbox.className = 'tobii'
+    lightbox.classList.add('tobii')
+
+    // Adc theme class
+    lightbox.classList.add(config.theme)
 
     // Create the previous button
     prevButton = document.createElement('button')
-    prevButton.className = 'tobii__prev'
+    prevButton.className = 'tobii__btn tobii__btn--previous'
     prevButton.setAttribute('type', 'button')
     prevButton.setAttribute('aria-label', config.navLabel[0])
     prevButton.innerHTML = config.navText[0]
@@ -590,7 +616,7 @@ export default function Tobii (userOptions) {
 
     // Create the next button
     nextButton = document.createElement('button')
-    nextButton.className = 'tobii__next'
+    nextButton.className = 'tobii__btn tobii__btn--next'
     nextButton.setAttribute('type', 'button')
     nextButton.setAttribute('aria-label', config.navLabel[1])
     nextButton.innerHTML = config.navText[1]
@@ -598,7 +624,7 @@ export default function Tobii (userOptions) {
 
     // Create the close button
     closeButton = document.createElement('button')
-    closeButton.className = 'tobii__close'
+    closeButton.className = 'tobii__btn tobii__btn--close'
     closeButton.setAttribute('type', 'button')
     closeButton.setAttribute('aria-label', config.closeLabel)
     closeButton.innerHTML = config.closeText
@@ -618,6 +644,10 @@ export default function Tobii (userOptions) {
   const createSlider = function createSlider () {
     groups[newGroup].slider = document.createElement('div')
     groups[newGroup].slider.className = 'tobii__slider'
+
+    // Hide slider
+    groups[newGroup].slider.setAttribute('aria-hidden', 'true')
+
     lightbox.appendChild(groups[newGroup].slider)
   }
 
@@ -627,26 +657,29 @@ export default function Tobii (userOptions) {
    */
   const createSlide = function createSlide (el) {
     // Detect type
-    for (let index in supportedElements) { // const index don't work in IE
-      if (Object.prototype.hasOwnProperty.call(supportedElements, index)) {
-        if (supportedElements[index].checkSupport(el)) {
+    for (let index in SUPPORTED_ELEMENTS) { // const index don't work in IE
+      if (Object.prototype.hasOwnProperty.call(SUPPORTED_ELEMENTS, index)) {
+        if (SUPPORTED_ELEMENTS[index].checkSupport(el)) {
           // Create slide elements
-          const sliderElement = document.createElement('div')
-          const sliderElementContent = document.createElement('div')
+          const SLIDER_ELEMENT = document.createElement('div')
+          const SLIDER_ELEMENT_CONTENT = document.createElement('div')
 
-          sliderElement.className = 'tobii__slider-slide'
-          sliderElement.style.position = 'absolute'
-          sliderElement.style.left = `${groups[newGroup].x * 100}%`
+          SLIDER_ELEMENT.className = 'tobii__slide'
+          SLIDER_ELEMENT.style.position = 'absolute'
+          SLIDER_ELEMENT.style.left = `${groups[newGroup].x * 100}%`
+
+          // Hide slide
+          SLIDER_ELEMENT.setAttribute('aria-hidden', 'true')
 
           // Create type elements
-          supportedElements[index].init(el, sliderElementContent)
+          SUPPORTED_ELEMENTS[index].init(el, SLIDER_ELEMENT_CONTENT)
 
           // Add slide content container to slider element
-          sliderElement.appendChild(sliderElementContent)
+          SLIDER_ELEMENT.appendChild(SLIDER_ELEMENT_CONTENT)
 
           // Add slider element to slider
-          groups[newGroup].slider.appendChild(sliderElement)
-          groups[newGroup].sliderElements.push(sliderElement)
+          groups[newGroup].slider.appendChild(SLIDER_ELEMENT)
+          groups[newGroup].sliderElements.push(SLIDER_ELEMENT)
 
           ++groups[newGroup].x
 
@@ -660,27 +693,22 @@ export default function Tobii (userOptions) {
    * Open Tobii
    *
    * @param {number} index - Index to load
-   * @param {function} callback - Optional callback to call after open
    */
-  const open = function open (index, callback) {
+  const open = function open (index) {
     activeGroup = activeGroup !== null ? activeGroup : newGroup
 
-    if (!isOpen() && !index) {
-      index = 0
-    }
-
     if (isOpen()) {
-      if (!index) {
-        throw new Error('Ups, Tobii is aleady open.')
-      }
-
-      if (index === groups[activeGroup].currentIndex) {
-        throw new Error(`Ups, slide ${index} is already selected.`)
-      }
+      throw new Error('Ups, I\'m aleady open.')
     }
 
-    if (index === -1 || index >= groups[activeGroup].elementsLength) {
-      throw new Error(`Ups, I can't find slide ${index}.`)
+    if (!isOpen()) {
+      if (!index) {
+        index = 0
+      }
+
+      if (index === -1 || index >= groups[activeGroup].elementsLength) {
+        throw new Error(`Ups, I can't find slide ${index}.`)
+      }
     }
 
     if (config.hideScrollbar) {
@@ -699,6 +727,15 @@ export default function Tobii (userOptions) {
     // Save user’s focus
     lastFocus = document.activeElement
 
+    // Use `history.pushState()` to make sure the "Back" button behavior
+    // that aligns with the user's expectations
+    const stateObj = {
+      tobii: 'close'
+    }
+    const url = window.location.href
+
+    history.pushState(stateObj, 'Image', url)
+
     // Set current index
     groups[activeGroup].currentIndex = index
 
@@ -708,7 +745,10 @@ export default function Tobii (userOptions) {
     // Load slide
     load(groups[activeGroup].currentIndex)
 
-    // Makes lightbox appear, too
+    // Show slider
+    groups[activeGroup].slider.setAttribute('aria-hidden', 'false')
+
+    // Show lightbox
     lightbox.setAttribute('aria-hidden', 'false')
 
     updateLightbox()
@@ -718,23 +758,23 @@ export default function Tobii (userOptions) {
     preload(groups[activeGroup].currentIndex - 1)
 
     // Hack to prevent animation during opening
-    setTimeout(function () {
+    setTimeout(() => {
       groups[activeGroup].slider.classList.add('tobii__slider--animate')
     }, 1000)
 
-    if (callback) {
-      callback.call(this)
-    }
+    // Create and dispatch a new event
+    const openEvent = new CustomEvent('open')
+
+    lightbox.dispatchEvent(openEvent)
   }
 
   /**
    * Close Tobii
    *
-   * @param {function} callback - Optional callback to call after close
    */
-  const close = function close (callback) {
+  const close = function close () {
     if (!isOpen()) {
-      throw new Error('Tobii is already closed.')
+      throw new Error('Ups, I\'m already closed.')
     }
 
     if (config.hideScrollbar) {
@@ -744,27 +784,31 @@ export default function Tobii (userOptions) {
 
     unbindEvents()
 
+    // Remove entry in browser history
+    if (history.state !== null) {
+      if (history.state.tobii === 'close') {
+        history.back()
+      }
+    }
+
     // Reenable the user’s focus
     lastFocus.focus()
 
     // Don't forget to cleanup our current element
-    const container = groups[activeGroup].sliderElements[groups[activeGroup].currentIndex].querySelector('[data-type]')
-    const type = container.getAttribute('data-type')
+    leave(groups[activeGroup].currentIndex)
+    cleanup(groups[activeGroup].currentIndex)
 
-    supportedElements[type].onLeave(container)
-    supportedElements[type].onCleanup(container)
-
+    // Hide lightbox
     lightbox.setAttribute('aria-hidden', 'true')
+
+    // Hide slider
+    groups[activeGroup].slider.setAttribute('aria-hidden', 'true')
 
     // Reset current index
     groups[activeGroup].currentIndex = 0
 
     // Remove the hack to prevent animation during opening
     groups[activeGroup].slider.classList.remove('tobii__slider--animate')
-
-    if (callback) {
-      callback.call(this)
-    }
   }
 
   /**
@@ -777,10 +821,10 @@ export default function Tobii (userOptions) {
       return
     }
 
-    const container = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
-    const type = container.getAttribute('data-type')
+    const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
+    const TYPE = CONTAINER.getAttribute('data-type')
 
-    supportedElements[type].onPreload(container)
+    SUPPORTED_ELEMENTS[TYPE].onPreload(CONTAINER)
   }
 
   /**
@@ -794,48 +838,126 @@ export default function Tobii (userOptions) {
       return
     }
 
-    const container = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
-    const type = container.getAttribute('data-type')
+    const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
+    const TYPE = CONTAINER.getAttribute('data-type')
 
-    supportedElements[type].onLoad(container)
+    // Add active slide class
+    groups[activeGroup].sliderElements[index].classList.add('tobii__slide--is-active')
+    groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'false')
+
+    SUPPORTED_ELEMENTS[TYPE].onLoad(CONTAINER)
   }
 
   /**
-   * Show the previous slide
+   * Select a slide
    *
-   * @param {function} callback - Optional callback function
+   * @param {number} index - Index to select
    */
-  const prev = function prev (callback) {
+  const select = function select (index) {
+    const currIndex = groups[activeGroup].currentIndex
+
+    if (!isOpen()) {
+      throw new Error('Ups, I\'m closed.')
+    }
+
+    if (isOpen()) {
+      if (!index && index !== 0) {
+        throw new Error('Ups, no slide specified.')
+      }
+
+      if (index === groups[activeGroup].currentIndex) {
+        throw new Error(`Ups, slide ${index} is already selected.`)
+      }
+
+      if (index === -1 || index >= groups[activeGroup].elementsLength) {
+        throw new Error(`Ups, I can't find slide ${index}.`)
+      }
+    }
+
+    // Set current index
+    groups[activeGroup].currentIndex = index
+
+    leave(currIndex)
+    load(index)
+
+    if (index < currIndex) {
+      updateLightbox('left')
+      cleanup(currIndex)
+      preload(index - 1)
+    }
+
+    if (index > currIndex) {
+      updateLightbox('right')
+      cleanup(currIndex)
+      preload(index + 1)
+    }
+  }
+
+  /**
+   * Select the previous slide
+   *
+   */
+  const previous = function previous () {
+    if (!isOpen()) {
+      throw new Error('Ups, I\'m closed.')
+    }
+
     if (groups[activeGroup].currentIndex > 0) {
       leave(groups[activeGroup].currentIndex)
       load(--groups[activeGroup].currentIndex)
       updateLightbox('left')
       cleanup(groups[activeGroup].currentIndex + 1)
       preload(groups[activeGroup].currentIndex - 1)
-
-      if (callback) {
-        callback.call(this)
-      }
     }
+
+    // Create and dispatch a new event
+    const previousEvent = new CustomEvent('previous')
+
+    lightbox.dispatchEvent(previousEvent)
   }
 
   /**
-   * Show the next slide
+   * Select the next slide
    *
-   * @param {function} callback - Optional callback function
    */
-  const next = function next (callback) {
+  const next = function next () {
+    if (!isOpen()) {
+      throw new Error('Ups, I\'m closed.')
+    }
+
     if (groups[activeGroup].currentIndex < groups[activeGroup].elementsLength - 1) {
       leave(groups[activeGroup].currentIndex)
       load(++groups[activeGroup].currentIndex)
       updateLightbox('right')
       cleanup(groups[activeGroup].currentIndex - 1)
       preload(groups[activeGroup].currentIndex + 1)
-
-      if (callback) {
-        callback.call(this)
-      }
     }
+
+    // Create and dispatch a new event
+    const nextEvent = new CustomEvent('next')
+
+    lightbox.dispatchEvent(nextEvent)
+  }
+
+  /**
+   * Select a group
+   *
+   * @param {string} name - Name of the group to select
+   */
+  const selectGroup = function selectGroup (name) {
+    if (isOpen()) {
+      throw new Error('Ups, I\'m open.')
+    }
+
+    if (!name) {
+      throw new Error('Ups, no group specified.')
+    }
+
+    if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {
+      throw new Error(`Ups, I don't have a group called "${name}".`)
+    }
+
+    activeGroup = name
   }
 
   /**
@@ -849,10 +971,14 @@ export default function Tobii (userOptions) {
       return
     }
 
-    const container = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
-    const type = container.getAttribute('data-type')
+    const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
+    const TYPE = CONTAINER.getAttribute('data-type')
 
-    supportedElements[type].onLeave(container)
+    // Remove active slide class
+    groups[activeGroup].sliderElements[index].classList.remove('tobii__slide--is-active')
+    groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'true')
+
+    SUPPORTED_ELEMENTS[TYPE].onLeave(CONTAINER)
   }
 
   /**
@@ -866,10 +992,10 @@ export default function Tobii (userOptions) {
       return
     }
 
-    const container = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
-    const type = container.getAttribute('data-type')
+    const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
+    const TYPE = CONTAINER.getAttribute('data-type')
 
-    supportedElements[type].onCleanup(container)
+    SUPPORTED_ELEMENTS[TYPE].onCleanup(CONTAINER)
   }
 
   /**
@@ -894,51 +1020,52 @@ export default function Tobii (userOptions) {
   }
 
   /**
-   * Set focus to the next slide
+   * Update focus
    *
    * @param {string} dir - Current slide direction
    */
   const updateFocus = function updateFocus (dir) {
-    let focusableEls = null
-
-    if (config.nav) {
-      prevButton.disabled = false
-      nextButton.disabled = false
-
-      if (dir === 'left') {
-        prevButton.focus()
-      } else {
-        nextButton.focus()
-      }
+    if ((config.nav === true || config.nav === 'auto') && !isTouchDevice() && groups[activeGroup].elementsLength > 1) {
+      prevButton.setAttribute('aria-hidden', 'true')
+      prevButton.disabled = true
+      nextButton.setAttribute('aria-hidden', 'true')
+      nextButton.disabled = true
 
       // If there is only one slide
       if (groups[activeGroup].elementsLength === 1) {
-        prevButton.disabled = true
-        nextButton.disabled = true
-
         if (config.close) {
           closeButton.focus()
         }
       } else {
         // If the first slide is displayed
         if (groups[activeGroup].currentIndex === 0) {
-          prevButton.disabled = true
-          nextButton.focus()
-        }
+          nextButton.setAttribute('aria-hidden', 'false')
+          nextButton.disabled = false
 
-        // If the last slide is displayed
-        if (groups[activeGroup].currentIndex === groups[activeGroup].elementsLength - 1) {
-          nextButton.disabled = true
+          nextButton.focus()
+
+          // If the last slide is displayed
+        } else if (groups[activeGroup].currentIndex === groups[activeGroup].elementsLength - 1) {
+          prevButton.setAttribute('aria-hidden', 'false')
+          prevButton.disabled = false
+
           prevButton.focus()
+        } else {
+          prevButton.setAttribute('aria-hidden', 'false')
+          prevButton.disabled = false
+          nextButton.setAttribute('aria-hidden', 'false')
+          nextButton.disabled = false
+
+          if (dir === 'left') {
+            prevButton.focus()
+          } else {
+            nextButton.focus()
+          }
         }
       }
     } else if (config.close) {
       closeButton.focus()
     }
-
-    focusableEls = lightbox.querySelectorAll('.tobii > button:not(:disabled)')
-    firstFocusableEl = focusableEls[0]
-    lastFocusableEl = focusableEls.length === 1 ? focusableEls[0] : focusableEls[focusableEls.length - 1]
   }
 
   /**
@@ -959,16 +1086,16 @@ export default function Tobii (userOptions) {
    *
    */
   const updateAfterDrag = function updateAfterDrag () {
-    const movementX = drag.endX - drag.startX
-    const movementY = drag.endY - drag.startY
-    const movementXDistance = Math.abs(movementX)
-    const movementYDistance = Math.abs(movementY)
+    const MOVEMENT_X = drag.endX - drag.startX
+    const MOVEMENT_Y = drag.endY - drag.startY
+    const MOVEMENT_X_DISTANCE = Math.abs(MOVEMENT_X)
+    const MOVEMENT_Y_DISTANCE = Math.abs(MOVEMENT_Y)
 
-    if (movementX > 0 && movementXDistance > config.threshold && groups[activeGroup].currentIndex > 0) {
-      prev()
-    } else if (movementX < 0 && movementXDistance > config.threshold && groups[activeGroup].currentIndex !== groups[activeGroup].elementsLength - 1) {
+    if (MOVEMENT_X > 0 && MOVEMENT_X_DISTANCE > config.threshold && groups[activeGroup].currentIndex > 0) {
+      previous()
+    } else if (MOVEMENT_X < 0 && MOVEMENT_X_DISTANCE > config.threshold && groups[activeGroup].currentIndex !== groups[activeGroup].elementsLength - 1) {
       next()
-    } else if (movementY < 0 && movementYDistance > config.threshold && config.swipeClose) {
+    } else if (MOVEMENT_Y < 0 && MOVEMENT_Y_DISTANCE > config.threshold && config.swipeClose) {
       close()
     } else {
       updateOffset()
@@ -983,7 +1110,7 @@ export default function Tobii (userOptions) {
     if (!resizeTicking) {
       resizeTicking = true
 
-      browserWindow.requestAnimationFrame(() => {
+      BROWSER_WINDOW.requestAnimationFrame(() => {
         updateOffset()
 
         resizeTicking = false
@@ -1009,14 +1136,29 @@ export default function Tobii (userOptions) {
    */
   const clickHandler = function clickHandler (event) {
     if (event.target === prevButton) {
-      prev()
+      previous()
     } else if (event.target === nextButton) {
       next()
-    } else if (event.target === closeButton || (event.target.className === 'tobii__slider-slide' && config.docClose)) {
+    } else if (event.target === closeButton || (isDraggingX === false && isDraggingY === false && event.target.classList.contains('tobii__slide') && config.docClose)) {
       close()
     }
 
     event.stopPropagation()
+  }
+
+  /**
+   * Get the focusable children of the given element
+   *
+   * @return {Array<Element>}
+   */
+  const getFocusableChildren = function getFocusableChildren () {
+    return Array.prototype.slice.call(lightbox.querySelectorAll(`.tobii__btn:not([disabled]), .tobii__slide--is-active + ${FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active ')}`)).filter(function (child) {
+      return !!(
+        child.offsetWidth ||
+        child.offsetHeight ||
+        child.getClientRects().length
+      )
+    })
   }
 
   /**
@@ -1026,20 +1168,22 @@ export default function Tobii (userOptions) {
    * @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
    */
   const keydownHandler = function keydownHandler (event) {
+    const FOCUSABLE_CHILDREN = getFocusableChildren()
+    const FOCUSED_ITEM_INDEX = FOCUSABLE_CHILDREN.indexOf(document.activeElement)
+
     if (event.keyCode === 9 || event.code === 'Tab') {
-      // `TAB` Key: Navigate to the next / previous focusable element
-      if (event.shiftKey) {
-        // Step backwards in the tab-order
-        if (document.activeElement === firstFocusableEl) {
-          lastFocusableEl.focus()
-          event.preventDefault()
-        }
-      } else {
-        // Step forward in the tab-order
-        if (document.activeElement === lastFocusableEl) {
-          firstFocusableEl.focus()
-          event.preventDefault()
-        }
+      // If the SHIFT key is being pressed while tabbing (moving backwards) and
+      // the currently focused item is the first one, move the focus to the last
+      // focusable item from the slide
+      if (event.shiftKey && FOCUSED_ITEM_INDEX === 0) {
+        FOCUSABLE_CHILDREN[FOCUSABLE_CHILDREN.length - 1].focus()
+        event.preventDefault()
+        // If the SHIFT key is not being pressed (moving forwards) and the currently
+        // focused item is the last one, move the focus to the first focusable item
+        // from the slide
+      } else if (!event.shiftKey && FOCUSED_ITEM_INDEX === FOCUSABLE_CHILDREN.length - 1) {
+        FOCUSABLE_CHILDREN[0].focus()
+        event.preventDefault()
       }
     } else if (event.keyCode === 27 || event.code === 'Escape') {
       // `ESC` Key: Close Tobii
@@ -1048,7 +1192,7 @@ export default function Tobii (userOptions) {
     } else if (event.keyCode === 37 || event.code === 'ArrowLeft') {
       // `PREV` Key: Show the previous slide
       event.preventDefault()
-      prev()
+      previous()
     } else if (event.keyCode === 39 || event.code === 'ArrowRight') {
       // `NEXT` Key: Show the next slide
       event.preventDefault()
@@ -1067,6 +1211,9 @@ export default function Tobii (userOptions) {
     }
 
     event.stopPropagation()
+
+    isDraggingX = false
+    isDraggingY = false
 
     pointerDown = true
 
@@ -1105,9 +1252,6 @@ export default function Tobii (userOptions) {
     groups[activeGroup].slider.classList.remove('tobii__slider--is-dragging')
 
     if (drag.endX) {
-      isDraggingX = false
-      isDraggingY = false
-
       updateAfterDrag()
     }
 
@@ -1126,6 +1270,9 @@ export default function Tobii (userOptions) {
 
     event.preventDefault()
     event.stopPropagation()
+
+    isDraggingX = false
+    isDraggingY = false
 
     pointerDown = true
 
@@ -1162,9 +1309,6 @@ export default function Tobii (userOptions) {
     groups[activeGroup].slider.classList.remove('tobii__slider--is-dragging')
 
     if (drag.endX) {
-      isDraggingX = false
-      isDraggingY = false
-
       updateAfterDrag()
     }
 
@@ -1172,17 +1316,28 @@ export default function Tobii (userOptions) {
   }
 
   /**
+   * Contextmenu event handler
+   * This is a fix for chromium based browser on mac.
+   * The 'contextmenu' terminates a mouse event sequence.
+   * https://bugs.chromium.org/p/chromium/issues/detail?id=506801
+   *
+   */
+  const contextmenuHandler = function contextmenuHandler () {
+    pointerDown = false
+  }
+
+  /**
    * Decide whether to do horizontal of vertical swipe
    *
    */
   const doSwipe = function doSwipe () {
-    if (Math.abs(drag.startX - drag.endX) > 0 && !isDraggingY && config.swipeClose) {
+    if (Math.abs(drag.startX - drag.endX) > 0 && !isDraggingY && groups[activeGroup].elementsLength > 1) {
       // Horizontal swipe
       groups[activeGroup].slider.style.transform = `translate3d(${offsetTmp - Math.round(drag.startX - drag.endX)}px, 0, 0)`
 
       isDraggingX = true
       isDraggingY = false
-    } else if (Math.abs(drag.startY - drag.endY) > 0 && !isDraggingX) {
+    } else if (Math.abs(drag.startY - drag.endY) > 0 && !isDraggingX && config.swipeClose) {
       // Vertical swipe
       groups[activeGroup].slider.style.transform = `translate3d(${offsetTmp}px, -${Math.round(drag.startY - drag.endY)}px, 0)`
 
@@ -1197,11 +1352,14 @@ export default function Tobii (userOptions) {
    */
   const bindEvents = function bindEvents () {
     if (config.keyboard) {
-      browserWindow.addEventListener('keydown', keydownHandler)
+      BROWSER_WINDOW.addEventListener('keydown', keydownHandler)
     }
 
     // Resize event
-    browserWindow.addEventListener('resize', resizeHandler)
+    BROWSER_WINDOW.addEventListener('resize', resizeHandler)
+
+    // Popstate event
+    BROWSER_WINDOW.addEventListener('popstate', close)
 
     // Click event
     lightbox.addEventListener('click', clickHandler)
@@ -1218,6 +1376,7 @@ export default function Tobii (userOptions) {
       lightbox.addEventListener('mousedown', mousedownHandler)
       lightbox.addEventListener('mouseup', mouseupHandler)
       lightbox.addEventListener('mousemove', mousemoveHandler)
+      lightbox.addEventListener('contextmenu', contextmenuHandler)
     }
   }
 
@@ -1227,11 +1386,14 @@ export default function Tobii (userOptions) {
    */
   const unbindEvents = function unbindEvents () {
     if (config.keyboard) {
-      browserWindow.removeEventListener('keydown', keydownHandler)
+      BROWSER_WINDOW.removeEventListener('keydown', keydownHandler)
     }
 
     // Resize event
-    browserWindow.removeEventListener('resize', resizeHandler)
+    BROWSER_WINDOW.removeEventListener('resize', resizeHandler)
+
+    // Popstate event
+    BROWSER_WINDOW.removeEventListener('popstate', close)
 
     // Click event
     lightbox.removeEventListener('click', clickHandler)
@@ -1248,6 +1410,7 @@ export default function Tobii (userOptions) {
       lightbox.removeEventListener('mousedown', mousedownHandler)
       lightbox.removeEventListener('mouseup', mouseupHandler)
       lightbox.removeEventListener('mousemove', mousemoveHandler)
+      lightbox.removeEventListener('contextmenu', contextmenuHandler)
     }
   }
 
@@ -1265,10 +1428,10 @@ export default function Tobii (userOptions) {
    * @param {HTMLElement} el - Element to remove all `src` attributes
    */
   const removeSources = function setVideoSources (el) {
-    const sources = el.querySelectorAll('src')
+    const SOURCES = el.querySelectorAll('src')
 
-    if (sources) {
-      Array.prototype.forEach.call(sources, function (source) {
+    if (SOURCES) {
+      SOURCES.forEach(source => {
         source.setAttribute('src', '')
       })
     }
@@ -1279,17 +1442,21 @@ export default function Tobii (userOptions) {
    *
    */
   const updateConfig = function updateConfig () {
-    if (config.draggable && groups[activeGroup].elementsLength > 1 && !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable')) {
+    if ((config.draggable && config.swipeClose && !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable')) || (config.draggable && groups[activeGroup].elementsLength > 1 && !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable'))) {
       groups[activeGroup].slider.classList.add('tobii__slider--is-draggable')
     }
 
     // Hide buttons if necessary
     if (!config.nav || groups[activeGroup].elementsLength === 1 || (config.nav === 'auto' && isTouchDevice())) {
       prevButton.setAttribute('aria-hidden', 'true')
+      prevButton.disabled = true
       nextButton.setAttribute('aria-hidden', 'true')
+      nextButton.disabled = true
     } else {
       prevButton.setAttribute('aria-hidden', 'false')
+      prevButton.disabled = false
       nextButton.setAttribute('aria-hidden', 'false')
+      nextButton.disabled = false
     }
 
     // Hide counter if necessary
@@ -1301,59 +1468,52 @@ export default function Tobii (userOptions) {
   }
 
   /**
-   * Update slider
-   */
-  const updateSlider = function updateSlider () {
-    for (let name in groups) { // const name don't work in IE
-      if (!Object.prototype.hasOwnProperty.call(groups, name)) continue
-      groups[name].slider.style.display = activeGroup === name ? 'block' : 'none'
-    }
-  }
-
-  /**
    * Update lightbox
    *
    * @param {string} dir - Current slide direction
    */
   const updateLightbox = function updateLightbox (dir) {
-    updateSlider()
     updateOffset()
     updateCounter()
     updateFocus(dir)
   }
 
   /**
-   * Destroy Tobii
+   * Reset Tobii
    *
-   * @param {function} callback - Optional callback to call after destroy
    */
-  const destroy = function destroy (callback) {
+  const reset = function reset () {
     if (isOpen()) {
       close()
     }
 
     // TODO Cleanup
-    const groupsEntries = Object.entries(groups)
+    const GROUPS_ENTRIES = Object.entries(groups)
 
-    Array.prototype.forEach.call(groupsEntries, function (groupsEntrie) {
-      const els = groupsEntrie[1].gallery
+    GROUPS_ENTRIES.forEach(groupsEntrie => {
+      const SLIDE_ELS = groupsEntrie[1].gallery
 
-      Array.prototype.forEach.call(els, function (el) {
-        remove(el)
+      // Remove slides
+      SLIDE_ELS.forEach(slideEl => {
+        remove(slideEl)
       })
     })
-
-    lightbox.parentNode.removeChild(lightbox)
 
     groups = {}
     newGroup = activeGroup = null
     figcaptionId = 0
 
     // TODO
+  }
 
-    if (callback) {
-      callback.call(this)
-    }
+  /**
+   * Destroy Tobii
+   *
+   */
+  const destroy = function destroy () {
+    reset()
+
+    lightbox.parentNode.removeChild(lightbox)
   }
 
   /**
@@ -1377,15 +1537,23 @@ export default function Tobii (userOptions) {
    *
    */
   const isIgnoreElement = function isIgnoreElement (el) {
-    return ['TEXTAREA', 'OPTION', 'INPUT', 'SELECT'].indexOf(el.nodeName) !== -1 || el === prevButton || el === nextButton || el === closeButton || groups[activeGroup].elementsLength === 1
+    return ['TEXTAREA', 'OPTION', 'INPUT', 'SELECT'].indexOf(el.nodeName) !== -1 || el === prevButton || el === nextButton || el === closeButton
   }
 
   /**
    * Return current index
    *
    */
-  const currentSlide = function currentSlide () {
+  const slidesIndex = function slidesIndex () {
     return groups[activeGroup].currentIndex
+  }
+
+  /**
+   * Return elements length
+   *
+   */
+  const slidesCount = function slidesCount () {
+    return groups[activeGroup].elementsLength
   }
 
   /**
@@ -1397,39 +1565,43 @@ export default function Tobii (userOptions) {
   }
 
   /**
-   * Select a specific group
+   * Bind events
+   * @param {String} eventName
+   * @param {function} callback - callback to call
    *
-   * @param {string} name
    */
-  const selectGroup = function selectGroup (name) {
-    if (isOpen()) {
-      throw new Error('Ups, I can\'t do this. Tobii is open.')
-    }
+  const on = function on (eventName, callback) {
+    lightbox.addEventListener(eventName, callback)
+  }
 
-    if (!name) {
-      return
-    }
-
-    if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {
-      throw new Error(`Ups, I don't have a group called "${name}".`)
-    }
-
-    activeGroup = name
+  /**
+   * Unbind events
+   * @param {String} eventName
+   * @param {function} callback - callback to call
+   *
+   */
+  const off = function off (eventName, callback) {
+    lightbox.removeEventListener(eventName, callback)
   }
 
   init(userOptions)
 
-  return {
-    open: open,
-    prev: prev,
-    next: next,
-    close: close,
-    add: checkDependencies,
-    remove: remove,
-    destroy: destroy,
-    isOpen: isOpen,
-    currentSlide: currentSlide,
-    selectGroup: selectGroup,
-    currentGroup: currentGroup
-  }
+  Tobii.open = open
+  Tobii.previous = previous
+  Tobii.next = next
+  Tobii.close = close
+  Tobii.add = checkDependencies
+  Tobii.remove = remove
+  Tobii.reset = reset
+  Tobii.destroy = destroy
+  Tobii.isOpen = isOpen
+  Tobii.slidesIndex = slidesIndex
+  Tobii.select = select
+  Tobii.slidesCount = slidesCount
+  Tobii.selectGroup = selectGroup
+  Tobii.currentGroup = currentGroup
+  Tobii.on = on
+  Tobii.off = off
+
+  return Tobii
 }

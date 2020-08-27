@@ -1,6 +1,6 @@
 # Tobii
 
-[![Version](https://img.shields.io/badge/Version-2.0.0--alpha-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/releases)
+[![Version](https://img.shields.io/badge/Version-2.0.0--beta-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/releases)
 [![License](https://img.shields.io/badge/License-MIT-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/blob/master/LICENSE.md)
 ![Dependecies](https://img.shields.io/badge/Dependencies-none-1a2a3a.svg)
 [![Amazon wishlist](https://img.shields.io/badge/Amazon_wishlist-0366d6.svg)](https://www.amazon.de/hz/wishlist/ls/29WXITO63O0BX)
@@ -14,7 +14,7 @@ An accessible, open-source lightbox with no dependencies.
 ## Table of contents
 
 - [Features](#features)
-- [Get Tobii](#get-Tobii)
+- [Get Tobii](#get-tobii)
   - [Download](#download)
   - [Package managers](#package-managers)
 - [Usage](#usage)
@@ -26,6 +26,7 @@ An accessible, open-source lightbox with no dependencies.
 - [Grouping](#grouping)
 - [Options](#options)
 - [API](#api)
+- [Events](#events)
 - [Browser support](#browser-support)
 - [To do](#to-do)
 - [Contributing](#contributing)
@@ -55,7 +56,7 @@ An accessible, open-source lightbox with no dependencies.
 
 ### Download
 
-CSS: `css/tobii.min.css` minified, or `css/Totii.css` un-minified
+CSS: `css/tobii.min.css` minified, or `css/tobii.css` un-minified
 
 JavaScript: `js/tobii.min.js` minified, or `js/tobii.js` un-minified
 
@@ -67,7 +68,7 @@ Tobii is also available on npm.
 
 ## Usage
 
-You can install Tobii by linking the `.css` and `.js` files to your html file. The HTML code may look like this:
+You can install Tobii by linking the `.css` and `.js` files to your HTML file. The HTML code may look like this:
 
 ```html
 <!DOCTYPE html>
@@ -109,7 +110,7 @@ The standard way of using Tobii is a linked thumbnail image with the class name 
 </a>
 ```
 
-Instead of a thumbnail, you can also refer to a larger image with a textlink:
+Instead of a thumbnail, you can also refer to a larger image with a text link:
 
 ```html
 <a href="path/to/image.jpg" class="lightbox">
@@ -145,7 +146,7 @@ or a button with the class name `lightbox` and a `data-target` attribute that ma
 </button>
 ```
 
-In both ways, the attribute `data-type` with the value `html` must be added.
+In both ways, the attribute `data-type` with the value `html` is required.
 
 ### Iframe
 
@@ -167,7 +168,7 @@ or a button with the class name `lightbox` and a `data-target` attribute:
 </button>
 ```
 
-In both ways, the attribute `data-type` with the value `iframe` must be added.
+In both ways, the attribute `data-type` with the value `iframe` is required.
 
 #### Optional attributes
 
@@ -177,7 +178,7 @@ In both ways, the attribute `data-type` with the value `iframe` must be added.
 
 [Play on CodePen](https://codepen.io/rqrauhvmra/pen/rgpjXE)
 
-For an YouTube video, create a link with the class name `lightbox` and a `data-id` attribute with the YouTube video ID:
+For a YouTube video, create a link with the class name `lightbox` and a `data-id` attribute with the YouTube video ID:
 
 ```html
 <a href="#" data-type="youtube" data-id="KU2sSZ_90PY" class="lightbox">
@@ -193,7 +194,7 @@ or a button with the class name `lightbox` and a `data-id` attribute with the Yo
 </button>
 ```
 
-In both ways, the attribute `data-type` with the value `youtube` must be added.
+In both ways, the attribute `data-type` with the value `youtube` is required.
 
 #### Optional attributes
 
@@ -266,31 +267,54 @@ The following options are available:
 
 | Function | Description |
 | --- | --- |
-| `open(index, callback)` | Open Tobii. Optional with a specific slide with `index` (number). Optional `callback` (function) as a second argument. |
-| `next(callback)` | Show the next slide. Optional `callback` (function). |
-| `prev(callback)` | Show the previous slide. Optional `callback` (function). |
-| `close(callback)` | Close Tobii. Optional `callback` (function). |
-| `add(element, callback)` | Add an `element` (DOM element) ([example on CodePen](https://codepen.io/rqrauhvmra/pen/vzbXxQ)). Optional `callback` (function) as a second argument ([example on CodePen](https://codepen.io/rqrauhvmra/pen/qyEmXR)). |
-| `remove(element, callback)` | Remove an `element` (DOM element). Optional `callback` (function) as a second argument. |
+| `open(index)` | Open Tobii. Optional `index` (Integer), zero-based index of the slide to open. |
+| `select(index)` | Select a slide with `index` (Integer), zero-based index of the slide to select. |
+| `previous()` | Select the previous slide. |
+| `next()` | Select the next slide. |
+| `selectGroup(value)` | Select a group with `value` (string), name of the group to select. |
+| `close()` | Close Tobii. |
+| `add(element)` | Add `element` (DOM element). |
+| `remove(element)` | Remove `element` (DOM element). |
 | `isOpen()` | Check if Tobii is open. |
-| `currentSlide()` | Return the current slide index. |
-| `selectGroup()` | Select a specific group. |
-| `currentGroup()` | Return the current group. |
-| `destroy()` | Destroy Tobii. Optional `callback` (function). |
+| `slidesIndex()` | Return the current slide index. |
+| `slidesCount()` | Return the current number of slides. |
+| `currentGroup()` | Return the current group name. |
+| `reset()` | Reset Tobii. |
+| `destroy()` | Destroy Tobii. |
+
+## Events
+
+Bind events with the `.on()` and `.off()` methods.
+
+```js
+const tobii = new Tobii()
+
+const listener = function listener () {
+  console.log('eventName happened')
+}
+
+// bind event listener
+tobii.on(eventName, listener)
+
+// unbind event listener
+tobii.off(eventName, listener)
+```
+
+| eventName | Description |
+| --- | --- |
+| `open` | Triggered after Tobii has been opened. |
+| `previous` | Triggered after the previous slide is selected. |
+| `next` | Triggered after the next slide is selected. |
 
 ## Browser support
 
-Tobii has been tested in the following browsers (all the latest versions):
+Tobii supports the following browser (all the latest versions):
 
 - Chrome
 - Firefox
 - Internet Explorer
 - Edge
 - Safari
-
-## To do
-
-- [ ] Support for `srcset` and `picture`
 
 ## Contributing
 

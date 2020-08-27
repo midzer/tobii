@@ -2,7 +2,11 @@
   'variables',
   'functions';
 
-/* Link */
+/**
+ * Lightbox link
+ *
+ */
+
 .tobii-zoom {
   border: 0;
   box-shadow: none;
@@ -16,46 +20,51 @@
   }
 
   &__icon {
-    background-color: $zoom-icon-background;
-    bottom: 0;
-    color: $zoom-icon-color;
+    align-items: center;
+    background-color: var(--zoom-icon-background);
+    top: em(8);
+    color: var(--zoom-icon-color);
+    display: flex;
+    height: em(32);
+    justify-content: center;
     line-height: 1;
     position: absolute;
-    right: 0;
+    right: em(8);
+    width: em(32);
 
 
     & svg {
-      color: $zoom-icon-color;
       fill: none;
-      height: em(20);
-      padding-bottom: em(4);
-      padding-left: em(4);
-      padding-right: em(4);
-      padding-top: em(4);
+      height: em(24);
       pointer-events: none;
-      stroke-linecap: square;
-      stroke-linejoin: miter;
-      stroke-width: 2;
-      stroke: $zoom-icon-color;
-      width: em(20);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.5;
+      stroke: currentColor;
+      width: em(24);
     }
   }
 }
 
-/* Hide scrollbar if lightbox is displayed */
+// Hide scrollbar if lightbox is displayed
+
 .tobii-is-open {
   overflow-y: hidden;
 }
 
-/* Lightbox */
+/**
+ * Lightbox
+ *
+ */
+
 .tobii {
-  background-color: $lightbox-background;
+  background-color: var(--lightbox-background);
   bottom: 0;
   box-sizing: border-box;
   contain: strict;
-  font-size: #{$base-font-size}px;
+  font-size: var(--base-font-size)px;
   left: 0;
-  line-height: 1.5555555555555556;
+  line-height: 1.5;
   overflow: hidden;
   position: fixed;
   right: 0;
@@ -63,7 +72,7 @@
   z-index: 1337;
 
 
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: none;
   }
 
@@ -74,7 +83,12 @@
   }
 }
 
-/* Slider */
+
+/**
+ * Slider
+ *
+ */
+
 .tobii__slider {
   bottom: 0;
   left: 0;
@@ -84,189 +98,192 @@
   will-change: transform;
 
 
-  &--animate:not(&--is-dragging) {
-    transition-duration: $transition-duration;
-    transition-property: transform;
-    transition-timing-function: $transition-timing-function;
+  &[aria-hidden='true'] {
+    display: none;
+  }
 
-    @media screen and (prefers-reduced-motion: reduce) {
-      transition: none;
+  @media screen and (prefers-reduced-motion: no-preference) {
+
+    &--animate:not(&--is-dragging) {
+      transition-duration: var(--transition-duration);
+      transition-property: transform;
+      transition-timing-function: var(--transition-timing-function);
     }
   }
 
-  &--is-draggable &__slide__content {
+  &--is-draggable [data-type] {
     cursor: grab;
   }
 
-  &--is-dragging &__slide__content {
+  &--is-dragging [data-type] {
     cursor: grabbing;
   }
 }
 
-/* Slide */
-.tobii__slider-slide {
+/**
+ * Slide
+ *
+ */
+
+.tobii__slide {
   align-items: center;
   display: flex;
   height: 100%;
   justify-content: center;
   width: 100%;
-}
 
-/* Slide content */
-[data-type] {
-  max-height: $slide-max-height;
-  max-width: $slide-max-width;
-  overflow: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+
+  &:not(&--is-active) {
+    visibility: hidden;
+
+    @media screen and (prefers-reduced-motion: no-preference) {
+      transition-duration: var(--transition-duration);
+      transition-property: visibility;
+      transition-timing-function: var(--transition-timing-function);
+    }
+  }
+
+  & [data-type] {
+    max-height: var(--slide-max-height);
+    max-width: var(--slide-max-width);
+    overflow: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
 
   & iframe,
   & video {
     display: block;
   }
 
-  > figure {
+  & figure {
     margin: 0;
     position: relative;
 
 
-    > img {
+    & > img {
       display: block;
       height: auto;
-      max-height: $slide-max-height;
-      max-width: $slide-max-width;
+      max-height: var(--slide-max-height);
+      max-width: var(--slide-max-width);
       width: auto;
     }
 
-    > figcaption {
-      background-color: $caption-background;
+    & > figcaption {
+      background-color: var(--caption-background);
       bottom: 0;
-      color: $caption-color;
-      padding-bottom: em(4);
-      padding-left: em(8);
-      padding-right: em(8);
-      padding-top: em(4);
+      color: var(--caption-color);
+      padding: em(4) em(8);
       position: absolute;
       white-space: pre-wrap;
       width: 100%;
     }
   }
-}
 
-[data-type="html"] {
-
+  & [data-type='html'] {
 
 
-  & video {
-    cursor: auto;
-    max-height: $slide-max-height;
-    max-width: $slide-max-width;
+
+    & video {
+      cursor: auto;
+      max-height: var(--slide-max-height);
+      max-width: var(--slide-max-width);
+    }
+  }
+
+  & [data-type='iframe'] {
+
+    /* Fix iframe scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    transform: translate3d(0, 0, 0);
+
+
+    & iframe {
+      height: var(--slide-max-height);
+      width: var(--slide-max-width);
+    }
   }
 }
 
-[data-type="iframe"] {
-  /* Fix iframe scrolling on iOS */
-  -webkit-overflow-scrolling: touch;
-  transform: translate3d(0, 0, 0);
+/**
+ * Buttons
+ *
+ */
 
-
-  & iframe {
-    height: $slide-max-height;
-    width: $slide-max-width;
-  }
-}
-
-/* Buttons */
-.tobii > button {
+.tobii__btn {
   appearance: none;
-  background-color: $button-background;
+  background-color: var(--button-background);
   border: em(1) solid transparent;
-  color: $button-color;
+  color: var(--button-color);
   cursor: pointer;
   font: inherit;
   line-height: 1;
   margin: 0;
   opacity: 0.5;
-  padding-bottom: em(4);
-  padding-left: em(4);
-  padding-right: em(4);
-  padding-top: em(4);
+  padding: 0;
   position: absolute;
   touch-action: manipulation;
-  transition-duration: $transition-duration;
-  transition-property: opacity, transform;
-  transition-timing-function: $transition-timing-function;
-  will-change: opacity, transform;
+  will-change: opacity;
   z-index: 1;
 
-  @media screen and (prefers-reduced-motion: reduce) {
-    transition: none;
-    will-change: opacity;
+  @media screen and (prefers-reduced-motion: no-preference) {
+    transition-duration: var(--transition-duration);
+    transition-property: opacity, transform;
+    transition-timing-function: var(--transition-timing-function);
+    will-change: opacity, transform;
   }
 
 
   & svg {
-    pointer-events: none;
-    stroke: #fff;
-    stroke-width: 1;
-    stroke-linecap: square;
-    stroke-linejoin: miter;
     fill: none;
-    color: #fff;
+    height: em(60);
+    pointer-events: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1;
+    stroke: currentColor;
+    width: em(60);
   }
 
   &:active,
   &:focus,
   &:hover {
     opacity: 1;
-    transform: scale(.84);
-
-    @media screen and (prefers-reduced-motion: reduce) {
-      transform: none;
-    }
   }
 
-  &.tobii__prev,
-  &.tobii__next {
+  &--previous,
+  &--next {
     top: 50%;
-    top: calc(50% - #{em(40)});
-
-
-    & svg {
-      height: em(70);
-      width: em(70);
-    }
+    transform: translateY(-50%);
   }
 
-  &.tobii__prev {
-    left: 0;
+  &--previous {
+    left: em(16);
   }
 
-  &.tobii__next {
-    right: 0;
+  &--next {
+    right: em(16);
   }
 
-  &.tobii__close {
-    right: em(5);
-    top: em(18);
-
-
-    & svg {
-      height: em(60);
-      width: em(60);
-    }
+  &--close {
+    right: em(16);
+    top: em(16);
   }
 
   &:disabled,
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: none;
   }
 }
 
-/* Counter */
+/**
+ * Counter
+ *
+ */
+
 .tobii__counter {
-  background-color: $counter-background;
-  color: $counter-color;
+  background-color: var(--counter-background);
+  color: var(--counter-color);
   font-size: em(20);
   left: em(18);
   line-height: 1;
@@ -275,18 +292,23 @@
   z-index: 1;
 
 
-  &[aria-hidden="true"] {
+  &[aria-hidden='true'] {
     display: none;
   }
 }
 
-/* Loader */
-.tobii-loader {
+/**
+ * Loader
+ *
+ */
+
+.tobii__loader {
   display: inline-block;
   height: em(100);
-  left: calc(50% - #{em(50)});
+  left: 50%;
   position: absolute;
-  top: calc(50% - #{em(50)});
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: em(100);
 
 
@@ -294,9 +316,9 @@
     animation: spin 1s infinite;
     border-radius: 100%;
     border: em(4) solid #949ba3;
-    border-top-color: $loader-color;
+    border-top-color: var(--loader-color);
     bottom: 0;
-    content: "";
+    content: '';
     left: 0;
     position: absolute;
     right: 0;
@@ -306,6 +328,7 @@
 }
 
 @keyframes spin {
+
   to {
     transform: rotate(360deg);
   }
