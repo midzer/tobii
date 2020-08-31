@@ -941,16 +941,6 @@ _export({ target: 'Object', stat: true }, {
   }
 });
 
-var FAILS_ON_PRIMITIVES = fails(function () { objectKeys(1); });
-
-// `Object.keys` method
-// https://tc39.github.io/ecma262/#sec-object.keys
-_export({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES }, {
-  keys: function keys(it) {
-    return objectKeys(toObject(it));
-  }
-});
-
 // `RegExp.prototype.flags` getter implementation
 // https://tc39.github.io/ecma262/#sec-get-regexp.prototype.flags
 var regexpFlags = function () {
@@ -1339,6 +1329,55 @@ for (var COLLECTION_NAME in domIterables) {
   }
 }
 
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys$1(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys$1(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys$1(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
 /**
  * CustomEvent() polyfill
  * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#Polyfill
@@ -1422,10 +1461,10 @@ function Tobii(userOptions) {
       captionsSelector: 'img',
       captionAttribute: 'alt',
       nav: 'auto',
-      navText: ["<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\">\n          <path stroke=\"none\" d=\"M0 0h24v24H0z\"/>\n          <polyline points=\"15 6 9 12 15 18\" />\n        </svg>", "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\">\n          <path stroke=\"none\" d=\"M0 0h24v24H0z\"/>\n          <polyline points=\"9 6 15 12 9 18\" />\n        </svg>"],
+      navText: ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18" /></svg>', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="9 6 15 12 9 18" /></svg>'],
       navLabel: ['Previous image', 'Next image'],
       close: true,
-      closeText: "\n        <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\">\n          <path stroke=\"none\" d=\"M0 0h24v24H0z\"/>\n          <line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\" />\n          <line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\" />\n        </svg>\n      ",
+      closeText: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>',
       closeLabel: 'Close lightbox',
       loadingIndicatorLabel: 'Image loading',
       counter: true,
@@ -1437,7 +1476,7 @@ function Tobii(userOptions) {
       // TODO
       keyboard: true,
       zoom: true,
-      zoomText: "\n        <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\">\n          <path stroke=\"none\" d=\"M0 0h24v24H0z\"/>\n          <polyline points=\"16 4 20 4 20 8\" />\n          <line x1=\"14\" y1=\"10\" x2=\"20\" y2=\"4\" />\n          <polyline points=\"8 20 4 20 4 16\" />\n          <line x1=\"4\" y1=\"20\" x2=\"10\" y2=\"14\" />\n          <polyline points=\"16 20 20 20 20 16\" />\n          <line x1=\"14\" y1=\"14\" x2=\"20\" y2=\"20\" />\n          <polyline points=\"8 4 4 4 4 8\" />\n          <line x1=\"4\" y1=\"4\" x2=\"10\" y2=\"10\" />\n        </svg>\n      ",
+      zoomText: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="16 4 20 4 20 8" /><line x1="14" y1="10" x2="20" y2="4" /><polyline points="8 20 4 20 4 16" /><line x1="4" y1="20" x2="10" y2="14" /><polyline points="16 20 20 20 20 16" /><line x1="14" y1="14" x2="20" y2="20" /><polyline points="8 4 4 4 4 8" /><line x1="4" y1="4" x2="10" y2="10" /></svg>',
       docClose: true,
       swipeClose: true,
       hideScrollbar: true,
@@ -1451,14 +1490,7 @@ function Tobii(userOptions) {
       modal: false,
       theme: 'tobii--theme-default'
     };
-
-    if (userOptions) {
-      Object.keys(userOptions).forEach(function (key) {
-        OPTIONS[key] = userOptions[key];
-      });
-    }
-
-    return OPTIONS;
+    return _objectSpread2(_objectSpread2({}, OPTIONS), userOptions);
   };
   /**
    * Types - you can add new type to support something new
