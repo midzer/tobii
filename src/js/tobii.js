@@ -118,7 +118,7 @@ export default function Tobii (userOptions) {
   const SUPPORTED_ELEMENTS = {
     image: {
       checkSupport (el) {
-        return !el.hasAttribute('data-type') && el.href.match(/\.(png|jpe?g|tiff|tif|gif|bmp|webp|svg|ico)(\?.*)?$/i)
+        return !el.hasAttribute('data-type') && el.href.match(/\.(png|jpe?g|tiff|tif|gif|bmp|webp|avif|svg|ico)(\?.*)?$/i)
       },
 
       init (el, container) {
