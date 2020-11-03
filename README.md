@@ -7,7 +7,7 @@
 
 An accessible, open-source lightbox with no dependencies.
 
-[Play on CodePen](https://codepen.io/collection/nbqJVV)
+[See it in Action](https://feuerwehr-eisolzried.de/media/)
 
 ![Open slide with a picture of the Berlin television tower](https://rqrauhvmra.com/tobi/tobi.png)
 
