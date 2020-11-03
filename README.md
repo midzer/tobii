@@ -100,8 +100,6 @@ const tobii = new Tobii()
 
 ### Image
 
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/ZRZdwG)
-
 The standard way of using Tobii is a linked thumbnail image with the class name `lightbox` to a larger image:
 
 ```html
@@ -119,8 +117,6 @@ Instead of a thumbnail, you can also refer to a larger image with a text link:
 ```
 
 ### Inline HTML
-
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/BOLxqj)
 
 For inline HTML, create an element with a unique ID:
 
@@ -150,8 +146,6 @@ In both ways, the attribute `data-type` with the value `html` is required.
 
 ### Iframe
 
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/GXJwar)
-
 For an iframe, create a link with the class name `lightbox`:
 
 ```html
@@ -175,8 +169,6 @@ In both ways, the attribute `data-type` with the value `iframe` is required.
 - `data-height` set the height and `data-width` the width of the iframe.
 
 ### YouTube
-
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/rgpjXE)
 
 For a YouTube video, create a link with the class name `lightbox` and a `data-id` attribute with the YouTube video ID:
 
@@ -203,8 +195,6 @@ In both ways, the attribute `data-type` with the value `youtube` is required.
 
 ## Grouping
 
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/PvKVxp)
-
 If you have a group of related types that you would like to combine into a set, add the `data-group` attribute:
 
 ```html
@@ -226,8 +216,6 @@ If you have a group of related types that you would like to combine into a set, 
 ```
 
 ## Options
-
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/MBYEog)
 
 You can pass an object with custom options as an argument.
 
