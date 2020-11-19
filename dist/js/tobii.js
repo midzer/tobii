@@ -2393,8 +2393,8 @@
 
 	  var triggerTobii = function triggerTobii(event) {
 	    event.preventDefault();
-	    activeGroup = getGroupName(this);
-	    open(groups[activeGroup].gallery.indexOf(this));
+	    activeGroup = getGroupName(event.currentTarget);
+	    open(groups[activeGroup].gallery.indexOf(event.currentTarget));
 	  };
 	  /**
 	   * Click event handler
@@ -2683,7 +2683,7 @@
 	   */
 
 
-	  var removeSources = function setVideoSources(el) {
+	  var removeSources = function removeSources(el) {
 	    var SOURCES = el.querySelectorAll('src');
 
 	    if (SOURCES) {
