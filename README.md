@@ -245,6 +245,7 @@ The following options are available:
 | captions | bool | true | Display captions, if available. |
 | captionsSelector | "self", "img" | "img" | Set the element where the caption is. Set it to "self" for the `a` tag itself. |
 | captionAttribute | string | "alt" | Get the caption from given attribute. |
+| captionText | function | null | Custom callback which returns the caption text for the current element. The first argument of the callback is the element. If set, `captionsSelector` and `captionAttribute` are ignored. |
 | nav | bool, "auto" | "auto" | Display navigation buttons. "auto" hides buttons on touch-enabled devices. |
 | navText | string | ["inline svg", "inline svg"] | Text or HTML for the navigation buttons. |
 | navLabel | string | ["Previous", "Next"] | ARIA label for screen readers. |

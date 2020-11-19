@@ -1464,6 +1464,7 @@
 	      captions: true,
 	      captionsSelector: 'img',
 	      captionAttribute: 'alt',
+	      captionText: null,
 	      nav: 'auto',
 	      navText: ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18" /></svg>', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="9 6 15 12 9 18" /></svg>'],
 	      navLabel: ['Previous image', 'Next image'],
@@ -1526,7 +1527,9 @@
 	        FIGURE.appendChild(IMAGE); // Create figcaption
 
 	        if (config.captions) {
-	          if (config.captionsSelector === 'self' && el.getAttribute(config.captionAttribute)) {
+	          if (typeof config.captionText === 'function') {
+	            FIGCAPTION.textContent = config.captionText(el);
+	          } else if (config.captionsSelector === 'self' && el.getAttribute(config.captionAttribute)) {
 	            FIGCAPTION.textContent = el.getAttribute(config.captionAttribute);
 	          } else if (config.captionsSelector === 'img' && THUMBNAIL && THUMBNAIL.getAttribute(config.captionAttribute)) {
 	            FIGCAPTION.textContent = THUMBNAIL.getAttribute(config.captionAttribute);

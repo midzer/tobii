@@ -135,7 +135,7 @@
         overscroll-behavior: contain; }
   .tobii__slide iframe,
   .tobii__slide video {
-    display: block; }
+    display: block !important; }
   .tobii__slide figure {
     margin: 0;
     position: relative; }
