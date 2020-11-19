@@ -1502,7 +1502,7 @@ function Tobii(userOptions) {
   var SUPPORTED_ELEMENTS = {
     image: {
       checkSupport: function checkSupport(el) {
-        return !el.hasAttribute('data-type') && el.href.match(/\.(png|jpe?g|tiff|tif|gif|bmp|webp|svg|ico)(\?.*)?$/i);
+        return !el.hasAttribute('data-type') && el.href.match(/\.(png|jpe?g|tiff|tif|gif|bmp|webp|avif|svg|ico)(\?.*)?$/i);
       },
       init: function init(el, container) {
         var FIGURE = document.createElement('figure');
