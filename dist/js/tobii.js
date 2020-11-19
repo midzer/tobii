@@ -1388,7 +1388,7 @@
 	 *
 	 */
 	if (typeof window.CustomEvent !== 'function') {
-	  var CustomEvent$1 = function CustomEvent(event, params) {
+	  var CustomEvent = function CustomEvent(event, params) {
 	    params = params || {
 	      bubbles: false,
 	      cancelable: false,
@@ -1399,8 +1399,8 @@
 	    return evt;
 	  };
 
-	  CustomEvent$1.prototype = window.Event.prototype;
-	  window.CustomEvent = CustomEvent$1;
+	  CustomEvent.prototype = window.Event.prototype;
+	  window.CustomEvent = CustomEvent;
 	}
 
 	/**
@@ -1418,7 +1418,6 @@
 	   * Global variables
 	   *
 	   */
-	  var BROWSER_WINDOW = window;
 	  var FOCUSABLE_ELEMENTS = ['a[href]:not([tabindex^="-"]):not([inert])', 'area[href]:not([tabindex^="-"]):not([inert])', 'input:not([disabled]):not([inert])', 'select:not([disabled]):not([inert])', 'textarea:not([disabled]):not([inert])', 'button:not([disabled]):not([inert])', 'iframe:not([tabindex^="-"]):not([inert])', 'audio:not([tabindex^="-"]):not([inert])', 'video:not([tabindex^="-"]):not([inert])', '[contenteditable]:not([tabindex^="-"]):not([inert])', '[tabindex]:not([tabindex^="-"]):not([inert])'];
 	  var WAITING_ELS = [];
 	  var GROUP_ATTS = {
@@ -1955,7 +1954,6 @@
 	  var createSlide = function createSlide(el) {
 	    // Detect type
 	    for (var index in SUPPORTED_ELEMENTS) {
-	      // const index don't work in IE
 	      if (Object.prototype.hasOwnProperty.call(SUPPORTED_ELEMENTS, index)) {
 	        if (SUPPORTED_ELEMENTS[index].checkSupport(el)) {
 	          // Create slide elements
@@ -2023,7 +2021,7 @@
 	      tobii: 'close'
 	    };
 	    var url = window.location.href;
-	    history.pushState(stateObj, 'Image', url); // Set current index
+	    window.history.pushState(stateObj, 'Image', url); // Set current index
 
 	    groups[activeGroup].currentIndex = index;
 	    clearDrag();
@@ -2043,7 +2041,7 @@
 	      groups[activeGroup].slider.classList.add('tobii__slider--animate');
 	    }, 1000); // Create and dispatch a new event
 
-	    var openEvent = new CustomEvent('open');
+	    var openEvent = new window.CustomEvent('open');
 	    lightbox.dispatchEvent(openEvent);
 	  };
 	  /**
@@ -2064,9 +2062,9 @@
 
 	    unbindEvents(); // Remove entry in browser history
 
-	    if (history.state !== null) {
-	      if (history.state.tobii === 'close') {
-	        history.back();
+	    if (window.history.state !== null) {
+	      if (window.history.state.tobii === 'close') {
+	        window.history.back();
 	      }
 	    } // Reenable the user’s focus
 
@@ -2185,7 +2183,7 @@
 	    } // Create and dispatch a new event
 
 
-	    var previousEvent = new CustomEvent('previous');
+	    var previousEvent = new window.CustomEvent('previous');
 	    lightbox.dispatchEvent(previousEvent);
 	  };
 	  /**
@@ -2208,7 +2206,7 @@
 	    } // Create and dispatch a new event
 
 
-	    var nextEvent = new CustomEvent('next');
+	    var nextEvent = new window.CustomEvent('next');
 	    lightbox.dispatchEvent(nextEvent);
 	  };
 	  /**
@@ -2381,7 +2379,7 @@
 	  var resizeHandler = function resizeHandler() {
 	    if (!resizeTicking) {
 	      resizeTicking = true;
-	      BROWSER_WINDOW.requestAnimationFrame(function () {
+	      window.requestAnimationFrame(function () {
 	        updateOffset();
 	        resizeTicking = false;
 	      });
@@ -2611,13 +2609,13 @@
 
 	  var bindEvents = function bindEvents() {
 	    if (config.keyboard) {
-	      BROWSER_WINDOW.addEventListener('keydown', keydownHandler);
+	      window.addEventListener('keydown', keydownHandler);
 	    } // Resize event
 
 
-	    BROWSER_WINDOW.addEventListener('resize', resizeHandler); // Popstate event
+	    window.addEventListener('resize', resizeHandler); // Popstate event
 
-	    BROWSER_WINDOW.addEventListener('popstate', close); // Click event
+	    window.addEventListener('popstate', close); // Click event
 
 	    lightbox.addEventListener('click', clickHandler);
 
@@ -2644,13 +2642,13 @@
 
 	  var unbindEvents = function unbindEvents() {
 	    if (config.keyboard) {
-	      BROWSER_WINDOW.removeEventListener('keydown', keydownHandler);
+	      window.removeEventListener('keydown', keydownHandler);
 	    } // Resize event
 
 
-	    BROWSER_WINDOW.removeEventListener('resize', resizeHandler); // Popstate event
+	    window.removeEventListener('resize', resizeHandler); // Popstate event
 
-	    BROWSER_WINDOW.removeEventListener('popstate', close); // Click event
+	    window.removeEventListener('popstate', close); // Click event
 
 	    lightbox.removeEventListener('click', clickHandler);
 
