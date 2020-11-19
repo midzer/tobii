@@ -15,7 +15,6 @@ export default function Tobii (userOptions) {
    * Global variables
    *
    */
-  const BROWSER_WINDOW = window
   const FOCUSABLE_ELEMENTS = [
     'a[href]:not([tabindex^="-"]):not([inert])',
     'area[href]:not([tabindex^="-"]):not([inert])',
@@ -632,7 +631,7 @@ export default function Tobii (userOptions) {
    */
   const createSlide = function createSlide (el) {
     // Detect type
-    for (let index in SUPPORTED_ELEMENTS) { // const index don't work in IE
+    for (const index in SUPPORTED_ELEMENTS) {
       if (Object.prototype.hasOwnProperty.call(SUPPORTED_ELEMENTS, index)) {
         if (SUPPORTED_ELEMENTS[index].checkSupport(el)) {
           // Create slide elements
@@ -709,7 +708,7 @@ export default function Tobii (userOptions) {
     }
     const url = window.location.href
 
-    history.pushState(stateObj, 'Image', url)
+    window.history.pushState(stateObj, 'Image', url)
 
     // Set current index
     groups[activeGroup].currentIndex = index
@@ -738,7 +737,7 @@ export default function Tobii (userOptions) {
     }, 1000)
 
     // Create and dispatch a new event
-    const openEvent = new CustomEvent('open')
+    const openEvent = new window.CustomEvent('open')
 
     lightbox.dispatchEvent(openEvent)
   }
@@ -760,9 +759,9 @@ export default function Tobii (userOptions) {
     unbindEvents()
 
     // Remove entry in browser history
-    if (history.state !== null) {
-      if (history.state.tobii === 'close') {
-        history.back()
+    if (window.history.state !== null) {
+      if (window.history.state.tobii === 'close') {
+        window.history.back()
       }
     }
 
@@ -886,7 +885,7 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const previousEvent = new CustomEvent('previous')
+    const previousEvent = new window.CustomEvent('previous')
 
     lightbox.dispatchEvent(previousEvent)
   }
@@ -909,7 +908,7 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const nextEvent = new CustomEvent('next')
+    const nextEvent = new window.CustomEvent('next')
 
     lightbox.dispatchEvent(nextEvent)
   }
@@ -1085,7 +1084,7 @@ export default function Tobii (userOptions) {
     if (!resizeTicking) {
       resizeTicking = true
 
-      BROWSER_WINDOW.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
         updateOffset()
 
         resizeTicking = false
@@ -1327,14 +1326,14 @@ export default function Tobii (userOptions) {
    */
   const bindEvents = function bindEvents () {
     if (config.keyboard) {
-      BROWSER_WINDOW.addEventListener('keydown', keydownHandler)
+      window.addEventListener('keydown', keydownHandler)
     }
 
     // Resize event
-    BROWSER_WINDOW.addEventListener('resize', resizeHandler)
+    window.addEventListener('resize', resizeHandler)
 
     // Popstate event
-    BROWSER_WINDOW.addEventListener('popstate', close)
+    window.addEventListener('popstate', close)
 
     // Click event
     lightbox.addEventListener('click', clickHandler)
@@ -1361,14 +1360,14 @@ export default function Tobii (userOptions) {
    */
   const unbindEvents = function unbindEvents () {
     if (config.keyboard) {
-      BROWSER_WINDOW.removeEventListener('keydown', keydownHandler)
+      window.removeEventListener('keydown', keydownHandler)
     }
 
     // Resize event
-    BROWSER_WINDOW.removeEventListener('resize', resizeHandler)
+    window.removeEventListener('resize', resizeHandler)
 
     // Popstate event
-    BROWSER_WINDOW.removeEventListener('popstate', close)
+    window.removeEventListener('popstate', close)
 
     // Click event
     lightbox.removeEventListener('click', clickHandler)
