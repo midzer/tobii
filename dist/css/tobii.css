@@ -1,5 +1,5 @@
 :root {
-  --base-font-size: 18;
+  --base-font-size: 18px;
   --transition-duration: 0.3s;
   --transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
   --zoom-icon-background: hsla(210, 38%, 16%, 0.94);
@@ -65,8 +65,8 @@
   bottom: 0;
   box-sizing: border-box;
   contain: strict;
-  font-size: 18 px;
-  font-size: var(--base-font-size) px;
+  font-size: 18px;
+  font-size: var(--base-font-size);
   left: 0;
   line-height: 1.5;
   overflow: hidden;
