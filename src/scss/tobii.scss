@@ -69,7 +69,7 @@
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 1337;
+  z-index: var(--lightbox-z-index);
 
 
   &[aria-hidden='true'] {
