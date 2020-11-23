@@ -2,7 +2,9 @@
   "name": "tobii",
   "version": "2.0.0-beta",
   "description": "An accessible, open-source lightbox with no dependencies.",
-  "main": "dist/js/tobii.js",
+  "main": "dist/js/tobii.cjs.js",
+  "module": "dist/js/tobii.es.js",
+  "browser": "dist/js/tobii.browser.js",
   "style": "dist/css/tobii.css",
   "devDependencies": {
     "@babel/core": "^7.11.4",
