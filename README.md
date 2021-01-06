@@ -119,6 +119,28 @@ Instead of a thumbnail, you can also refer to a larger image with a text link:
 </a>
 ```
 
+If you use a Markdown parser or CMS and want to make all images in a post
+automatically viewable in a lightbox, use the following JavaScript code to add
+all images to the same album:
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  // This assumes your article is wrapped in an element with the class "content-article".
+  document.querySelectorAll('.content-article img').forEach((articleImg) => {
+    // Add lightbox elements in blog articles for Tobii.
+    const lightbox = document.createElement('a');
+    lightbox.href = articleImg.src;
+    lightbox.classList.add('lightbox');
+    lightbox.dataset.group = 'article';
+    articleImg.parentNode.appendChild(lightbox);
+    lightbox.appendChild(articleImg);
+  });
+});
+```
+
+Alternatively, depending on your Markdown parser or CMS, it may be possible to
+customize its output to add the markup on the server-side.
+
 ### Inline HTML
 
 [Play on CodePen](https://codepen.io/rqrauhvmra/pen/BOLxqj)
