@@ -1,5 +1,9 @@
 import '../scss/tobii.scss'
 import './polyfill/CustomEvent'
-import Tobii from '.'
+import Tobii from './index'
 
-export default Tobii
+if (typeof module < 'u') {
+  module.exports = Tobii
+} else {
+  self.Tobii = Tobii
+}

@@ -3,10 +3,22 @@
   "version": "2.0.0-beta",
   "description": "An accessible, open-source lightbox with no dependencies.",
   "main": "dist/tobii.js",
-  "module": "dist/tobii.esm.js",
-  "exports": "./dist/tobii.modern.js",
-  "umd:main": "dist/tobii.js",
+  "module": "dist/tobii.module.js",
+  "umd:main": "dist/tobii.umd.js",
+  "unpkg": "dist/tobii.min.js",
+  "source": "src/js/index.js",
+  "exports": {
+    ".": {
+      "browser": "./dist/tobii.module.js",
+      "umd": "./dist/tobii.umd.js",
+      "import": "./dist/tobii.mjs",
+      "require": "./dist/tobii.js"
+    },
+    "./package.json": "./package.json",
+		"./": "./"
+  },
   "devDependencies": {
+    "eslint": "^7.20.0",
     "microbundle": "^0.13.0",
     "node-sass": "^5.0.0",
     "rimraf": "^3.0.2",
@@ -20,9 +32,11 @@
   ],
   "scripts": {
     "build": "npm run clean && npm run build:main && npm run build:browser",
-    "build:main": "microbundle src/js/index.js -f es,modern --no-sourcemap --target web --name Tobii",
-    "build:browser": "microbundle src/js/browser.js -f umd --no-sourcemap --target web --name Tobii",
+    "build:main": "microbundle build --raw --no-sourcemap --name Tobii",
+    "build:browser": "microbundle build --raw -f iife src/js/browser.js -o dist/tobii.min.js --no-sourcemap --name Tobii",
     "clean": "rimraf dist",
+    "dev": "microbundle watch --raw --format cjs",
+    "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
