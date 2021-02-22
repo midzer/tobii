@@ -1,6 +1,6 @@
 # Tobii
 
-[![Version](https://img.shields.io/badge/Version-2.0.0--beta-1a2a3a.svg)](https://github.com/midzer/tobii/releases)
+[![Version](https://img.shields.io/badge/Version-2.0.0-1a2a3a.svg)](https://github.com/midzer/tobii/releases)
 [![License](https://img.shields.io/badge/License-MIT-1a2a3a.svg)](https://github.com/midzer/tobii/blob/master/LICENSE.md)
 ![Dependecies](https://img.shields.io/badge/Dependencies-none-1a2a3a.svg)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/tobii?color=1a2a3a)

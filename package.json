@@ -1,6 +1,6 @@
 {
   "name": "tobii",
-  "version": "2.0.0-beta",
+  "version": "2.0.0",
   "description": "An accessible, open-source lightbox with no dependencies.",
   "main": "dist/tobii.js",
   "module": "dist/tobii.module.js",
@@ -15,7 +15,7 @@
       "require": "./dist/tobii.js"
     },
     "./package.json": "./package.json",
-		"./": "./"
+    "./": "./"
   },
   "devDependencies": {
     "eslint": "^7.20.0",
