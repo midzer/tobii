@@ -1,6 +1,3 @@
-import '../scss/tobii.scss'
-import './polyfill/CustomEvent'
-
 /**
  * Tobii
  *
