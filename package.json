@@ -41,7 +41,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/rqrauhvmra/tobii.git"
+    "url": "git://github.com/midzer/tobii.git"
   },
   "keywords": [
     "lightbox",
@@ -52,13 +52,13 @@
     "scss",
     "css"
   ],
-  "author": "rqrauhvmra",
+  "author": "midzer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/rqrauhvmra/tobii/issues"
+    "url": "https://github.com/midzer/tobii/issues"
   },
-  "homepage": "https://github.com/rqrauhvmra/tobii",
+  "homepage": "https://github.com/midzer/tobii",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@rqrauhvmra"
+    "registry": "https://npm.pkg.github.com/@midzer"
   }
 }

@@ -1,16 +1,12 @@
 # Tobii
 
-[![Version](https://img.shields.io/badge/Version-2.0.0--beta-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/releases)
-[![License](https://img.shields.io/badge/License-MIT-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/blob/master/LICENSE.md)
+[![Version](https://img.shields.io/badge/Version-2.0.0--beta-1a2a3a.svg)](https://github.com/midzer/tobii/releases)
+[![License](https://img.shields.io/badge/License-MIT-1a2a3a.svg)](https://github.com/midzer/tobii/blob/master/LICENSE.md)
 ![Dependecies](https://img.shields.io/badge/Dependencies-none-1a2a3a.svg)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/tobii?color=1a2a3a)
 [![Amazon wishlist](https://img.shields.io/badge/Amazon_wishlist-0366d6.svg)](https://www.amazon.de/hz/wishlist/ls/29WXITO63O0BX)
 
 An accessible, open-source lightbox with no dependencies.
-
-[Play on CodePen](https://codepen.io/collection/nbqJVV)
-
-![Open slide with a picture of the Berlin television tower](https://rqrauhvmra.com/tobi/tobi.png)
 
 ## Table of contents
 
@@ -101,8 +97,6 @@ const tobii = new Tobii()
 
 ### Image
 
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/ZRZdwG)
-
 The standard way of using Tobii is a linked thumbnail image with the class name `lightbox` to a larger image:
 
 ```html
@@ -143,8 +137,6 @@ customize its output to add the markup on the server-side.
 
 ### Inline HTML
 
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/BOLxqj)
-
 For inline HTML, create an element with a unique ID:
 
 ```html
@@ -173,8 +165,6 @@ In both ways, the attribute `data-type` with the value `html` is required.
 
 ### Iframe
 
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/GXJwar)
-
 For an iframe, create a link with the class name `lightbox`:
 
 ```html
@@ -198,8 +188,6 @@ In both ways, the attribute `data-type` with the value `iframe` is required.
 - `data-height` set the height and `data-width` the width of the iframe.
 
 ### YouTube
-
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/rgpjXE)
 
 For a YouTube video, create a link with the class name `lightbox` and a `data-id` attribute with the YouTube video ID:
 
@@ -226,8 +214,6 @@ In both ways, the attribute `data-type` with the value `youtube` is required.
 
 ## Grouping
 
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/PvKVxp)
-
 If you have a group of related types that you would like to combine into a set, add the `data-group` attribute:
 
 ```html
@@ -249,8 +235,6 @@ If you have a group of related types that you would like to combine into a set, 
 ```
 
 ## Options
-
-[Play on CodePen](https://codepen.io/rqrauhvmra/pen/MBYEog)
 
 You can pass an object with custom options as an argument.
 
@@ -347,4 +331,4 @@ Tobii supports the following browser (all the latest versions):
 
 ## License
 
-Tobii is available under the MIT license. See the [LICENSE](https://github.com/rqrauhvmra/Tobii/blob/master/LICENSE.md) file for more info.
+Tobii is available under the MIT license. See the [LICENSE](https://github.com/midzer/Tobii/blob/master/LICENSE.md) file for more info.

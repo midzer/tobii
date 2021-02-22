@@ -1,9 +1,9 @@
 /**
  * Tobii
  *
- * @author rqrauhvmra
+ * @author midzer
  * @version 2.0.0-beta
- * @url https://github.com/rqrauhvmra/tobii
+ * @url https://github.com/midzer/tobii
  *
  * MIT License
  */
