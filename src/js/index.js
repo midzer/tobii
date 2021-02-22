@@ -1,12 +1,9 @@
-import '../scss/tobii.scss'
-import './polyfill/CustomEvent'
-
 /**
  * Tobii
  *
- * @author rqrauhvmra
- * @version 2.0.0-beta
- * @url https://github.com/rqrauhvmra/tobii
+ * @author midzer
+ * @version 2.0.0
+ * @url https://github.com/midzer/tobii
  *
  * MIT License
  */
@@ -15,7 +12,6 @@ export default function Tobii (userOptions) {
    * Global variables
    *
    */
-  const BROWSER_WINDOW = window
   const FOCUSABLE_ELEMENTS = [
     'a[href]:not([tabindex^="-"]):not([inert])',
     'area[href]:not([tabindex^="-"]):not([inert])',
@@ -67,36 +63,25 @@ export default function Tobii (userOptions) {
    * @param {Object} userOptions - Optional user options
    * @returns {Object} - Custom options
    */
-  const mergeOptions = function mergeOptions (userOptions) {
+  const mergeOptions = (userOptions) => {
     // Default options
     const OPTIONS = {
       selector: '.lightbox',
       captions: true,
       captionsSelector: 'img',
       captionAttribute: 'alt',
+      captionText: null,
       nav: 'auto',
       navText: [
-        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path stroke="none" d="M0 0h24v24H0z"/>
-          <polyline points="15 6 9 12 15 18" />
-        </svg>`,
-        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path stroke="none" d="M0 0h24v24H0z"/>
-          <polyline points="9 6 15 12 9 18" />
-        </svg>`
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18" /></svg>',
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="9 6 15 12 9 18" /></svg>'
       ],
       navLabel: [
         'Previous image',
         'Next image'
       ],
       close: true,
-      closeText: `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path stroke="none" d="M0 0h24v24H0z"/>
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
-      `,
+      closeText: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>',
       closeLabel: 'Close lightbox',
       loadingIndicatorLabel: 'Image loading',
       counter: true,
@@ -105,19 +90,7 @@ export default function Tobii (userOptions) {
       downloadLabel: 'Download image', // TODO
       keyboard: true,
       zoom: true,
-      zoomText: `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path stroke="none" d="M0 0h24v24H0z"/>
-          <polyline points="16 4 20 4 20 8" />
-          <line x1="14" y1="10" x2="20" y2="4" />
-          <polyline points="8 20 4 20 4 16" />
-          <line x1="4" y1="20" x2="10" y2="14" />
-          <polyline points="16 20 20 20 20 16" />
-          <line x1="14" y1="14" x2="20" y2="20" />
-          <polyline points="8 4 4 4 4 8" />
-          <line x1="4" y1="4" x2="10" y2="10" />
-        </svg>
-      `,
+      zoomText: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="16 4 20 4 20 8" /><line x1="14" y1="10" x2="20" y2="4" /><polyline points="8 20 4 20 4 16" /><line x1="4" y1="20" x2="10" y2="14" /><polyline points="16 20 20 20 20 16" /><line x1="14" y1="14" x2="20" y2="20" /><polyline points="8 4 4 4 4 8" /><line x1="4" y1="4" x2="10" y2="10" /></svg>',
       docClose: true,
       swipeClose: true,
       hideScrollbar: true,
@@ -130,13 +103,9 @@ export default function Tobii (userOptions) {
       theme: 'tobii--theme-default'
     }
 
-    if (userOptions) {
-      Object.keys(userOptions).forEach(key => {
-        OPTIONS[key] = userOptions[key]
-      })
+    return {
+      ...OPTIONS, ...userOptions
     }
-
-    return OPTIONS
   }
 
   /**
@@ -146,7 +115,7 @@ export default function Tobii (userOptions) {
   const SUPPORTED_ELEMENTS = {
     image: {
       checkSupport (el) {
-        return !el.hasAttribute('data-type') && el.href.match(/\.(png|jpe?g|tiff|tif|gif|bmp|webp|svg|ico)(\?.*)?$/i)
+        return !el.hasAttribute('data-type') && el.href.match(/\.(png|jpe?g|tiff|tif|gif|bmp|webp|avif|svg|ico)(\?.*)?$/i)
       },
 
       init (el, container) {
@@ -171,7 +140,9 @@ export default function Tobii (userOptions) {
 
         // Create figcaption
         if (config.captions) {
-          if (config.captionsSelector === 'self' && el.getAttribute(config.captionAttribute)) {
+          if (typeof config.captionText === 'function') {
+            FIGCAPTION.textContent = config.captionText(el)
+          } else if (config.captionsSelector === 'self' && el.getAttribute(config.captionAttribute)) {
             FIGCAPTION.textContent = el.getAttribute(config.captionAttribute)
           } else if (config.captionsSelector === 'img' && THUMBNAIL && THUMBNAIL.getAttribute(config.captionAttribute)) {
             FIGCAPTION.textContent = THUMBNAIL.getAttribute(config.captionAttribute)
@@ -418,7 +389,7 @@ export default function Tobii (userOptions) {
    * Init
    *
    */
-  const init = function init (userOptions) {
+  const init = (userOptions) => {
     // Merge user options into defaults
     config = mergeOptions(userOptions)
 
@@ -435,7 +406,7 @@ export default function Tobii (userOptions) {
     }
 
     // Execute a few things once per element
-    LIGHTBOX_TRIGGER_ELS.forEach(lightboxTriggerEl => {
+    LIGHTBOX_TRIGGER_ELS.forEach((lightboxTriggerEl) => {
       checkDependencies(lightboxTriggerEl)
     })
   }
@@ -445,7 +416,7 @@ export default function Tobii (userOptions) {
    *
    * @param {HTMLElement} el - Element to add
    */
-  const checkDependencies = function checkDependencies (el) {
+  const checkDependencies = (el) => {
     // Check if there is a YouTube video and if the YouTube iframe-API is ready
     if (document.querySelector('[data-type="youtube"]') !== null && !isYouTubeDependencieLoaded) {
       if (document.getElementById('iframe_api') === null) {
@@ -463,7 +434,7 @@ export default function Tobii (userOptions) {
       }
 
       window.onYouTubePlayerAPIReady = () => {
-        WAITING_ELS.forEach(waitingEl => {
+        WAITING_ELS.forEach((waitingEl) => {
           add(waitingEl)
         })
 
@@ -480,7 +451,7 @@ export default function Tobii (userOptions) {
    * @param {HTMLElement} el
    * @return {string}
    */
-  const getGroupName = function getGroupName (el) {
+  const getGroupName = (el) => {
     return el.hasAttribute('data-group') ? el.getAttribute('data-group') : 'default'
   }
 
@@ -490,7 +461,7 @@ export default function Tobii (userOptions) {
    * @param {object} object
    * @return {object}
    */
-  const copyObject = function copyObject (object) {
+  const copyObject = (object) => {
     return JSON.parse(JSON.stringify(object))
   }
 
@@ -499,7 +470,7 @@ export default function Tobii (userOptions) {
    *
    * @param {HTMLElement} el - Element to add
    */
-  const add = function add (el) {
+  const add = (el) => {
     newGroup = getGroupName(el)
 
     if (!Object.prototype.hasOwnProperty.call(groups, newGroup)) {
@@ -543,7 +514,7 @@ export default function Tobii (userOptions) {
    *
    * @param {HTMLElement} el - Element to remove
    */
-  const remove = function remove (el) {
+  const remove = (el) => {
     const GROUP_NAME = getGroupName(el)
 
     // Check if element exists
@@ -596,7 +567,7 @@ export default function Tobii (userOptions) {
    * Create the lightbox
    *
    */
-  const createLightbox = function createLightbox () {
+  const createLightbox = () => {
     // Create the lightbox container
     lightbox = document.createElement('div')
     lightbox.setAttribute('role', 'dialog')
@@ -641,7 +612,7 @@ export default function Tobii (userOptions) {
   /**
    * Create a slider
    */
-  const createSlider = function createSlider () {
+  const createSlider = () => {
     groups[newGroup].slider = document.createElement('div')
     groups[newGroup].slider.className = 'tobii__slider'
 
@@ -655,9 +626,9 @@ export default function Tobii (userOptions) {
    * Create a slide
    *
    */
-  const createSlide = function createSlide (el) {
+  const createSlide = (el) => {
     // Detect type
-    for (let index in SUPPORTED_ELEMENTS) { // const index don't work in IE
+    for (const index in SUPPORTED_ELEMENTS) {
       if (Object.prototype.hasOwnProperty.call(SUPPORTED_ELEMENTS, index)) {
         if (SUPPORTED_ELEMENTS[index].checkSupport(el)) {
           // Create slide elements
@@ -694,7 +665,7 @@ export default function Tobii (userOptions) {
    *
    * @param {number} index - Index to load
    */
-  const open = function open (index) {
+  const open = (index) => {
     activeGroup = activeGroup !== null ? activeGroup : newGroup
 
     if (isOpen()) {
@@ -734,7 +705,7 @@ export default function Tobii (userOptions) {
     }
     const url = window.location.href
 
-    history.pushState(stateObj, 'Image', url)
+    window.history.pushState(stateObj, 'Image', url)
 
     // Set current index
     groups[activeGroup].currentIndex = index
@@ -763,7 +734,7 @@ export default function Tobii (userOptions) {
     }, 1000)
 
     // Create and dispatch a new event
-    const openEvent = new CustomEvent('open')
+    const openEvent = new window.CustomEvent('open')
 
     lightbox.dispatchEvent(openEvent)
   }
@@ -772,7 +743,7 @@ export default function Tobii (userOptions) {
    * Close Tobii
    *
    */
-  const close = function close () {
+  const close = () => {
     if (!isOpen()) {
       throw new Error('Ups, I\'m already closed.')
     }
@@ -785,9 +756,9 @@ export default function Tobii (userOptions) {
     unbindEvents()
 
     // Remove entry in browser history
-    if (history.state !== null) {
-      if (history.state.tobii === 'close') {
-        history.back()
+    if (window.history.state !== null) {
+      if (window.history.state.tobii === 'close') {
+        window.history.back()
       }
     }
 
@@ -816,7 +787,7 @@ export default function Tobii (userOptions) {
    *
    * @param {number} index - Index to preload
    */
-  const preload = function preload (index) {
+  const preload = (index) => {
     if (groups[activeGroup].sliderElements[index] === undefined) {
       return
     }
@@ -833,7 +804,7 @@ export default function Tobii (userOptions) {
    *
    * @param {number} index - Index to load
    */
-  const load = function load (index) {
+  const load = (index) => {
     if (groups[activeGroup].sliderElements[index] === undefined) {
       return
     }
@@ -853,7 +824,7 @@ export default function Tobii (userOptions) {
    *
    * @param {number} index - Index to select
    */
-  const select = function select (index) {
+  const select = (index) => {
     const currIndex = groups[activeGroup].currentIndex
 
     if (!isOpen()) {
@@ -897,7 +868,7 @@ export default function Tobii (userOptions) {
    * Select the previous slide
    *
    */
-  const previous = function previous () {
+  const previous = () => {
     if (!isOpen()) {
       throw new Error('Ups, I\'m closed.')
     }
@@ -911,7 +882,7 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const previousEvent = new CustomEvent('previous')
+    const previousEvent = new window.CustomEvent('previous')
 
     lightbox.dispatchEvent(previousEvent)
   }
@@ -920,7 +891,7 @@ export default function Tobii (userOptions) {
    * Select the next slide
    *
    */
-  const next = function next () {
+  const next = () => {
     if (!isOpen()) {
       throw new Error('Ups, I\'m closed.')
     }
@@ -934,7 +905,7 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const nextEvent = new CustomEvent('next')
+    const nextEvent = new window.CustomEvent('next')
 
     lightbox.dispatchEvent(nextEvent)
   }
@@ -944,7 +915,7 @@ export default function Tobii (userOptions) {
    *
    * @param {string} name - Name of the group to select
    */
-  const selectGroup = function selectGroup (name) {
+  const selectGroup = (name) => {
     if (isOpen()) {
       throw new Error('Ups, I\'m open.')
     }
@@ -966,7 +937,7 @@ export default function Tobii (userOptions) {
    *
    * @param {number} index - Index to leave
    */
-  const leave = function leave (index) {
+  const leave = (index) => {
     if (groups[activeGroup].sliderElements[index] === undefined) {
       return
     }
@@ -987,7 +958,7 @@ export default function Tobii (userOptions) {
    *
    * @param {number} index - Index to cleanup
    */
-  const cleanup = function cleanup (index) {
+  const cleanup = (index) => {
     if (groups[activeGroup].sliderElements[index] === undefined) {
       return
     }
@@ -1002,7 +973,7 @@ export default function Tobii (userOptions) {
    * Update offset
    *
    */
-  const updateOffset = function updateOffset () {
+  const updateOffset = () => {
     activeGroup = activeGroup !== null ? activeGroup : newGroup
 
     offset = -groups[activeGroup].currentIndex * lightbox.offsetWidth
@@ -1015,7 +986,7 @@ export default function Tobii (userOptions) {
    * Update counter
    *
    */
-  const updateCounter = function updateCounter () {
+  const updateCounter = () => {
     counter.textContent = `${groups[activeGroup].currentIndex + 1}/${groups[activeGroup].elementsLength}`
   }
 
@@ -1024,7 +995,7 @@ export default function Tobii (userOptions) {
    *
    * @param {string} dir - Current slide direction
    */
-  const updateFocus = function updateFocus (dir) {
+  const updateFocus = (dir) => {
     if ((config.nav === true || config.nav === 'auto') && !isTouchDevice() && groups[activeGroup].elementsLength > 1) {
       prevButton.setAttribute('aria-hidden', 'true')
       prevButton.disabled = true
@@ -1072,7 +1043,7 @@ export default function Tobii (userOptions) {
    * Clear drag after touchend and mousup event
    *
    */
-  const clearDrag = function clearDrag () {
+  const clearDrag = () => {
     drag = {
       startX: 0,
       endX: 0,
@@ -1085,7 +1056,7 @@ export default function Tobii (userOptions) {
    * Recalculate drag / swipe event
    *
    */
-  const updateAfterDrag = function updateAfterDrag () {
+  const updateAfterDrag = () => {
     const MOVEMENT_X = drag.endX - drag.startX
     const MOVEMENT_Y = drag.endY - drag.startY
     const MOVEMENT_X_DISTANCE = Math.abs(MOVEMENT_X)
@@ -1106,11 +1077,11 @@ export default function Tobii (userOptions) {
    * Resize event using requestAnimationFrame
    *
    */
-  const resizeHandler = function resizeHandler () {
+  const resizeHandler = () => {
     if (!resizeTicking) {
       resizeTicking = true
 
-      BROWSER_WINDOW.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
         updateOffset()
 
         resizeTicking = false
@@ -1122,19 +1093,19 @@ export default function Tobii (userOptions) {
    * Click event handler to trigger Tobii
    *
    */
-  const triggerTobii = function triggerTobii (event) {
+  const triggerTobii = (event) => {
     event.preventDefault()
 
-    activeGroup = getGroupName(this)
+    activeGroup = getGroupName(event.currentTarget)
 
-    open(groups[activeGroup].gallery.indexOf(this))
+    open(groups[activeGroup].gallery.indexOf(event.currentTarget))
   }
 
   /**
    * Click event handler
    *
    */
-  const clickHandler = function clickHandler (event) {
+  const clickHandler = (event) => {
     if (event.target === prevButton) {
       previous()
     } else if (event.target === nextButton) {
@@ -1151,8 +1122,8 @@ export default function Tobii (userOptions) {
    *
    * @return {Array<Element>}
    */
-  const getFocusableChildren = function getFocusableChildren () {
-    return Array.prototype.slice.call(lightbox.querySelectorAll(`.tobii__btn:not([disabled]), .tobii__slide--is-active + ${FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active ')}`)).filter(function (child) {
+  const getFocusableChildren = () => {
+    return Array.prototype.slice.call(lightbox.querySelectorAll(`.tobii__btn:not([disabled]), .tobii__slide--is-active + ${FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active ')}`)).filter((child) => {
       return !!(
         child.offsetWidth ||
         child.offsetHeight ||
@@ -1167,7 +1138,7 @@ export default function Tobii (userOptions) {
    * @TODO: Remove the deprecated event.keyCode when Edge support event.code and we drop f*cking IE
    * @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
    */
-  const keydownHandler = function keydownHandler (event) {
+  const keydownHandler = (event) => {
     const FOCUSABLE_CHILDREN = getFocusableChildren()
     const FOCUSED_ITEM_INDEX = FOCUSABLE_CHILDREN.indexOf(document.activeElement)
 
@@ -1204,7 +1175,7 @@ export default function Tobii (userOptions) {
    * Touchstart event handler
    *
    */
-  const touchstartHandler = function touchstartHandler (event) {
+  const touchstartHandler = (event) => {
     // Prevent dragging / swiping on textareas inputs and selects
     if (isIgnoreElement(event.target)) {
       return
@@ -1227,7 +1198,7 @@ export default function Tobii (userOptions) {
    * Touchmove event handler
    *
    */
-  const touchmoveHandler = function touchmoveHandler (event) {
+  const touchmoveHandler = (event) => {
     event.stopPropagation()
 
     if (pointerDown) {
@@ -1244,7 +1215,7 @@ export default function Tobii (userOptions) {
    * Touchend event handler
    *
    */
-  const touchendHandler = function touchendHandler (event) {
+  const touchendHandler = (event) => {
     event.stopPropagation()
 
     pointerDown = false
@@ -1262,7 +1233,7 @@ export default function Tobii (userOptions) {
    * Mousedown event handler
    *
    */
-  const mousedownHandler = function mousedownHandler (event) {
+  const mousedownHandler = (event) => {
     // Prevent dragging / swiping on textareas inputs and selects
     if (isIgnoreElement(event.target)) {
       return
@@ -1286,7 +1257,7 @@ export default function Tobii (userOptions) {
    * Mousemove event handler
    *
    */
-  const mousemoveHandler = function mousemoveHandler (event) {
+  const mousemoveHandler = (event) => {
     event.preventDefault()
 
     if (pointerDown) {
@@ -1301,7 +1272,7 @@ export default function Tobii (userOptions) {
    * Mouseup event handler
    *
    */
-  const mouseupHandler = function mouseupHandler (event) {
+  const mouseupHandler = (event) => {
     event.stopPropagation()
 
     pointerDown = false
@@ -1322,7 +1293,7 @@ export default function Tobii (userOptions) {
    * https://bugs.chromium.org/p/chromium/issues/detail?id=506801
    *
    */
-  const contextmenuHandler = function contextmenuHandler () {
+  const contextmenuHandler = () => {
     pointerDown = false
   }
 
@@ -1330,7 +1301,7 @@ export default function Tobii (userOptions) {
    * Decide whether to do horizontal of vertical swipe
    *
    */
-  const doSwipe = function doSwipe () {
+  const doSwipe = () => {
     if (Math.abs(drag.startX - drag.endX) > 0 && !isDraggingY && groups[activeGroup].elementsLength > 1) {
       // Horizontal swipe
       groups[activeGroup].slider.style.transform = `translate3d(${offsetTmp - Math.round(drag.startX - drag.endX)}px, 0, 0)`
@@ -1350,16 +1321,16 @@ export default function Tobii (userOptions) {
    * Bind events
    *
    */
-  const bindEvents = function bindEvents () {
+  const bindEvents = () => {
     if (config.keyboard) {
-      BROWSER_WINDOW.addEventListener('keydown', keydownHandler)
+      window.addEventListener('keydown', keydownHandler)
     }
 
     // Resize event
-    BROWSER_WINDOW.addEventListener('resize', resizeHandler)
+    window.addEventListener('resize', resizeHandler)
 
     // Popstate event
-    BROWSER_WINDOW.addEventListener('popstate', close)
+    window.addEventListener('popstate', close)
 
     // Click event
     lightbox.addEventListener('click', clickHandler)
@@ -1384,16 +1355,16 @@ export default function Tobii (userOptions) {
    * Unbind events
    *
    */
-  const unbindEvents = function unbindEvents () {
+  const unbindEvents = () => {
     if (config.keyboard) {
-      BROWSER_WINDOW.removeEventListener('keydown', keydownHandler)
+      window.removeEventListener('keydown', keydownHandler)
     }
 
     // Resize event
-    BROWSER_WINDOW.removeEventListener('resize', resizeHandler)
+    window.removeEventListener('resize', resizeHandler)
 
     // Popstate event
-    BROWSER_WINDOW.removeEventListener('popstate', close)
+    window.removeEventListener('popstate', close)
 
     // Click event
     lightbox.removeEventListener('click', clickHandler)
@@ -1418,7 +1389,7 @@ export default function Tobii (userOptions) {
    * Checks whether element has requested data-type value
    *
    */
-  const checkType = function checkType (el, type) {
+  const checkType = (el, type) => {
     return el.getAttribute('data-type') === type
   }
 
@@ -1427,11 +1398,11 @@ export default function Tobii (userOptions) {
    *
    * @param {HTMLElement} el - Element to remove all `src` attributes
    */
-  const removeSources = function setVideoSources (el) {
+  const removeSources = (el) => {
     const SOURCES = el.querySelectorAll('src')
 
     if (SOURCES) {
-      SOURCES.forEach(source => {
+      SOURCES.forEach((source) => {
         source.setAttribute('src', '')
       })
     }
@@ -1441,7 +1412,7 @@ export default function Tobii (userOptions) {
    * Update Config
    *
    */
-  const updateConfig = function updateConfig () {
+  const updateConfig = () => {
     if ((config.draggable && config.swipeClose && !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable')) || (config.draggable && groups[activeGroup].elementsLength > 1 && !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable'))) {
       groups[activeGroup].slider.classList.add('tobii__slider--is-draggable')
     }
@@ -1472,7 +1443,7 @@ export default function Tobii (userOptions) {
    *
    * @param {string} dir - Current slide direction
    */
-  const updateLightbox = function updateLightbox (dir) {
+  const updateLightbox = (dir) => {
     updateOffset()
     updateCounter()
     updateFocus(dir)
@@ -1482,7 +1453,7 @@ export default function Tobii (userOptions) {
    * Reset Tobii
    *
    */
-  const reset = function reset () {
+  const reset = () => {
     if (isOpen()) {
       close()
     }
@@ -1490,11 +1461,11 @@ export default function Tobii (userOptions) {
     // TODO Cleanup
     const GROUPS_ENTRIES = Object.entries(groups)
 
-    GROUPS_ENTRIES.forEach(groupsEntrie => {
+    GROUPS_ENTRIES.forEach((groupsEntrie) => {
       const SLIDE_ELS = groupsEntrie[1].gallery
 
       // Remove slides
-      SLIDE_ELS.forEach(slideEl => {
+      SLIDE_ELS.forEach((slideEl) => {
         remove(slideEl)
       })
     })
@@ -1510,7 +1481,7 @@ export default function Tobii (userOptions) {
    * Destroy Tobii
    *
    */
-  const destroy = function destroy () {
+  const destroy = () => {
     reset()
 
     lightbox.parentNode.removeChild(lightbox)
@@ -1520,7 +1491,7 @@ export default function Tobii (userOptions) {
    * Check if Tobii is open
    *
    */
-  const isOpen = function isOpen () {
+  const isOpen = () => {
     return lightbox.getAttribute('aria-hidden') === 'false'
   }
 
@@ -1528,7 +1499,7 @@ export default function Tobii (userOptions) {
    * Detect whether device is touch capable
    *
    */
-  const isTouchDevice = function isTouchDevice () {
+  const isTouchDevice = () => {
     return 'ontouchstart' in window
   }
 
@@ -1536,7 +1507,7 @@ export default function Tobii (userOptions) {
    * Checks whether element's nodeName is part of array
    *
    */
-  const isIgnoreElement = function isIgnoreElement (el) {
+  const isIgnoreElement = (el) => {
     return ['TEXTAREA', 'OPTION', 'INPUT', 'SELECT'].indexOf(el.nodeName) !== -1 || el === prevButton || el === nextButton || el === closeButton
   }
 
@@ -1544,7 +1515,7 @@ export default function Tobii (userOptions) {
    * Return current index
    *
    */
-  const slidesIndex = function slidesIndex () {
+  const slidesIndex = () => {
     return groups[activeGroup].currentIndex
   }
 
@@ -1552,7 +1523,7 @@ export default function Tobii (userOptions) {
    * Return elements length
    *
    */
-  const slidesCount = function slidesCount () {
+  const slidesCount = () => {
     return groups[activeGroup].elementsLength
   }
 
@@ -1560,7 +1531,7 @@ export default function Tobii (userOptions) {
    * Return current group
    *
    */
-  const currentGroup = function currentGroup () {
+  const currentGroup = () => {
     return activeGroup !== null ? activeGroup : newGroup
   }
 
@@ -1570,7 +1541,7 @@ export default function Tobii (userOptions) {
    * @param {function} callback - callback to call
    *
    */
-  const on = function on (eventName, callback) {
+  const on = (eventName, callback) => {
     lightbox.addEventListener(eventName, callback)
   }
 
@@ -1580,7 +1551,7 @@ export default function Tobii (userOptions) {
    * @param {function} callback - callback to call
    *
    */
-  const off = function off (eventName, callback) {
+  const off = (eventName, callback) => {
     lightbox.removeEventListener(eventName, callback)
   }
 

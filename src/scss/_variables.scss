@@ -1,5 +1,5 @@
 :root {
-  --base-font-size: 18;
+  --base-font-size: 18px;
 
   --transition-duration: 0.3s;
   --transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
@@ -8,6 +8,7 @@
   --zoom-icon-color: #fff;
 
   --lightbox-background: hsla(210, 38%, 16%, 0.94);
+  --lightbox-z-index: 1337;
 
   --caption-background: rgba(255, 255, 255, 0.94);
   --caption-color: hsl(210, 38%, 16%);

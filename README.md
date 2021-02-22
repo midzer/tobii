@@ -1,16 +1,20 @@
 # Tobii
 
-[![Version](https://img.shields.io/badge/Version-2.0.0--beta-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/releases)
-[![License](https://img.shields.io/badge/License-MIT-1a2a3a.svg)](https://github.com/rqrauhvmra/Tobii/blob/master/LICENSE.md)
+[![Version](https://img.shields.io/badge/Version-2.0.0-1a2a3a.svg)](https://github.com/midzer/tobii/releases)
+[![License](https://img.shields.io/badge/License-MIT-1a2a3a.svg)](https://github.com/midzer/tobii/blob/master/LICENSE.md)
 ![Dependecies](https://img.shields.io/badge/Dependencies-none-1a2a3a.svg)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/tobii?color=1a2a3a)
 [![Amazon wishlist](https://img.shields.io/badge/Amazon_wishlist-0366d6.svg)](https://www.amazon.de/hz/wishlist/ls/29WXITO63O0BX)
 
 An accessible, open-source lightbox with no dependencies.
 
+<<<<<<< HEAD
 [See it in Action](https://feuerwehr-eisolzried.de/media/)
 
 ![Open slide with a picture of the Berlin television tower](https://rqrauhvmra.com/tobi/tobi.png)
 
+=======
+>>>>>>> develop
 ## Table of contents
 
 - [Features](#features)
@@ -116,8 +120,33 @@ Instead of a thumbnail, you can also refer to a larger image with a text link:
 </a>
 ```
 
+If you use a Markdown parser or CMS and want to make all images in a post
+automatically viewable in a lightbox, use the following JavaScript code to add
+all images to the same album:
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  // This assumes your article is wrapped in an element with the class "content-article".
+  document.querySelectorAll('.content-article img').forEach((articleImg) => {
+    // Add lightbox elements in blog articles for Tobii.
+    const lightbox = document.createElement('a');
+    lightbox.href = articleImg.src;
+    lightbox.classList.add('lightbox');
+    lightbox.dataset.group = 'article';
+    articleImg.parentNode.appendChild(lightbox);
+    lightbox.appendChild(articleImg);
+  });
+});
+```
+
+<<<<<<< HEAD
+=======
+Alternatively, depending on your Markdown parser or CMS, it may be possible to
+customize its output to add the markup on the server-side.
+
 ### Inline HTML
 
+>>>>>>> develop
 For inline HTML, create an element with a unique ID:
 
 ```html
@@ -233,6 +262,7 @@ The following options are available:
 | captions | bool | true | Display captions, if available. |
 | captionsSelector | "self", "img" | "img" | Set the element where the caption is. Set it to "self" for the `a` tag itself. |
 | captionAttribute | string | "alt" | Get the caption from given attribute. |
+| captionText | function | null | Custom callback which returns the caption text for the current element. The first argument of the callback is the element. If set, `captionsSelector` and `captionAttribute` are ignored. |
 | nav | bool, "auto" | "auto" | Display navigation buttons. "auto" hides buttons on touch-enabled devices. |
 | navText | string | ["inline svg", "inline svg"] | Text or HTML for the navigation buttons. |
 | navLabel | string | ["Previous", "Next"] | ARIA label for screen readers. |
@@ -311,4 +341,4 @@ Tobii supports the following browser (all the latest versions):
 
 ## License
 
-Tobii is available under the MIT license. See the [LICENSE](https://github.com/rqrauhvmra/Tobii/blob/master/LICENSE.md) file for more info.
+Tobii is available under the MIT license. See the [LICENSE](https://github.com/midzer/Tobii/blob/master/LICENSE.md) file for more info.

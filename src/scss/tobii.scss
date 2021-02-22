@@ -62,14 +62,14 @@
   bottom: 0;
   box-sizing: border-box;
   contain: strict;
-  font-size: var(--base-font-size)px;
+  font-size: var(--base-font-size);
   left: 0;
   line-height: 1.5;
   overflow: hidden;
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 1337;
+  z-index: var(--lightbox-z-index);
 
 
   &[aria-hidden='true'] {
@@ -153,7 +153,7 @@
 
   & iframe,
   & video {
-    display: block;
+    display: block !important;
   }
 
   & figure {
