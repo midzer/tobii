@@ -8,13 +8,10 @@
 
 An accessible, open-source lightbox with no dependencies.
 
-<<<<<<< HEAD
 [See it in Action](https://feuerwehr-eisolzried.de/media/)
 
 ![Open slide with a picture of the Berlin television tower](https://rqrauhvmra.com/tobi/tobi.png)
 
-=======
->>>>>>> develop
 ## Table of contents
 
 - [Features](#features)
@@ -139,14 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 ```
 
-<<<<<<< HEAD
-=======
-Alternatively, depending on your Markdown parser or CMS, it may be possible to
-customize its output to add the markup on the server-side.
-
-### Inline HTML
-
->>>>>>> develop
 For inline HTML, create an element with a unique ID:
 
 ```html
