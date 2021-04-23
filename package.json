@@ -57,8 +57,5 @@
   "bugs": {
     "url": "https://github.com/midzer/tobii/issues"
   },
-  "homepage": "https://github.com/midzer/tobii",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@midzer"
-  }
+  "homepage": "https://github.com/midzer/tobii"
 }
