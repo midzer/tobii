@@ -1,6 +1,6 @@
 # Tobii
 
-[![Version](https://badgen.net/npm/v/@babel/core)](https://github.com/midzer/tobii/releases)
+[![Version](https://badgen.net/npm/v/@midzer/tobii)](https://github.com/midzer/tobii/releases)
 [![License](https://badgen.net/npm/license/@midzer/tobii)](https://github.com/midzer/tobii/blob/master/LICENSE.md)
 ![Dependencies](https://badgen.net/npm/dependents/@midzer/tobii)
 ![npm bundle size](https://badgen.net/bundlephobia/minzip/@midzer/tobii)
