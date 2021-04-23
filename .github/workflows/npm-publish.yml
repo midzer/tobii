@@ -32,7 +32,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   publish-gpr:
-    needs: build
+    needs: [build, publish-npm]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
