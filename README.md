@@ -1,10 +1,9 @@
 # Tobii
 
-[![Version](https://img.shields.io/badge/Version-2.0.0-1a2a3a.svg)](https://github.com/midzer/tobii/releases)
-[![License](https://img.shields.io/badge/License-MIT-1a2a3a.svg)](https://github.com/midzer/tobii/blob/master/LICENSE.md)
-![Dependecies](https://img.shields.io/badge/Dependencies-none-1a2a3a.svg)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/tobii?color=1a2a3a)
-[![Amazon wishlist](https://img.shields.io/badge/Amazon_wishlist-0366d6.svg)](https://www.amazon.de/hz/wishlist/ls/29WXITO63O0BX)
+[![Version](https://badgen.net/npm/v/@babel/core)](https://github.com/midzer/tobii/releases)
+[![License](https://badgen.net/npm/license/@midzer/tobii)](https://github.com/midzer/tobii/blob/master/LICENSE.md)
+![Dependencies](https://badgen.net/npm/dependents/@midzer/tobii)
+![npm bundle size](https://badgen.net/bundlephobia/minzip/@midzer/tobii)
 
 An accessible, open-source lightbox with no dependencies.
 
