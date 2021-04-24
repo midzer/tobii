@@ -64,7 +64,7 @@ JavaScript: `js/tobii.min.js` minified, or `js/tobii.js` un-minified
 
 Tobii is also available on npm.
 
-`npm install tobii --save`
+`npm install @midzer/tobii --save`
 
 ## Usage
 
