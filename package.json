@@ -25,15 +25,21 @@
     "standard": "^14.3.4",
     "stylelint": "^13.6.1"
   },
-  "browserslist": [
-    "last 2 versions",
-    "not <= 1%",
-    "not IE 10"
-  ],
+  "browserslist": {
+    "browser": [
+      "last 2 versions",
+      "not <= 1%",
+      "IE >= 11"
+    ],
+    "main": [
+      "last 2 versions",
+      "not <= 1%"
+    ]
+  },
   "scripts": {
     "build": "npm run clean && npm run build:main && npm run build:browser",
-    "build:main": "microbundle build --raw --no-sourcemap --name Tobii",
-    "build:browser": "microbundle build --raw -f iife src/js/browser.js -o dist/tobii.min.js --no-sourcemap --name Tobii",
+    "build:main": "BROWSERSLIST_ENV=main microbundle build --raw --no-sourcemap --name Tobii",
+    "build:browser": "BROWSERSLIST_ENV=browser microbundle build --raw -f iife src/js/browser.js -o dist/tobii.min.js --no-sourcemap --name Tobii",
     "clean": "rimraf dist",
     "dev": "microbundle watch --raw --format cjs",
     "lint": "eslint src",
