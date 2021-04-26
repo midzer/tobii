@@ -56,9 +56,15 @@ An accessible, open-source lightbox with no dependencies.
 
 ### Download
 
-CSS: `css/tobii.min.css` minified, or `css/tobii.css` un-minified
+CSS: `dist/tobii.min.css`
 
-JavaScript: `js/tobii.min.js` minified, or `js/tobii.js` un-minified
+JavaScript:
+
+* `dist/tobii.min.js`: IIFE build for maximum browser support, including IE 11
+* `dist/tobii.modern.js`: Build specially designed to work in all modern browsers
+* `dist/tobii.module.js`: ESM build
+* `dist/tobii.umd.js`: UMD build
+* `dist/tobii.js`: CommonJS/Node build
 
 ### Package managers
 
@@ -318,7 +324,7 @@ Tobii supports the following browser (all the latest versions):
 
 - Chrome
 - Firefox
-- Internet Explorer
+- Internet Explorer 11
 - Edge
 - Safari
 
