@@ -49,6 +49,10 @@
     "type": "git",
     "url": "git://github.com/midzer/tobii.git"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "keywords": [
     "lightbox",
     "accessible",
