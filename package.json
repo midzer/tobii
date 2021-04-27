@@ -1,6 +1,6 @@
 {
   "name": "@midzer/tobii",
-  "version": "2.0.7",
+  "version": "2.1.0",
   "description": "An accessible, open-source lightbox with no dependencies.",
   "main": "dist/tobii.js",
   "module": "dist/tobii.module.js",
