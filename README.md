@@ -7,7 +7,7 @@
 
 An accessible, open-source lightbox with no dependencies.
 
-[See it in Action](https://feuerwehr-eisolzried.de/media/)
+[See it in Action](https://midzer.github.io/tobii/demo/)
 
 ![Open slide with a picture of the Berlin television tower](https://rqrauhvmra.com/tobi/tobi.png)
 
