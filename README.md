@@ -141,6 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 ```
 
+### Inline-HTML
+
 For inline HTML, create an element with a unique ID:
 
 ```html
