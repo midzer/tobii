@@ -275,6 +275,27 @@ The following options are available:
 | threshold | number | 100 | Touch and mouse dragging threshold (in px). |
 | autoplayVideo | bool | false | Videos will automatically start playing as soon as they can do so without stopping to finish loading the data. |
 
+### Data attributes
+
+You can also use data attributes to customize HTML elements.
+
+```js
+<a href="path/to/image.jpg" class="lightbox" data-group="custom-group">
+  Open image.
+</a>
+```
+
+The following options are available:
+
+| Property | Description |
+| --- | --- |
+| data-type | Sets media type. Possible values: `html`,`iframe`,`youtube`. |
+| data-target | Can be used to set target for "iframe" and "html" types. |
+| data-group | Set custom group |
+| data-width | Set container width for iframe or youtube types.  |
+| data-height | Set container height for iframe or youtube types. |
+| data-controls | Indicates whether the video player controls are displayed: 0 do not display and 1 display controls in the player. |
+
 ## API
 
 | Function | Description |
