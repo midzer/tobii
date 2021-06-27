@@ -293,6 +293,10 @@ export default function Tobii (userOptions) {
 
         IFRAME.setAttribute('frameborder', '0')
         IFRAME.setAttribute('src', '')
+        IFRAME.setAttribute('allowfullscreen', '')
+        if (el.hasAttribute('data-allow')) {
+          IFRAME.setAttribute('allow', el.getAttribute('data-allow'))
+        }
         IFRAME.setAttribute('data-src', HREF)
 
         if (el.getAttribute('data-width')) {
@@ -326,6 +330,8 @@ export default function Tobii (userOptions) {
 
       onCleanup (container) {
         // Nothing
+        var video = container.getElementsByTagName('iframe')[0]
+        video.setAttribute('src', '')
       }
     },
 

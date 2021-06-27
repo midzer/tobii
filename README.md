@@ -290,11 +290,13 @@ The following options are available:
 | Property | Description |
 | --- | --- |
 | data-type | Sets media type. Possible values: `html`,`iframe`,`youtube`. |
+| data-id | Required for youtube media type. |
 | data-target | Can be used to set target for "iframe" and "html" types. |
 | data-group | Set custom group |
 | data-width | Set container width for iframe or youtube types.  |
 | data-height | Set container height for iframe or youtube types. |
 | data-controls | Indicates whether the video player controls are displayed: 0 do not display and 1 display controls in the player. |
+| data-allow | Allow to set allow attribute on iframes. |
 
 ## API
 
