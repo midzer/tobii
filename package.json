@@ -18,6 +18,7 @@
     "./": "./"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "^7.20.0",
     "microbundle": "^0.13.0",
     "node-sass": "^5.0.0",
@@ -38,10 +39,11 @@
   },
   "scripts": {
     "build": "npm run clean && npm run build:main && npm run build:browser",
-    "build:main": "BROWSERSLIST_ENV=main microbundle build --raw --no-sourcemap --name Tobii",
-    "build:browser": "BROWSERSLIST_ENV=browser microbundle build --raw -f iife src/js/browser.js -o dist/tobii.min.js --no-sourcemap --name Tobii",
+    "build:main": "cross-env BROWSERSLIST_ENV=main microbundle build --raw --no-sourcemap --name Tobii",
+    "build:browser": "cross-env BROWSERSLIST_ENV=browser microbundle build --raw -f iife src/js/browser.js -o dist/tobii.min.js --no-sourcemap --name Tobii",
     "clean": "rimraf dist",
     "dev": "microbundle watch --raw --format cjs",
+    "dev-modern": "microbundle watch --raw --format modern",
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
