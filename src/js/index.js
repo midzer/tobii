@@ -294,10 +294,16 @@ export default function Tobii (userOptions) {
         IFRAME.setAttribute('frameborder', '0')
         IFRAME.setAttribute('src', '')
         IFRAME.setAttribute('allowfullscreen', '')
-        if (el.hasAttribute('data-allow')) {
+        IFRAME.setAttribute('data-src', HREF)
+
+        // set allow parameters
+        if (HREF.indexOf('youtube.com') > -1) {
+          IFRAME.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture')
+        } else if (HREF.indexOf('vimeo.com') > -1) {
+          IFRAME.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture')
+        } else if (el.hasAttribute('data-allow')) {
           IFRAME.setAttribute('allow', el.getAttribute('data-allow'))
         }
-        IFRAME.setAttribute('data-src', HREF)
 
         if (el.getAttribute('data-width')) {
           IFRAME.style.maxWidth = `${el.getAttribute('data-width')}px`
