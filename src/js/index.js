@@ -329,9 +329,7 @@ export default function Tobii (userOptions) {
       },
 
       onCleanup (container) {
-        // Nothing
-        var video = container.getElementsByTagName('iframe')[0]
-        video.setAttribute('src', '')
+        container.getElementsByTagName('iframe')[0].setAttribute('src', '')
       }
     },
 

@@ -1,186 +1,197 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>Tobii demo (modern)</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" href="../dist/tobii.min.css">
-	<style>
-		body{
-            max-width: 1000px;
-			margin: 0 auto;
-			padding: 0 20px;
-			background-color: #f5f5f7;
-		}
-		table{
-            border-collapse: collapse;
-            border-spacing: 0;
-		}
-		th{
-            text-align:left;
-		}
-		th, td{
-            padding: 5px 5px;
-		}
-		img{
-			max-width:200px;
-		}
-		.bold{
-			font-weight:bold;
-		}
-		.inline-style{
-            background:white;
-			padding:15px 20px;
-			max-width:600px;
-		}
-	</style>
+  <meta charset="utf-8">
+  <title>Tobii demo (modern)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="../dist/tobii.min.css">
+  <style>
+    body {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+      background-color: #f5f5f7;
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    th {
+      text-align: left;
+    }
+
+    th, td {
+      padding: 5px 5px;
+    }
+
+    img {
+      max-width: 200px;
+    }
+
+    .bold {
+      font-weight: 700;
+    }
+
+    .inline-style {
+      background: #fff;
+      padding: 15px 20px;
+      max-width: 600px;
+    }
+  </style>
 </head>
 
 <body>
 
-	<h1>
-		Tobii demo (modern)
-	</h1>
+<h1>
+  Tobii demo (modern)
+</h1>
 
-	Modes: <a href="index.html">default</a> | <a class="bold" href="modern.html">modern</a>
-	<hr />
+Modes: <a href="index.html">default</a> | <a class="bold" href="modern.html">modern</a>
+<hr/>
 
-	<table>
-		<tr>
-			<th style="width:200px;">
-				Image (single)
-			</th>
-			<td>
-				<a href="https://img.youtube.com/vi/HHi8qOtHnhE/maxresdefault.jpg" class="lightbox" data-group="single">
-					<img src="https://img.youtube.com/vi/HHi8qOtHnhE/mqdefault.jpg" />
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				Images (grouped)
-			</th>
-			<td>
-				<a href="https://img.youtube.com/vi/spxtEt6RaS4/maxresdefault.jpg" class="lightbox" data-group="gallery">
-					<img src="https://img.youtube.com/vi/spxtEt6RaS4/mqdefault.jpg" />
-				</a>
-				<a href="https://img.youtube.com/vi/DGIXT7ce3vQ/maxresdefault.jpg" class="lightbox" data-group="gallery">
-					<img src="https://img.youtube.com/vi/DGIXT7ce3vQ/mqdefault.jpg" />
-				</a>
-				<a href="https://img.youtube.com/vi/Q8eh58Z249o/maxresdefault.jpg" class="lightbox" data-group="gallery">
-					<img src="https://img.youtube.com/vi/Q8eh58Z249o/mqdefault.jpg" />
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				Inline HTML
-			</th>
-			<td>
-				<a href="#selector" data-type="html" class="lightbox" data-group="inline">
-					Open
-				</a>
+<table>
+  <tr>
+    <th style="width: 200px;">
+      Image (single)
+    </th>
+    <td>
+      <a href="https://img.youtube.com/vi/HHi8qOtHnhE/maxresdefault.jpg" class="lightbox" data-group="single">
+        <img alt="" src="https://img.youtube.com/vi/HHi8qOtHnhE/mqdefault.jpg"/>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Images (grouped)
+    </th>
+    <td>
+      <a href="https://img.youtube.com/vi/spxtEt6RaS4/maxresdefault.jpg" class="lightbox" data-group="gallery">
+        <img alt="" src="https://img.youtube.com/vi/spxtEt6RaS4/mqdefault.jpg"/>
+      </a>
+      <a href="https://img.youtube.com/vi/DGIXT7ce3vQ/maxresdefault.jpg" class="lightbox" data-group="gallery">
+        <img alt="" src="https://img.youtube.com/vi/DGIXT7ce3vQ/mqdefault.jpg"/>
+      </a>
+      <a href="https://img.youtube.com/vi/Q8eh58Z249o/maxresdefault.jpg" class="lightbox" data-group="gallery">
+        <img alt="" src="https://img.youtube.com/vi/Q8eh58Z249o/mqdefault.jpg"/>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Inline HTML
+    </th>
+    <td>
+      <a href="#selector" data-type="html" class="lightbox" data-group="inline">
+        Open
+      </a>
 
-				<div style="display:none;">
-					<div class="inline-style" id="selector" data-group="iframe">
-						Instrument cultivated alteration any favourable expression law far nor. Both new like tore but year. An
-						from mean on with when sing pain. Oh to as principles devonshire companions unsatiable an delightful. The
-						ourselves suffering the sincerity. Inhabit her manners adapted age certain. Debating offended at branched
-						<a href="#">striking be subjects</a>.
-					</div>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				Iframe
-			</th>
-			<td>
-				<a href="https://www.wikipedia.org" data-type="iframe" class="lightbox" data-group="iframe">
-					Open
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				YouTube: (mode: iframe)
-			</th>
-			<td>
-				<a href="https://www.youtube.com/embed/RK1K2bCg4J8?autoplay=1" data-type="iframe" class="lightbox" data-group="iframe-youtube"
-				   data-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-					Open
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				YouTube: (mode: API)
-			</th>
-			<td>
-				<a href="#" data-type="youtube" data-id="RK1K2bCg4J8" class="lightbox" data-group="youtube">
-					Open
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				Manual call
-			</th>
-			<td>
-				<a href="#" id="manual">
-					Open
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				Image error
-			</th>
-			<td>
-				<a href="https://example.org/404.jpg" class="lightbox" data-group="single-error">
-					Open
-				</a>
-			</td>
-		</tr>
-		<tr>
-			<th>
-				Iframe error
-			</th>
-			<td>
-				<a href="https://www.wikipedia.org/404/404/404/404/" data-type="iframe" class="lightbox" data-group="iframe-error">
-					Open
-				</a>
-			</td>
-		</tr>
-	</table>
+      <div style="display: none;">
+        <div class="inline-style" id="selector" data-group="iframe">
+          Instrument cultivated alteration any favourable expression law far nor. Both new like tore but year.
+          An
+          from mean on with when sing pain. Oh to as principles devonshire companions unsatiable an
+          delightful. The
+          ourselves suffering the sincerity. Inhabit her manners adapted age certain. Debating offended at
+          branched
+          <a href="#">striking be subjects</a>.
+        </div>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Iframe
+    </th>
+    <td>
+      <a href="https://www.wikipedia.org" data-type="iframe" class="lightbox" data-group="iframe">
+        Open
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      YouTube: (mode: iframe)
+    </th>
+    <td>
+      <a href="https://www.youtube.com/embed/RK1K2bCg4J8?autoplay=1" data-type="iframe" class="lightbox"
+         data-group="iframe-youtube"
+         data-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+        Open
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      YouTube: (mode: API)
+    </th>
+    <td>
+      <a href="#" data-type="youtube" data-id="RK1K2bCg4J8" class="lightbox" data-group="youtube">
+        Open
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Manual call
+    </th>
+    <td>
+      <a href="#" id="manual">
+        Open
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Image error
+    </th>
+    <td>
+      <a href="https://example.org/404.jpg" class="lightbox" data-group="single-error">
+        Open
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Iframe error
+    </th>
+    <td>
+      <a href="https://www.wikipedia.org/404/404/404/404/" data-type="iframe" class="lightbox"
+         data-group="iframe-error">
+        Open
+      </a>
+    </td>
+  </tr>
+</table>
 
 
-	<script type="module">
-      	import Tobii from '../dist/tobii.modern.js';
+<script type="module">
+  import Tobii from '../dist/tobii.modern.js'
 
-		//prepare manual executions
-        var manual = document.querySelector('#manual');
-        manual.classList.add('lightbox');
-        manual.href = 'https://via.placeholder.com/600.jpg';
-        manual.attributes.group = 'manual';
+  //prepare manual executions
+  let manual = document.getElementById('manual')
+  manual.classList.add('lightbox')
+  manual.href = 'https://via.placeholder.com/600.jpg'
+  manual.attributes.group = 'manual'
 
-		//init
-		const tobii = new Tobii();
+  //init
+  const tobii = new Tobii()
 
-		//set events
-        tobii.on('open', function() {
-		  console.log('event: ' + 'open');
-        })
-        tobii.on('previous', function() {
-          console.log('event: ' + 'previous');
-        })
-        tobii.on('next', function() {
-          console.log('event: ' + 'next');
-        })
-        tobii.on('close', function() {
-          console.log('event: ' + 'close');
-        })
-	</script>
+  //set events
+  tobii.on('open', function () {
+    console.log('event: ' + 'open')
+  })
+  tobii.on('previous', function () {
+    console.log('event: ' + 'previous')
+  })
+  tobii.on('next', function () {
+    console.log('event: ' + 'next')
+  })
+  tobii.on('close', function () {
+    console.log('event: ' + 'close')
+  })
+</script>
 
 </body>
 </html>
