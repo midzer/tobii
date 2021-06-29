@@ -790,6 +790,10 @@ export default function Tobii (userOptions) {
 
     // Remove the hack to prevent animation during opening
     groups[activeGroup].slider.classList.remove('tobii__slider--animate')
+
+    // Create and dispatch a new event
+    const closeEvent = new window.CustomEvent('close')
+    lightbox.dispatchEvent(closeEvent)
   }
 
   /**
