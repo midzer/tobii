@@ -135,6 +135,10 @@ export default function Tobii (userOptions) {
         IMAGE.setAttribute('src', '')
         IMAGE.setAttribute('data-src', el.href)
 
+        if (el.hasAttribute('data-srcset')) {
+          IMAGE.setAttribute('srcset', el.getAttribute('data-srcset'))
+        }
+
         // Add image to figure
         FIGURE.appendChild(IMAGE)
 
