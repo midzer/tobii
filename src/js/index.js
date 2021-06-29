@@ -296,6 +296,9 @@ export default function Tobii (userOptions) {
         IFRAME.setAttribute('allowfullscreen', '')
         IFRAME.setAttribute('data-src', HREF)
 
+        // Hide until loaded
+        IFRAME.style.opacity = '0'
+
         // set allow parameters
         if (HREF.indexOf('youtube.com') > -1) {
           IFRAME.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture')
@@ -326,7 +329,7 @@ export default function Tobii (userOptions) {
 
       onLoad (container) {
         const IFRAME = container.querySelector('iframe')
-
+        IFRAME.style.opacity = '1'
         IFRAME.setAttribute('src', IFRAME.getAttribute('data-src'))
       },
 
@@ -335,7 +338,9 @@ export default function Tobii (userOptions) {
       },
 
       onCleanup (container) {
-        container.getElementsByTagName('iframe')[0].setAttribute('src', '')
+        const IFRAME = container.querySelector('iframe')
+        IFRAME.setAttribute('src', '')
+        IFRAME.style.opacity = '0'
       }
     },
 
