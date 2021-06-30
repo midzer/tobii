@@ -307,7 +307,7 @@ export default function Tobii (userOptions) {
         if (HREF.indexOf('youtube.com') > -1) {
           IFRAME.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture')
         } else if (HREF.indexOf('vimeo.com') > -1) {
-          IFRAME.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture')
+          IFRAME.setAttribute('allow', 'autoplay; picture-in-picture')
         } else if (el.hasAttribute('data-allow')) {
           IFRAME.setAttribute('allow', el.getAttribute('data-allow'))
         }
