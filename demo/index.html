@@ -159,6 +159,16 @@ Modes: <a class="bold" href="index.html">default</a> | <a href="modern.html">mod
     </td>
   </tr>
   <tr>
+    <th style="width: 200px;">
+      Events
+    </th>
+    <td>
+      <a href="https://img.youtube.com/vi/HHi8qOtHnhE/maxresdefault.jpg" class="lightbox" data-group="events">
+        Open
+      </a>
+    </td>
+  </tr>
+  <tr>
     <th>
       Manual call
     </th>
@@ -205,17 +215,21 @@ Modes: <a class="bold" href="index.html">default</a> | <a href="modern.html">mod
   const tobii = new Tobii()
 
   //set events
-  tobii.on('open', function () {
-    console.log('event: ' + 'open')
+  tobii.on('open', function (e) {
+    if(e.detail.group === 'events')
+      console.log('event: ' + 'open', e.detail)
   })
-  tobii.on('previous', function () {
-    console.log('event: ' + 'previous')
+  tobii.on('previous', function (e) {
+    if(e.detail.group === 'events')
+      console.log('event: ' + 'previous', e.detail)
   })
-  tobii.on('next', function () {
-    console.log('event: ' + 'next')
+  tobii.on('next', function (e) {
+    if(e.detail.group === 'events')
+      console.log('event: ' + 'next', e.detail)
   })
-  tobii.on('close', function () {
-    console.log('event: ' + 'close')
+  tobii.on('close', function (e) {
+    if(e.detail.group === 'events')
+      console.log('event: ' + 'close', e.detail)
   })
 </script>
 

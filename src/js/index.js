@@ -756,7 +756,11 @@ export default function Tobii (userOptions) {
     }, 1000)
 
     // Create and dispatch a new event
-    const openEvent = new window.CustomEvent('open')
+    const openEvent = new window.CustomEvent('open', {
+      detail: {
+        group: activeGroup
+      }
+    })
 
     lightbox.dispatchEvent(openEvent)
   }
@@ -804,7 +808,11 @@ export default function Tobii (userOptions) {
     groups[activeGroup].slider.classList.remove('tobii__slider--animate')
 
     // Create and dispatch a new event
-    const closeEvent = new window.CustomEvent('close')
+    const closeEvent = new window.CustomEvent('close', {
+      detail: {
+        group: activeGroup
+      }
+    })
     lightbox.dispatchEvent(closeEvent)
   }
 
@@ -908,7 +916,11 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const previousEvent = new window.CustomEvent('previous')
+    const previousEvent = new window.CustomEvent('previous', {
+      detail: {
+        group: activeGroup
+      }
+    })
 
     lightbox.dispatchEvent(previousEvent)
   }
@@ -931,7 +943,11 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const nextEvent = new window.CustomEvent('next')
+    const nextEvent = new window.CustomEvent('next', {
+      detail: {
+        group: activeGroup
+      }
+    })
 
     lightbox.dispatchEvent(nextEvent)
   }
