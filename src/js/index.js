@@ -333,8 +333,11 @@ export default function Tobii (userOptions) {
 
       onLoad (container) {
         const IFRAME = container.querySelector('iframe')
-        IFRAME.style.opacity = '1'
         IFRAME.setAttribute('src', IFRAME.getAttribute('data-src'))
+
+        IFRAME.onload = () => {
+          IFRAME.style.opacity = '1'
+        }
       },
 
       onLeave (container) {
