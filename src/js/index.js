@@ -175,6 +175,7 @@ export default function Tobii (userOptions) {
 
         // Register type
         container.setAttribute('data-type', 'image')
+        container.classList.add('tobii-image')
       },
 
       onPreload (container) {
@@ -228,6 +229,7 @@ export default function Tobii (userOptions) {
 
         // Register type
         container.setAttribute('data-type', 'html')
+        container.classList.add('tobii-html')
       },
 
       onPreload (container) {
@@ -325,6 +327,7 @@ export default function Tobii (userOptions) {
 
         // Register type
         container.setAttribute('data-type', 'iframe')
+        container.classList.add('tobii-iframe')
       },
 
       onPreload (container) {
@@ -379,6 +382,7 @@ export default function Tobii (userOptions) {
 
         // Register type
         container.setAttribute('data-type', 'youtube')
+        container.classList.add('tobii-youtube')
 
         playerId++
       },
