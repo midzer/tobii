@@ -216,7 +216,7 @@ export default function Tobii (userOptions) {
       },
 
       init (el, container) {
-        const TARGET_SELECTOR = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
+        const TARGET_SELECTOR = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href')
         const TARGET = document.querySelector(TARGET_SELECTOR)
 
         if (!TARGET) {
@@ -293,7 +293,7 @@ export default function Tobii (userOptions) {
 
       init (el, container) {
         const IFRAME = document.createElement('iframe')
-        const HREF = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
+        const HREF = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href')
 
         IFRAME.setAttribute('frameborder', '0')
         IFRAME.setAttribute('src', '')
