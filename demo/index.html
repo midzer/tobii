@@ -11,6 +11,9 @@
       margin: 0 auto;
       padding: 0 20px;
       background-color: #f5f5f7;
+      font-family: Tahoma, Verdana, Arial;
+      font-size: 14px;
+      line-height: 1.3;
     }
 
     table {
@@ -32,12 +35,6 @@
 
     .bold {
       font-weight: 700;
-    }
-
-    .inline-style {
-      background: #fff;
-      padding: 15px 20px;
-      max-width: 600px;
     }
   </style>
 </head>
@@ -79,6 +76,18 @@ Modes: <a class="bold" href="index.html">default</a> | <a href="modern.html">mod
     </td>
   </tr>
   <tr>
+    <th style="width: 200px;">
+      Image (retina)
+    </th>
+    <td>
+      <a href="https://via.placeholder.com/600.jpg" class="lightbox"
+         data-srcset="https://via.placeholder.com/1200.jpg 2x"
+         data-group="retina">
+        Open
+      </a>
+    </td>
+  </tr>
+  <tr>
     <th>
       Inline HTML
     </th>
@@ -88,7 +97,7 @@ Modes: <a class="bold" href="index.html">default</a> | <a href="modern.html">mod
       </a>
 
       <div style="display: none;">
-        <div class="inline-style" id="selector" data-group="iframe">
+        <div id="selector" data-group="iframe">
           Instrument cultivated alteration any favourable expression law far nor. Both new like tore but year.
           An
           from mean on with when sing pain. Oh to as principles devonshire companions unsatiable an
@@ -115,10 +124,11 @@ Modes: <a class="bold" href="index.html">default</a> | <a href="modern.html">mod
       YouTube: (mode: iframe)
     </th>
     <td>
-      <a href="https://www.youtube.com/embed/RK1K2bCg4J8?autoplay=1" data-type="iframe" class="lightbox"
+      <a href="https://www.youtube.com/embed/Yds5jgqmYpE?autoplay=1" data-type="iframe" class="lightbox"
          data-group="iframe-youtube"
-         data-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-        Open
+         data-width="1120"
+         data-height="630">
+        <img alt="" src="https://img.youtube.com/vi/Yds5jgqmYpE/mqdefault.jpg" />
       </a>
     </td>
   </tr>
@@ -128,6 +138,29 @@ Modes: <a class="bold" href="index.html">default</a> | <a href="modern.html">mod
     </th>
     <td>
       <a href="#" data-type="youtube" data-id="RK1K2bCg4J8" class="lightbox" data-group="youtube">
+        Open
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Vimeo:
+    </th>
+    <td>
+      <a href="https://player.vimeo.com/video/15209448?autoplay=1" data-type="iframe" class="lightbox"
+         data-group="iframe-vimeo"
+         data-width="1280"
+         data-height="720">
+        <img alt="" src="https://i.vimeocdn.com/video/91219950_1280x720" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <th style="width: 200px;">
+      Events
+    </th>
+    <td>
+      <a href="https://img.youtube.com/vi/HHi8qOtHnhE/maxresdefault.jpg" class="lightbox" data-group="events">
         Open
       </a>
     </td>
@@ -179,17 +212,21 @@ Modes: <a class="bold" href="index.html">default</a> | <a href="modern.html">mod
   const tobii = new Tobii()
 
   //set events
-  tobii.on('open', function () {
-    console.log('event: ' + 'open')
+  tobii.on('open', function (e) {
+    if(e.detail.group === 'events')
+      console.log('event: ' + 'open', e.detail)
   })
-  tobii.on('previous', function () {
-    console.log('event: ' + 'previous')
+  tobii.on('previous', function (e) {
+    if(e.detail.group === 'events')
+      console.log('event: ' + 'previous', e.detail)
   })
-  tobii.on('next', function () {
-    console.log('event: ' + 'next')
+  tobii.on('next', function (e) {
+    if(e.detail.group === 'events')
+      console.log('event: ' + 'next', e.detail)
   })
-  tobii.on('close', function () {
-    console.log('event: ' + 'close')
+  tobii.on('close', function (e) {
+    if(e.detail.group === 'events')
+      console.log('event: ' + 'close', e.detail)
   })
 </script>
 

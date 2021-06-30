@@ -296,7 +296,8 @@ The following options are available:
 | data-width | Set container width for iframe or youtube types.  |
 | data-height | Set container height for iframe or youtube types. |
 | data-controls | Indicates whether the video player controls are displayed: 0 do not display and 1 display controls in the player. |
-| data-allow | Allow to set allow attribute on iframes. |
+| data-allow | Allows to set allow attribute on iframes. |
+| data-srcset | Allows to have Responsive image or retina images  |
 
 ## API
 
