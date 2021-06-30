@@ -135,6 +135,10 @@ export default function Tobii (userOptions) {
         IMAGE.setAttribute('src', '')
         IMAGE.setAttribute('data-src', el.href)
 
+        if (el.hasAttribute('data-srcset')) {
+          IMAGE.setAttribute('srcset', el.getAttribute('data-srcset'))
+        }
+
         // Add image to figure
         FIGURE.appendChild(IMAGE)
 
@@ -171,6 +175,7 @@ export default function Tobii (userOptions) {
 
         // Register type
         container.setAttribute('data-type', 'image')
+        container.classList.add('tobii-image')
       },
 
       onPreload (container) {
@@ -212,7 +217,7 @@ export default function Tobii (userOptions) {
       },
 
       init (el, container) {
-        const TARGET_SELECTOR = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
+        const TARGET_SELECTOR = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href')
         const TARGET = document.querySelector(TARGET_SELECTOR)
 
         if (!TARGET) {
@@ -224,6 +229,7 @@ export default function Tobii (userOptions) {
 
         // Register type
         container.setAttribute('data-type', 'html')
+        container.classList.add('tobii-html')
       },
 
       onPreload (container) {
@@ -289,11 +295,24 @@ export default function Tobii (userOptions) {
 
       init (el, container) {
         const IFRAME = document.createElement('iframe')
-        const HREF = el.hasAttribute('href') ? el.getAttribute('href') : el.getAttribute('data-target')
+        const HREF = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href')
 
         IFRAME.setAttribute('frameborder', '0')
         IFRAME.setAttribute('src', '')
+        IFRAME.setAttribute('allowfullscreen', '')
         IFRAME.setAttribute('data-src', HREF)
+
+        // Hide until loaded
+        IFRAME.style.opacity = '0'
+
+        // set allow parameters
+        if (HREF.indexOf('youtube.com') > -1) {
+          IFRAME.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture')
+        } else if (HREF.indexOf('vimeo.com') > -1) {
+          IFRAME.setAttribute('allow', 'autoplay; picture-in-picture')
+        } else if (el.hasAttribute('data-allow')) {
+          IFRAME.setAttribute('allow', el.getAttribute('data-allow'))
+        }
 
         if (el.getAttribute('data-width')) {
           IFRAME.style.maxWidth = `${el.getAttribute('data-width')}px`
@@ -308,6 +327,7 @@ export default function Tobii (userOptions) {
 
         // Register type
         container.setAttribute('data-type', 'iframe')
+        container.classList.add('tobii-iframe')
       },
 
       onPreload (container) {
@@ -316,8 +336,11 @@ export default function Tobii (userOptions) {
 
       onLoad (container) {
         const IFRAME = container.querySelector('iframe')
-
         IFRAME.setAttribute('src', IFRAME.getAttribute('data-src'))
+
+        IFRAME.onload = () => {
+          IFRAME.style.opacity = '1'
+        }
       },
 
       onLeave (container) {
@@ -325,7 +348,9 @@ export default function Tobii (userOptions) {
       },
 
       onCleanup (container) {
-        // Nothing
+        const IFRAME = container.querySelector('iframe')
+        IFRAME.setAttribute('src', '')
+        IFRAME.style.opacity = '0'
       }
     },
 
@@ -357,6 +382,7 @@ export default function Tobii (userOptions) {
 
         // Register type
         container.setAttribute('data-type', 'youtube')
+        container.classList.add('tobii-youtube')
 
         playerId++
       },
@@ -734,7 +760,11 @@ export default function Tobii (userOptions) {
     }, 1000)
 
     // Create and dispatch a new event
-    const openEvent = new window.CustomEvent('open')
+    const openEvent = new window.CustomEvent('open', {
+      detail: {
+        group: activeGroup
+      }
+    })
 
     lightbox.dispatchEvent(openEvent)
   }
@@ -780,6 +810,14 @@ export default function Tobii (userOptions) {
 
     // Remove the hack to prevent animation during opening
     groups[activeGroup].slider.classList.remove('tobii__slider--animate')
+
+    // Create and dispatch a new event
+    const closeEvent = new window.CustomEvent('close', {
+      detail: {
+        group: activeGroup
+      }
+    })
+    lightbox.dispatchEvent(closeEvent)
   }
 
   /**
@@ -882,7 +920,11 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const previousEvent = new window.CustomEvent('previous')
+    const previousEvent = new window.CustomEvent('previous', {
+      detail: {
+        group: activeGroup
+      }
+    })
 
     lightbox.dispatchEvent(previousEvent)
   }
@@ -905,7 +947,11 @@ export default function Tobii (userOptions) {
     }
 
     // Create and dispatch a new event
-    const nextEvent = new window.CustomEvent('next')
+    const nextEvent = new window.CustomEvent('next', {
+      detail: {
+        group: activeGroup
+      }
+    })
 
     lightbox.dispatchEvent(nextEvent)
   }
