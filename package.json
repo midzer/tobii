@@ -44,7 +44,7 @@
     "build:browser": "cross-env BROWSERSLIST_ENV=browser microbundle build --raw -f iife src/js/browser.js -o dist/tobii.min.js --no-sourcemap --name Tobii",
     "clean": "rimraf dist",
     "dev": "microbundle watch --raw --format cjs",
-    "dev-modern": "microbundle watch --raw --format modern",
+    "dev-modern": "microbundle watch --raw --format esm",
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
