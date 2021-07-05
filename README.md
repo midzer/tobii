@@ -341,6 +341,7 @@ tobii.off(eventName, listener)
 | eventName | Description |
 | --- | --- |
 | `open` | Triggered after Tobii has been opened. |
+| `close` | Triggered after Tobii has been closed. |
 | `previous` | Triggered after the previous slide is selected. |
 | `next` | Triggered after the next slide is selected. |
 
