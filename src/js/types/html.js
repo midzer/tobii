@@ -7,7 +7,7 @@ class HtmlType {
     this.userSettings = userSettings
 
     const TARGET_SELECTOR = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href')
-    const TARGET = document.querySelector(TARGET_SELECTOR)
+    const TARGET = document.querySelector(TARGET_SELECTOR).cloneNode(true)
 
     if (!TARGET) {
       throw new Error(`Ups, I can't find the target ${TARGET_SELECTOR}.`)
