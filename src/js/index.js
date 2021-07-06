@@ -889,7 +889,7 @@ export default function Tobii (userOptions) {
   const getFocusableChildren = () => {
     return Array.prototype.slice.call(
       lightbox.querySelectorAll(
-        `.tobii__btn:not([disabled]), .tobii__slide--is-active + ${FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active ')}`
+        `.tobii__btn:not([disabled]), .tobii__slide--is-active ${FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active ')}`
       )
     ).filter((child) => {
       return !!(
@@ -959,7 +959,9 @@ export default function Tobii (userOptions) {
     drag.startX = event.touches[0].pageX
     drag.startY = event.touches[0].pageY
 
-    groups[activeGroup].slider.classList.add('tobii__slider--is-dragging')
+    if (isTouchDevice()) {
+      groups[activeGroup].slider.classList.add('tobii__slider--is-dragging')
+    }
   }
 
   /**
@@ -1018,7 +1020,9 @@ export default function Tobii (userOptions) {
     drag.startX = event.pageX
     drag.startY = event.pageY
 
-    groups[activeGroup].slider.classList.add('tobii__slider--is-dragging')
+    if (isTouchDevice()) {
+      groups[activeGroup].slider.classList.add('tobii__slider--is-dragging')
+    }
   }
 
   /**
@@ -1105,13 +1109,11 @@ export default function Tobii (userOptions) {
     // Click event
     lightbox.addEventListener('click', clickHandler)
 
-    if (userSettings.draggable) {
-      if (isTouchDevice()) {
-        // Touch events
-        lightbox.addEventListener('touchstart', touchstartHandler)
-        lightbox.addEventListener('touchmove', touchmoveHandler)
-        lightbox.addEventListener('touchend', touchendHandler)
-      }
+    if (userSettings.draggable && isTouchDevice()) {
+      // Touch events
+      lightbox.addEventListener('touchstart', touchstartHandler)
+      lightbox.addEventListener('touchmove', touchmoveHandler)
+      lightbox.addEventListener('touchend', touchendHandler)
 
       // Mouse events
       lightbox.addEventListener('mousedown', mousedownHandler)
@@ -1139,13 +1141,11 @@ export default function Tobii (userOptions) {
     // Click event
     lightbox.removeEventListener('click', clickHandler)
 
-    if (userSettings.draggable) {
-      if (isTouchDevice()) {
-        // Touch events
-        lightbox.removeEventListener('touchstart', touchstartHandler)
-        lightbox.removeEventListener('touchmove', touchmoveHandler)
-        lightbox.removeEventListener('touchend', touchendHandler)
-      }
+    if (userSettings.draggable && isTouchDevice()) {
+      // Touch events
+      lightbox.removeEventListener('touchstart', touchstartHandler)
+      lightbox.removeEventListener('touchmove', touchmoveHandler)
+      lightbox.removeEventListener('touchend', touchendHandler)
 
       // Mouse events
       lightbox.removeEventListener('mousedown', mousedownHandler)
@@ -1160,10 +1160,11 @@ export default function Tobii (userOptions) {
    *
    */
   const updateConfig = () => {
-    if ((userSettings.draggable && userSettings.swipeClose &&
+    if ((userSettings.draggable && userSettings.swipeClose && isTouchDevice() &&
       !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable')) ||
       (userSettings.draggable && groups[activeGroup].elementsLength > 1 &&
-       !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable'))) {
+       !groups[activeGroup].slider.classList.contains('tobii__slider--is-draggable'))
+    ) {
       groups[activeGroup].slider.classList.add('tobii__slider--is-draggable')
     }
 
