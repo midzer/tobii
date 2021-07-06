@@ -121,6 +121,11 @@ export default function Tobii (userOptions) {
    *
    */
   const init = (userOptions) => {
+    if (document.querySelector('div.tobii')) {
+      console.log('Multiple lightbox instances not supported.')
+      return
+    }
+
     // Merge user options into defaults
     userSettings = mergeOptions(userOptions)
 
