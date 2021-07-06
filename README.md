@@ -300,6 +300,7 @@ The following options are available:
 | data-controls | Indicates whether the video player controls are displayed: 0 do not display and 1 display controls in the player. |
 | data-allow | Allows to set allow attribute on iframes. |
 | data-srcset | Allows to have Responsive image or retina images  |
+| data-zoom | Allows to enable or disable zoom icon. Values: "true" or "false"  |
 
 ## API
 

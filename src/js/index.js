@@ -221,7 +221,8 @@ export default function Tobii (userOptions) {
       groups[newGroup].elementsLength++
 
       // Set zoom icon if necessary
-      if (userSettings.zoom && el.querySelector('img')) {
+      if ((userSettings.zoom && el.querySelector('img') && el.getAttribute('data-zoom') !== 'false') ||
+        el.getAttribute('data-zoom') === 'true') {
         const TOBII_ZOOM = document.createElement('div')
 
         TOBII_ZOOM.className = 'tobii-zoom__icon'
