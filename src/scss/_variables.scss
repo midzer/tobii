@@ -1,5 +1,5 @@
 :root {
-  --base-font-size: 18px;
+  --base-font-size: 18px; /* also update --slide-max-height */
 
   --transition-duration: 0.3s;
   --transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
@@ -7,20 +7,21 @@
   --zoom-icon-background: hsla(210, 38%, 16%, 0.94);
   --zoom-icon-color: #fff;
 
-  --lightbox-background: hsla(210, 38%, 16%, 0.94);
+  --lightbox-background: rgba(0,0,0,0.85);
   --lightbox-z-index: 1337;
 
-  --caption-background: rgba(255, 255, 255, 0.94);
-  --caption-color: hsl(210, 38%, 16%);
+  --caption-background: rgba(0,0,0,0.8);
+  --caption-color: #eee;
 
   --counter-background: transparent;
   --counter-color: #fff;
 
   --button-background: transparent;
+  --button-navigation-background: rgba(0,0,0,0.5);
   --button-color: #fff;
 
   --loader-color: #fff;
 
-  --slide-max-height: 85vh;
-  --slide-max-width: 85vw;
+  --slide-max-height: calc(100vh - 2.77778em); /* 50/18px, em() does not work here */
+  --slide-max-width: 100vw;
 }
