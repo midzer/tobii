@@ -55,7 +55,7 @@ Modes: <a href="index.html">default</a> | <a class="bold" href="modern.html">mod
     </th>
     <td>
       <a href="https://img.youtube.com/vi/HHi8qOtHnhE/maxresdefault.jpg" class="lightbox" data-group="single">
-        <img alt="Aquarium" title="Aquarium view" alt="" src="https://img.youtube.com/vi/HHi8qOtHnhE/mqdefault.jpg" />
+        <img alt="Aquarium" title="Aquarium view" src="https://img.youtube.com/vi/HHi8qOtHnhE/mqdefault.jpg" />
       </a>
     </td>
   </tr>
@@ -92,7 +92,7 @@ Modes: <a href="index.html">default</a> | <a class="bold" href="modern.html">mod
       Inline HTML
     </th>
     <td>
-      <a href="#selector" data-type="html" class="lightbox" data-group="inline">
+      <a href="?fallback_url" class="lightbox" data-type="html" data-target="#selector" data-group="inline">
         Open
       </a>
 
@@ -114,7 +114,7 @@ Modes: <a href="index.html">default</a> | <a class="bold" href="modern.html">mod
       Iframe
     </th>
     <td>
-      <a href="https://www.wikipedia.org" data-type="iframe" class="lightbox" data-group="iframe">
+      <a href="https://www.wikipedia.org" class="lightbox" data-type="iframe" data-group="iframe">
         Open
       </a>
     </td>
@@ -124,7 +124,8 @@ Modes: <a href="index.html">default</a> | <a class="bold" href="modern.html">mod
       YouTube: (mode: iframe)
     </th>
     <td>
-      <a href="https://www.youtube.com/embed/Yds5jgqmYpE?autoplay=1" data-type="iframe" class="lightbox"
+      <a href="https://www.youtube.com/embed/Yds5jgqmYpE?autoplay=1" class="lightbox"
+         data-type="iframe"
          data-group="iframe-youtube"
          data-width="1120"
          data-height="630">
@@ -137,7 +138,8 @@ Modes: <a href="index.html">default</a> | <a class="bold" href="modern.html">mod
       YouTube: (mode: API)
     </th>
     <td>
-      <a href="#" data-type="youtube" data-id="RK1K2bCg4J8" class="lightbox" data-group="youtube">
+      <a href="https://www.youtube.com/watch?v=RK1K2bCg4J8" class="lightbox"
+         data-type="youtube" data-id="RK1K2bCg4J8" data-group="youtube">
         Open
       </a>
     </td>
@@ -147,7 +149,8 @@ Modes: <a href="index.html">default</a> | <a class="bold" href="modern.html">mod
       Vimeo:
     </th>
     <td>
-      <a href="https://player.vimeo.com/video/15209448?autoplay=1" data-type="iframe" class="lightbox"
+      <a href="https://player.vimeo.com/video/15209448?autoplay=1" class="lightbox"
+         data-type="iframe"
          data-group="iframe-vimeo"
          data-width="1280"
          data-height="720">
@@ -181,17 +184,6 @@ Modes: <a href="index.html">default</a> | <a class="bold" href="modern.html">mod
     </th>
     <td>
       <a href="https://example.org/404.jpg" class="lightbox" data-group="single-error">
-        Open
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <th>
-      Iframe error
-    </th>
-    <td>
-      <a href="https://www.wikipedia.org/404/404/404/404/" data-type="iframe" class="lightbox"
-         data-group="iframe-error">
         Open
       </a>
     </td>
