@@ -471,10 +471,7 @@ export default function Tobii (userOptions) {
     preload(groups[activeGroup].currentIndex + 1)
     preload(groups[activeGroup].currentIndex - 1)
 
-    // Hack to prevent animation during opening
-    setTimeout(() => {
-      groups[activeGroup].slider.classList.add('tobii__slider--animate')
-    }, 1000)
+    groups[activeGroup].slider.classList.add('tobii__slider--animate')
 
     // Create and dispatch a new event
     const openEvent = new window.CustomEvent('open', {
