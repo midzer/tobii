@@ -28,13 +28,20 @@ An accessible, open-source lightbox with no dependencies.
 - [API](#api)
 - [Events](#events)
 - [Browser support](#browser-support)
-- [To do](#to-do)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Features
 
 - No dependencies
+- Supports multiple content types:
+  - Images
+  - Inline HTML
+  - Iframes
+  - Videos (YouTube, Vimeo)
+- Grouping
+- Events
+- Customizable with settings and CSS
 - Accessible:
   - ARIA roles
   - Keyboard navigation:
@@ -49,8 +56,6 @@ An accessible, open-source lightbox with no dependencies.
   - Drag/ Swipe horizontal to navigate through slides
   - Drag/ Swipe vertical to close Tobii
 - Responsive
-- Support iframes
-- Support inline HTML
 
 ## Get Tobii
 
