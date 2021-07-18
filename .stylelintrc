@@ -4,7 +4,7 @@
     "string-quotes": "single",
     "no-duplicate-selectors": true,
     "color-hex-case": "lower",
-    "color-hex-length": "short",
+    "color-hex-length": "long",
     "color-named": "never",
     "selector-no-qualifying-type": true,
     "selector-max-id": 0,

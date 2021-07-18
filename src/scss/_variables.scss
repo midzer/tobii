@@ -5,22 +5,22 @@
   --transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
 
   --zoom-icon-background: hsla(210, 38%, 16%, 0.94);
-  --zoom-icon-color: #fff;
+  --zoom-icon-color: #ffffff;
 
   --lightbox-background: rgba(0,0,0,0.85);
   --lightbox-z-index: 1337;
 
   --caption-background: rgba(0,0,0,0.8);
-  --caption-color: #eee;
+  --caption-color: #eeeeee;
 
   --counter-background: transparent;
-  --counter-color: #fff;
+  --counter-color: #ffffff;
 
   --button-background: transparent;
   --button-navigation-background: rgba(0,0,0,0.5);
-  --button-color: #fff;
+  --button-color: #ffffff;
 
-  --loader-color: #fff;
+  --loader-color: #ffffff;
 
   --slide-max-height: calc(100vh - 2.77778em); /* 50/18px, em() does not work here */
   --slide-max-width: 100vw;
