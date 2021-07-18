@@ -19,7 +19,7 @@
     "declaration-colon-space-after": "always",
     "number-leading-zero": "always",
     "function-url-quotes": "always",
-    "font-weight-notation": "numeric",
+    "font-weight-notation": "ignore",
     "font-family-name-quotes": "always-where-recommended",
     "comment-whitespace-inside": "always",
     "comment-empty-line-before": "always",
