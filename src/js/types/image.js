@@ -83,10 +83,15 @@ class ImageType {
     const FIGURE = container.querySelector('figure')
     const LOADING_INDICATOR = container.querySelector('.tobii__loader')
 
-    IMAGE.onload = () => {
+    IMAGE.addEventListener('load', () => {
       container.removeChild(LOADING_INDICATOR)
       FIGURE.style.opacity = '1'
-    }
+    })
+
+    IMAGE.addEventListener('error', () => {
+      container.removeChild(LOADING_INDICATOR)
+      FIGURE.style.opacity = '1'
+    })
 
     IMAGE.setAttribute('src', IMAGE.getAttribute('data-src'))
     IMAGE.removeAttribute('data-src')
