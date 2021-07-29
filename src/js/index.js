@@ -970,8 +970,6 @@ export default function Tobii (userOptions) {
     event.stopPropagation()
 
     if (pointerDown) {
-      event.preventDefault()
-
       drag.endX = event.touches[0].pageX
       drag.endY = event.touches[0].pageY
 
