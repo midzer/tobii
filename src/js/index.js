@@ -141,6 +141,11 @@ export default function Tobii (userOptions) {
       throw new Error(`Ups, I can't find the selector ${userSettings.selector} on this website.`)
     }
 
+    // Ignore duplicats
+    LIGHTBOX_TRIGGER_ELS.filter((element, index, array) => {
+      array.findIndex(temp => (temp.href === element.href)) === index
+    })
+
     // Execute a few things once per element
     LIGHTBOX_TRIGGER_ELS.forEach((lightboxTriggerEl) => {
       checkDependencies(lightboxTriggerEl)
