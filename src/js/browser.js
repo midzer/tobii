@@ -1,6 +1,5 @@
 import '../scss/tobii.scss'
 import './polyfill/CustomEvent'
-import './polyfill/FindIndex'
 import Tobii from './index'
 
 if (typeof module < 'u') {
