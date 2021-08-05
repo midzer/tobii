@@ -361,6 +361,9 @@ Tobii supports the following browser (all the latest versions):
 - Edge
 - Safari
 
+## Build instructions
+See [Wiki > Build instructions](https://github.com/midzer/tobii/wiki/Build-instructions)
+
 ## Contributing
 
 - Open an issue or a pull request to suggest changes or additions
