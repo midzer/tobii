@@ -277,7 +277,6 @@ The following options are available:
 | zoomText | string | "inline svg" | Text or HTML for the zoom icon. |
 | docClose | bool | true | Click outside to close Tobii. |
 | swipeClose | bool | true | Swipe up to close Tobii. |
-| hideScrollbar | bool | true | Hide browser scrollbars if Tobii is displayed. |
 | draggable | bool | true | Use dragging and touch swiping. |
 | threshold | number | 100 | Touch and mouse dragging threshold (in px). |
 | autoplayVideo | bool | false | Videos will automatically start playing as soon as they can do so without stopping to finish loading the data. |

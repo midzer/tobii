@@ -444,10 +444,9 @@ export default function Tobii (userOptions) {
       }
     }
 
-    if (userSettings.hideScrollbar) {
-      document.documentElement.classList.add('tobii-is-open')
-      document.body.classList.add('tobii-is-open')
-    }
+    document.documentElement.classList.add('tobii-is-open')
+    document.body.classList.add('tobii-is-open')
+    document.body.classList.add('tobii-is-open-' + activeGroup)
 
     updateConfig()
 
@@ -511,10 +510,9 @@ export default function Tobii (userOptions) {
       throw new Error('Ups, I\'m already closed.')
     }
 
-    if (userSettings.hideScrollbar) {
-      document.documentElement.classList.remove('tobii-is-open')
-      document.body.classList.remove('tobii-is-open')
-    }
+    document.documentElement.classList.remove('tobii-is-open')
+    document.body.classList.remove('tobii-is-open')
+    document.body.classList.remove('tobii-is-open-' + activeGroup)
 
     unbindEvents()
 
