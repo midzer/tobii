@@ -24,7 +24,7 @@ class ImageType {
     IMAGE.setAttribute('data-src', el.href)
 
     if (el.hasAttribute('data-srcset')) {
-      IMAGE.setAttribute('srcset', el.getAttribute('data-srcset'))
+      IMAGE.setAttribute('data-srcset', el.getAttribute('data-srcset'))
     }
 
     // Add image to figure
@@ -95,6 +95,10 @@ class ImageType {
 
     IMAGE.setAttribute('src', IMAGE.getAttribute('data-src'))
     IMAGE.removeAttribute('data-src')
+
+    if (IMAGE.hasAttribute('data-srcset')) {
+      IMAGE.setAttribute('srcset', IMAGE.getAttribute('data-srcset'))
+    }
   }
 
   onLeave (container) {
