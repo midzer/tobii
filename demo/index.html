@@ -4,7 +4,10 @@
   <meta charset="utf-8">
   <title>Tobii demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="../dist/tobii.min.css">
+
   <style>
     body {
       max-width: 1000px;
@@ -44,9 +47,6 @@
 <h1>
   Tobii demo
 </h1>
-
-Modes: <a class="bold" href="index.html">default</a> | <a href="modern.html">modern</a>
-<hr/>
 
 <table>
   <tr>
@@ -194,9 +194,12 @@ Modes: <a class="bold" href="index.html">default</a> | <a href="modern.html">mod
   </tr>
 </table>
 
+<!-- JS -->
+<!-- use this in production: <script src="tobii.min.js"></script> -->
 
-<script src="../dist/tobii.min.js"></script>
-<script>
+<script type="module">
+  //using modern mode as module (optional)
+  import Tobii from '../dist/tobii.module.js'
 
   //prepare manual executions
   let manual = document.getElementById('manual')
