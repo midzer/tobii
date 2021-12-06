@@ -1,5 +1,6 @@
 import '../scss/tobii.scss'
 import './polyfill/CustomEvent'
+import './polyfill/forEach'
 import Tobii from './index'
 
 if (typeof module < 'u') {
