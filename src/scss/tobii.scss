@@ -52,6 +52,12 @@
   overflow-y: hidden;
 }
 
+// Prevent background scrolling on Safari iOS devices.
+.tobii-is-open,
+.tobii-image {
+  touch-action: none;
+}
+
 /**
  * Lightbox
  *
