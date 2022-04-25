@@ -1,27 +1,27 @@
 :root {
-  --base-font-size: 18px; /* also update --slide-max-height */
+  --tobii-base-font-size: 18px; /* also update --tobii-slide-max-height */
 
-  --transition-duration: 0.3s;
-  --transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  --tobii-transition-duration: 0.3s;
+  --tobii-transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
 
-  --zoom-icon-background: hsla(210, 38%, 16%, 0.94);
-  --zoom-icon-color: #ffffff;
+  --tobii-zoom-icon-background: hsla(210, 38%, 16%, 0.94);
+  --tobii-zoom-icon-color: #ffffff;
 
-  --lightbox-background: rgba(0,0,0,0.85);
-  --lightbox-z-index: 1337;
+  --tobii-lightbox-background: rgba(0,0,0,0.85);
+  --tobii-lightbox-z-index: 1337;
 
-  --caption-background: rgba(0,0,0,0.8);
-  --caption-color: #eeeeee;
+  --tobii-caption-background: rgba(0,0,0,0.8);
+  --tobii-caption-color: #eeeeee;
 
-  --counter-background: transparent;
-  --counter-color: #ffffff;
+  --tobii-counter-background: transparent;
+  --tobii-counter-color: #ffffff;
 
-  --button-background: transparent;
-  --button-navigation-background: rgba(0,0,0,0.5);
-  --button-color: #ffffff;
+  --tobii-button-background: transparent;
+  --tobii-button-navigation-background: rgba(0,0,0,0.5);
+  --tobii-button-color: #ffffff;
 
-  --loader-color: #ffffff;
+  --tobii-loader-color: #ffffff;
 
-  --slide-max-height: calc(100vh - 2.77778em); /* 50/18px, em() does not work here */
-  --slide-max-width: 100vw;
+  --tobii-slide-max-height: calc(100vh - 2.77778em); /* 50/18px, em() does not work here */
+  --tobii-slide-max-width: 100vw;
 }
