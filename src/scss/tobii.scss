@@ -205,8 +205,8 @@
 
 
     & iframe {
-        height: var(--slide-max-height, var(--tobii-slide-max-height));
-        width: var(--slide-max-width, var(--tobii-slide-max-width));
+      height: var(--slide-max-height, var(--tobii-slide-max-height));
+      width: var(--slide-max-width, var(--tobii-slide-max-width));
     }
   }
 }
