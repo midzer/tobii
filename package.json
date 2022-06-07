@@ -1,6 +1,6 @@
 {
   "name": "@midzer/tobii",
-  "version": "2.3.3",
+  "version": "2.4.0",
   "description": "An accessible, open-source lightbox with no dependencies.",
   "main": "dist/tobii.js",
   "module": "dist/tobii.module.js",
@@ -19,13 +19,14 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "eslint": "^7.32.0",
+    "eslint": "^8.17.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-standard": "^5.0.0",
-    "microbundle": "^0.13.3",
-    "node-sass": "^6.0.1",
+    "microbundle": "^0.15.0",
+    "node-sass": "^7.0.1",
     "rimraf": "^3.0.2",
-    "standard": "^16.0.3",
-    "stylelint": "^13.13.1"
+    "standard": "^17.0.0",
+    "stylelint": "^14.8.5"
   },
   "browserslist": {
     "browser": [
