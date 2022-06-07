@@ -1,6 +1,6 @@
 {
   "name": "@midzer/tobii",
-  "version": "2.4.0",
+  "version": "2.3.3",
   "description": "An accessible, open-source lightbox with no dependencies.",
   "main": "dist/tobii.js",
   "module": "dist/tobii.module.js",
@@ -11,7 +11,7 @@
     ".": {
       "browser": "./dist/tobii.module.js",
       "umd": "./dist/tobii.umd.js",
-      "import": "./dist/tobii.mjs",
+      "import": "./dist/tobii.modern.js",
       "require": "./dist/tobii.js"
     },
     "./package.json": "./package.json",
