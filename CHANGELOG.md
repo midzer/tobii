@@ -1,6 +1,10 @@
 # Changelog
 
-## [Unreleased]
+## v2.4.0
+
+### Changes
+
+- tobii.mjs -> tobii.modern.js
 
 ### Fixed
 
