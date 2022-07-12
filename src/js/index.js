@@ -299,9 +299,10 @@ export default function Tobii (userOptions) {
         }
       }
 
-      // TODO Remove element
-      // groups[GROUP_NAME].gallery.splice(groups[GROUP_NAME].gallery.indexOf(el)) don't work
+      groups[GROUP_NAME].gallery.splice(groups[GROUP_NAME].gallery.indexOf(el))
+      groups[GROUP_NAME].sliderElements.splice(groups[GROUP_NAME].gallery.indexOf(el))
       groups[GROUP_NAME].elementsLength--
+      --groups[GROUP_NAME].x
 
       // Remove zoom icon if necessary
       if (userSettings.zoom && el.querySelector('.tobii-zoom__icon')) {
