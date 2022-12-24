@@ -79,6 +79,7 @@ export default function Tobii (userOptions) {
       captionsSelector: 'img',
       captionAttribute: 'alt',
       captionText: null,
+      captionHTML: false,
       nav: 'auto',
       navText: [
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18" /></svg>',

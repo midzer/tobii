@@ -32,17 +32,24 @@ class ImageType {
 
     // Create figcaption
     if (this.userSettings.captions) {
+      let captionContent
       if (typeof this.userSettings.captionText === 'function') {
-        FIGCAPTION.textContent = this.userSettings.captionText(el)
+        captionContent = this.userSettings.captionText(el)
       } else if (this.userSettings.captionsSelector === 'self' &&
         el.getAttribute(this.userSettings.captionAttribute)) {
-        FIGCAPTION.textContent = el.getAttribute(this.userSettings.captionAttribute)
+        captionContent = el.getAttribute(this.userSettings.captionAttribute)
       } else if (this.userSettings.captionsSelector === 'img' && THUMBNAIL &&
         THUMBNAIL.getAttribute(this.userSettings.captionAttribute)) {
-        FIGCAPTION.textContent = THUMBNAIL.getAttribute(this.userSettings.captionAttribute)
+        captionContent = THUMBNAIL.getAttribute(this.userSettings.captionAttribute)
       }
 
-      if (FIGCAPTION.textContent) {
+      if (this.userSettings.captionHTML) {
+        FIGCAPTION.innerHTML = captionContent
+      } else {
+        FIGCAPTION.textContent = captionContent
+      }
+
+      if (captionContent) {
         FIGCAPTION.id = `tobii-figcaption-${this.figcaptionId}`
         FIGURE.appendChild(FIGCAPTION)
 
