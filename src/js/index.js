@@ -259,7 +259,7 @@ export default function Tobii (userOptions) {
 
       if (isOpen() && newGroup === activeGroup) {
         updateConfig()
-        updateLightbox(null)
+        updateLightbox()
       }
     } else {
       throw new Error('Ups, element already added.')
@@ -485,7 +485,7 @@ export default function Tobii (userOptions) {
     // Show lightbox
     lightbox.setAttribute('aria-hidden', 'false')
 
-    updateLightbox(null)
+    updateLightbox()
 
     // Preload previous and next slide
     preload(groups[activeGroup].currentIndex + 1)
@@ -771,7 +771,7 @@ export default function Tobii (userOptions) {
   /**
    * Update focus
    *
-   * @param {string} dir - Current slide direction
+   * @param {string|null} dir - Current slide direction
    */
   const updateFocus = (dir) => {
     if ((userSettings.nav === true || userSettings.nav === 'auto') &&
@@ -1210,7 +1210,7 @@ export default function Tobii (userOptions) {
    *
    * @param {string|null} dir - Current slide direction
    */
-  const updateLightbox = (dir) => {
+  const updateLightbox = (dir = null) => {
     updateOffset()
     updateCounter()
     updateFocus(dir)
