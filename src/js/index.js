@@ -288,7 +288,6 @@ export default function Tobii (userOptions) {
           throw new Error('Ups, I\'ve closed. There are no slides more to show.')
         } else {
           // TODO If there is only one slide left, deactivate horizontal dragging/ swiping
-          // TODO Recalculate counter
           // TODO Set new absolute position per slide
 
           // If the first slide is displayed
@@ -297,6 +296,9 @@ export default function Tobii (userOptions) {
           } else {
             previous()
           }
+
+          updateConfig()
+          updateLightbox()
         }
       }
 
