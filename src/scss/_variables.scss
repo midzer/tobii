@@ -1,5 +1,5 @@
 :root {
-  --tobii-base-font-size: 18px; /* also update --tobii-slide-max-height */
+  --tobii-base-font-size: 1rem; /* also update --tobii-slide-max-height */
 
   --tobii-transition-duration: 0.3s;
   --tobii-transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
@@ -22,6 +22,6 @@
 
   --tobii-loader-color: #ffffff;
 
-  --tobii-slide-max-height: calc(100vh - 2.77778em); /* 50/18px, em() does not work here */
+  --tobii-slide-max-height: calc(100vh - 2.77778em); /* 50/18px */
   --tobii-slide-max-width: 100vw;
 }

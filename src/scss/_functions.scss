@@ -1,3 +1,0 @@
-@function em($pixels, $base-font-size: 18) {
-  @return #{$pixels/$base-font-size}em;
-}

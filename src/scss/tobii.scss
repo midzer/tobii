@@ -1,6 +1,4 @@
-@import
-  'variables',
-  'functions';
+@import 'variables';
 
 /**
  * Lightbox link
@@ -22,26 +20,26 @@
   &__icon {
     align-items: center;
     background-color: var(--zoom-icon-background, var(--tobii-zoom-icon-background));
-    top: em(8);
+    top: 0.44444em;
     color: var(--zoom-icon-color, var(--tobii-zoom-icon-color));
     display: flex;
-    height: em(32);
+    height: 1.77778em;
     justify-content: center;
     line-height: 1;
     position: absolute;
-    right: em(8);
-    width: em(32);
+    right: 0.44444em;
+    width: 1.77778em;
 
 
     & svg {
       fill: none;
-      height: em(24);
+      height: 1.33333em;
       pointer-events: none;
       stroke-linecap: round;
       stroke-linejoin: round;
       stroke-width: 1.5;
       stroke: currentColor;
-      width: em(24);
+      width: 1.33333em;
     }
   }
 }
@@ -100,7 +98,7 @@
   left: 0;
   position: absolute;
   right: 0;
-  top: em(50);
+  top: 2.77778em;
   will-change: transform;
 
 
@@ -179,7 +177,7 @@
       background-color: var(--caption-background, var(--tobii-caption-background));
       bottom: 0;
       color: var(--caption-color, var(--tobii-caption-color));
-      padding: em(4) em(8);
+      padding: 0.22222em 0.44444em;
       position: absolute;
       white-space: pre-wrap;
       width: 100%;
@@ -219,7 +217,7 @@
 .tobii__btn {
   appearance: none;
   background-color: var(--button-background, var(--tobii-button-background));
-  border: em(1) solid transparent;
+  border: 0.05556em solid transparent;
   color: var(--button-color, var(--tobii-button-color));
   cursor: pointer;
   font: inherit;
@@ -242,13 +240,13 @@
 
   & svg {
     fill: none;
-    height: em(60);
+    height: 3.33333em;
     pointer-events: none;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1;
     stroke: currentColor;
-    width: em(60);
+    width: 3.33333em;
   }
 
   &--previous,
@@ -256,22 +254,22 @@
     top: 50%;
     transform: translateY(-50%);
     background-color: var(--button-navigation-background, var(--tobii-button-navigation-background));
-    border-radius: em(5);
+    border-radius: 0.27778em;
   }
 
   &--previous {
-    left: em(16);
+    left: 0.88889em;
   }
 
   &--next {
-    right: em(16);
+    right: 0.88889em;
   }
 
   &--close {
-    right: em(5);
-    top: em(5);
-    width: em(40);
-    height: em(40);
+    right: 0.27778em;
+    top: 0.27778em;
+    width: 2.22222rem;
+    height: 2.22222rem;
 
     & svg {
       transform: scale(1.4);
@@ -295,11 +293,11 @@
 .tobii__counter {
   background-color: var(--counter-background, var(--tobii-counter-background));
   color: var(--counter-color, var(--tobii-counter-color));
-  font-size: em(20);
-  left: em(15);
+  font-size: 1.11111em;
+  left: 0.83333em;
   line-height: 1;
   position: absolute;
-  top: em(15);
+  top: 0.83333em;
   z-index: 1;
   opacity: 0.8;
 
@@ -315,18 +313,18 @@
 
 .tobii__loader {
   display: inline-block;
-  height: em(100);
+  height: 5.55556em;
   left: 50%;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: em(100);
+  width: 5.55556em;
 
 
   &::before {
     animation: spin 1s infinite;
     border-radius: 100%;
-    border: em(4) solid #949ba3;
+    border: 0.22222em solid #949ba3;
     border-top-color: var(--loader-color, var(--tobii-loader-color));
     bottom: 0;
     content: '';
