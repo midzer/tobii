@@ -148,7 +148,7 @@
   }
 
   & [data-type] {
-    max-height: var(--slide-max-height, var(--tobii-slide-max-height));
+    max-height: 100%;
     max-width: var(--slide-max-width, var(--tobii-slide-max-width));
     overflow: hidden;
     overflow-y: auto;
