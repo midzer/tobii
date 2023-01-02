@@ -20,26 +20,26 @@
   &__icon {
     align-items: center;
     background-color: var(--zoom-icon-background, var(--tobii-zoom-icon-background));
-    top: 0.44444em;
+    top: 0.5em;
     color: var(--zoom-icon-color, var(--tobii-zoom-icon-color));
     display: flex;
-    height: 1.77778em;
+    height: 2em;
     justify-content: center;
     line-height: 1;
     position: absolute;
-    right: 0.44444em;
-    width: 1.77778em;
+    right: 0.5em;
+    width: 2em;
 
 
     & svg {
       fill: none;
-      height: 1.33333em;
+      height: 1.5em;
       pointer-events: none;
       stroke-linecap: round;
       stroke-linejoin: round;
       stroke-width: 1.5;
       stroke: currentColor;
-      width: 1.33333em;
+      width: 1.5em;
     }
   }
 }
@@ -98,7 +98,7 @@
   left: 0;
   position: absolute;
   right: 0;
-  top: 2.77778em;
+  top: 3.125em;
   will-change: transform;
 
 
@@ -177,7 +177,7 @@
       background-color: var(--caption-background, var(--tobii-caption-background));
       bottom: 0;
       color: var(--caption-color, var(--tobii-caption-color));
-      padding: 0.22222em 0.44444em;
+      padding: 0.25em 0.5em;
       position: absolute;
       white-space: pre-wrap;
       width: 100%;
@@ -217,7 +217,7 @@
 .tobii__btn {
   appearance: none;
   background-color: var(--button-background, var(--tobii-button-background));
-  border: 0.05556em solid transparent;
+  border: 1px solid transparent;
   color: var(--button-color, var(--tobii-button-color));
   cursor: pointer;
   font: inherit;
@@ -240,13 +240,13 @@
 
   & svg {
     fill: none;
-    height: 3.33333em;
+    height: 3.75em;
     pointer-events: none;
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 1;
     stroke: currentColor;
-    width: 3.33333em;
+    width: 3.75em;
   }
 
   &--previous,
@@ -254,22 +254,22 @@
     top: 50%;
     transform: translateY(-50%);
     background-color: var(--button-navigation-background, var(--tobii-button-navigation-background));
-    border-radius: 0.27778em;
+    border-radius: 5px;
   }
 
   &--previous {
-    left: 0.88889em;
+    left: 1em;
   }
 
   &--next {
-    right: 0.88889em;
+    right: 1em;
   }
 
   &--close {
-    right: 0.27778em;
-    top: 0.27778em;
-    width: 2.22222rem;
-    height: 2.22222rem;
+    right: 0.25em;
+    top: 0.25em;
+    width: 2.5rem;
+    height: 2.5rem;
 
     & svg {
       transform: scale(1.4);
@@ -293,11 +293,11 @@
 .tobii__counter {
   background-color: var(--counter-background, var(--tobii-counter-background));
   color: var(--counter-color, var(--tobii-counter-color));
-  font-size: 1.11111em;
-  left: 0.83333em;
+  font-size: 1.25em;
+  left: 0.875em;
   line-height: 1;
   position: absolute;
-  top: 0.83333em;
+  top: 0.875em;
   z-index: 1;
   opacity: 0.8;
 
@@ -313,18 +313,18 @@
 
 .tobii__loader {
   display: inline-block;
-  height: 5.55556em;
+  height: 6em;
   left: 50%;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 5.55556em;
+  width: 6em;
 
 
   &::before {
     animation: spin 1s infinite;
     border-radius: 100%;
-    border: 0.22222em solid #949ba3;
+    border: 2px solid #949ba3;
     border-top-color: var(--loader-color, var(--tobii-loader-color));
     bottom: 0;
     content: '';
