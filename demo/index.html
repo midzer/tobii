@@ -144,10 +144,17 @@
         Video
       </a>
 
+      <style>
+        .tobii__slide .tobii-group-inline_video{
+          /* set container to fit all space. Class above contains data group */
+          max-width:none;
+          padding: 0;
+        }
+      </style>
       <div style="display: none;">
-        <div style="margin:-10px -20px;background-color:black;" id="selector_video" data-group="iframe">
+        <div style="background-color:black;" id="selector_video" data-group="iframe">
 
-          <video width="640" height="352" controls>
+          <video width="1280" height="704" controls>
             <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
           </video>
         </div>

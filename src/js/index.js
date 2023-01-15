@@ -588,7 +588,7 @@ export default function Tobii (userOptions) {
     groups[activeGroup].sliderElements[index].classList.add('tobii__slide--is-active')
     groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'false')
 
-    model.onLoad(CONTAINER)
+    model.onLoad(CONTAINER, activeGroup)
   }
 
   /**

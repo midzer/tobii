@@ -25,7 +25,7 @@ class HtmlType {
     // Nothing
   }
 
-  onLoad (container) {
+  onLoad (container, group) {
     const VIDEO = container.querySelector('video')
 
     if (VIDEO) {
@@ -47,6 +47,8 @@ class HtmlType {
         audio.play()
       }
     }
+
+    container.classList.add('tobii-group-' + group)
   }
 
   onLeave (container) {
