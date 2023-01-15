@@ -39,6 +39,14 @@ class HtmlType {
         VIDEO.play()
       }
     }
+
+    const audio = container.querySelector('audio')
+    if (audio) {
+     if (this.userSettings.autoplayAudio) {
+        // Start playback (and loading if necessary)
+        audio.play()
+      }
+    }
   }
 
   onLeave (container) {
@@ -53,6 +61,15 @@ class HtmlType {
       // Backup currentTime (needed for revisit)
       if (VIDEO.readyState > 0) {
         VIDEO.setAttribute('data-time', VIDEO.currentTime)
+      }
+    }
+
+    const audio = container.querySelector('audio')
+
+    if (audio) {
+      if (!audio.paused) {
+        // Stop if is playing
+        audio.pause()
       }
     }
   }

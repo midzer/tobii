@@ -186,12 +186,14 @@
 
   & [data-type='html'] {
 
-
-
     & video {
       cursor: auto;
       max-height: var(--slide-max-height, var(--tobii-slide-max-height));
       max-width: var(--slide-max-width, var(--tobii-slide-max-width));
+    }
+
+    & audio {
+      max-width: 100%;
     }
   }
 

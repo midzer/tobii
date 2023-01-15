@@ -281,6 +281,7 @@ The following options are available:
 | draggable | bool | true | Use dragging and touch swiping. |
 | threshold | number | 100 | Touch and mouse dragging threshold (in px). |
 | autoplayVideo | bool | false | Videos will automatically start playing as soon as they can do so without stopping to finish loading the data. |
+| autoplayAudio | bool | false | Audio will automatically start playing. |
 
 ### Data attributes
 
