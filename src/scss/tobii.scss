@@ -23,12 +23,12 @@
     top: 0.5em;
     color: var(--zoom-icon-color, var(--tobii-zoom-icon-color));
     display: flex;
-    height: 2em;
     justify-content: center;
     line-height: 1;
     position: absolute;
     right: 0.5em;
-    width: 2em;
+    width: 1.78em;
+    height: 1.78em;
 
 
     & svg {
@@ -181,6 +181,7 @@
       position: absolute;
       white-space: pre-wrap;
       width: 100%;
+      font-size: 1.125em;
     }
   }
 
@@ -350,4 +351,5 @@
   background: #ffffff;
   padding: 10px 20px;
   max-width: 800px;
+  font-size: 1.125em;
 }
