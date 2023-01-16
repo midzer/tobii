@@ -19,14 +19,14 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "eslint": "^8.30.0",
+    "eslint": "^8.32.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-standard": "^5.0.0",
     "microbundle": "^0.15.1",
     "node-sass": "^7.0.3",
     "rimraf": "^3.0.2",
     "standard": "^17.0.0",
-    "stylelint": "^14.16.0"
+    "stylelint": "^14.16.1"
   },
   "browserslist": {
     "browser": [
