@@ -270,8 +270,9 @@
   &--close {
     right: 0.25em;
     top: 0.25em;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.5em;
+    height: 2.5em;
+    opacity: 0.75;
 
     & svg {
       transform: scale(1.4);
