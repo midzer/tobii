@@ -42,7 +42,7 @@ class HtmlType {
 
     const audio = container.querySelector('audio')
     if (audio) {
-     if (this.userSettings.autoplayAudio) {
+      if (this.userSettings.autoplayAudio) {
         // Start playback (and loading if necessary)
         audio.play()
       }
