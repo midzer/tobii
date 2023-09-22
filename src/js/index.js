@@ -521,7 +521,7 @@ export default function Tobii (userOptions) {
     unbindEvents()
 
     // Remove entry in browser history
-    if (window.history.state !== null) {
+    if (window.history.state) {
       if (window.history.state.tobii === 'close') {
         window.history.back()
       }
