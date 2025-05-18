@@ -53,14 +53,47 @@ class ImageType {
         captionContent = THUMBNAIL.getAttribute(this.userSettings.captionAttribute)
       }
 
-      if (this.userSettings.captionHTML) {
-        FIGCAPTION.innerHTML = captionContent
-      } else {
-        FIGCAPTION.textContent = captionContent
-      }
+      FIGCAPTION.id = `tobii-figcaption-${this.figcaptionId}`
 
       if (captionContent) {
-        FIGCAPTION.id = `tobii-figcaption-${this.figcaptionId}`
+        const SPAN = document.createElement('span')
+        if (this.userSettings.captionHTML) {
+          SPAN.innerHTML = captionContent
+        } else {
+          SPAN.textContent = captionContent
+        }
+        FIGCAPTION.appendChild(SPAN)
+
+        if (this.userSettings.captionToggle) {
+          const BUTTON = document.createElement('button')
+          BUTTON.className = 'caption-toggle'
+          BUTTON.title = this.userSettings.captionToggleLabel[0]
+          BUTTON.innerText = this.userSettings.captionToggleLabel[0]
+          BUTTON.setAttribute('aria-controls', FIGCAPTION.id)
+          BUTTON.setAttribute('aria-expanded', true)
+          BUTTON.addEventListener('pointerdown', (event) => {
+            event.preventDefault()
+            event.stopPropagation()
+          })
+          BUTTON.addEventListener('pointerup', (event) => {
+            event.preventDefault()
+            event.stopPropagation()
+          })
+          BUTTON.addEventListener('click', (event) => {
+            event.preventDefault()
+            event.stopPropagation()
+            const isExpanded = BUTTON.getAttribute('aria-expanded') === 'true'
+            const buttonLabel = isExpanded
+              ? this.userSettings.captionToggleLabel[1]
+              : this.userSettings.captionToggleLabel[0]
+            BUTTON.title = buttonLabel
+            BUTTON.innerText = buttonLabel
+            BUTTON.setAttribute('aria-expanded', !isExpanded)
+            SPAN.setAttribute('aria-hidden', isExpanded)
+          })
+          FIGCAPTION.appendChild(BUTTON)
+        }
+
         FIGURE.appendChild(FIGCAPTION)
 
         IMAGE.setAttribute('aria-labelledby', FIGCAPTION.id)
