@@ -191,8 +191,14 @@ body.tobii-is-open {
         color: transparent;
         background-color: transparent;
 
-        & > button.caption-toggle::after {
-          opacity: 1;
+        & > button.caption-toggle {
+          &::after {
+            opacity: 0.6;
+          }
+
+          &:hover::after {
+            opacity: 1;
+          }
         }
       }
 
