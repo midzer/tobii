@@ -1,10 +1,16 @@
 # Changelog
 
+## v2.8.0
+
+### New
+
+- Toggle caption display on click/touch
+
 ## v2.7.3
 
 ### Fixed
 
-- fix unclickable top region for docClose
+- Fix unclickable top region for docClose
 
 ## v2.7.2
 
