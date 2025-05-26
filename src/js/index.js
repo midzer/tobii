@@ -94,7 +94,7 @@ export default function Tobii (userOptions) {
       captionAttribute: 'alt',
       captionText: null,
       captionHTML: false,
-      captionToggle: false,
+      captionToggle: true,
       captionToggleLabel: [
         'Hide caption',
         'Show caption'

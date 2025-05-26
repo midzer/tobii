@@ -267,7 +267,7 @@ The following options are available:
 | captionAttribute | string | "alt" | Get the caption from given attribute. |
 | captionText | function | null | Custom callback which returns the caption text for the current element. The first argument of the callback is the element. If set, `captionsSelector` and `captionAttribute` are ignored. |
 | captionHTML | bool | false | Allow HTML captions. |
-| captionToggle | bool | false | Allows users to hide or show the caption by clicking or tapping on it. |
+| captionToggle | bool | true | Allows users to hide or show the caption by clicking or tapping on it. |
 | captionToggleLabel | string | ["Hide caption", "Show caption"] | Labels for the caption display toggle button. |
 | nav | bool, "auto" | "auto" | Display navigation buttons. "auto" hides buttons on touch-enabled devices. |
 | navText | string | ["inline svg", "inline svg"] | Text or HTML for the navigation buttons. |
