@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.8.1
+
+### Fixed
+
+- Allow multiple lightbox instances
+
 ## v2.8.0
 
 ### New
