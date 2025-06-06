@@ -25,9 +25,9 @@
     "eslint-config-standard": "17.1.0",
     "microbundle": "^0.15.1",
     "rimraf": "4.4.1",
-    "sass": "^1.89.0",
+    "sass": "^1.89.1",
     "standard": "^17.1.2",
-    "stylelint": "^16.19.1"
+    "stylelint": "^16.20.0"
   },
   "overrides": {
     "eslint": "9.15.0"
