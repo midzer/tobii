@@ -99,7 +99,7 @@ class ImageType {
         IMAGE.setAttribute('aria-labelledby', FIGCAPTION.id)
 
         // Add aria-label to the figure containing the caption content
-        FIGURE.setAttribute('aria-label', FIGCAPTION.textContent)
+        FIGURE.setAttribute('aria-label', SPAN.textContent)
 
         ++this.figcaptionId
       }
