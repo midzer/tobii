@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.8.2
+
+### Fixed
+
+- fix aria-label of figure
+- tweak caption-toggle CSS
+
 ## v2.8.1
 
 ### Fixed
