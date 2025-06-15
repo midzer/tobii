@@ -3,7 +3,7 @@ html {
 }
 
 h1 {
-  margin-top: 0em;
+  margin-top: 0;
   text-decoration: underline;
   text-align: center;
 }
@@ -14,9 +14,9 @@ body {
   padding: 1em 1em;
   border-radius: 8px;
   background-color: #bfbfbf;
-  font-family: Tahoma, Verdana, Arial;
-  font-size: 14px;
-  line-height: 1.3;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
   box-shadow: #555 0 1px 3px 0, #555 0 3px 8px 3px;
 }
 
@@ -38,8 +38,4 @@ img {
   height: auto;
   border: 1px solid #555;
   box-shadow: 1px 2px 2px 0 #555;
-}
-
-.bold {
-  font-weight: bold;
 }
