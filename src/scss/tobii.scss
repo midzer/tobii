@@ -218,14 +218,13 @@ body.tobii-is-open {
 
         &::after {
           position: absolute;
-          right: 0.375em;
-          bottom: 0.375em;
+          right: 0.25em;
+          bottom: 0.25em;
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 1.5em;
-          height: 1.5em;
-          padding: 0.25em;
+          width: 1.75em;
+          height: 1.75em;
           content: 'ⓘ';
           transition: opacity 0.3s ease-in-out;
           pointer-events: none;
@@ -236,7 +235,8 @@ body.tobii-is-open {
             --caption-background,
             var(--tobii-caption-background)
           );
-          font-size: 1.25em;
+          font-size: medium;
+          font-weight: bold;
           line-height: 1;
         }
       }
