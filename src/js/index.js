@@ -1073,7 +1073,7 @@ export default function Tobii (userOptions) {
     const deltaY = DRAG.startY - y
     const distanceX = Math.abs(deltaX)
     const distanceY = Math.abs(deltaY)
-    if (distanceX || distanceY) {
+    if (distanceX > 8 || distanceY > 8) {
       if (!isZoomed()) {
         // Evaluate drag
         if (deltaX < 0 && distanceX > userSettings.threshold && groups[activeGroup].currentIndex > 0) {
@@ -1089,8 +1089,8 @@ export default function Tobii (userOptions) {
       }
     } else {
       // Evaluate tap
-      const currentTime = new Date().getTime()
-      const tapLength = currentTime - lastTapTime
+      const now = Date.now();
+      const tapLength = now - lastTapTime
       if (tapLength < DOUBLE_TAP_TIME && tapLength > 100) {
         // Double click
         event.preventDefault()
@@ -1101,7 +1101,7 @@ export default function Tobii (userOptions) {
           zoomPan(MAX_SCALE / 2, x, y, 0, 0)
         }
       } else {
-        lastTapTime = currentTime
+        lastTapTime = now
         if (isTouchDevice()) {
           // Delayed tap on mobile
           window.setTimeout(() => {
