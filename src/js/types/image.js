@@ -8,7 +8,6 @@ class ImageType {
     this.userSettings = userSettings
 
     const FIGURE = document.createElement('figure')
-    const FIGCAPTION = document.createElement('figcaption')
     const IMAGE = document.createElement('img')
     const THUMBNAIL = el.querySelector('img')
     const LOADING_INDICATOR = document.createElement('div')
@@ -26,7 +25,6 @@ class ImageType {
       IMAGE.alt = THUMBNAIL.alt || ''
     }
 
-    IMAGE.setAttribute('src', '')
     IMAGE.setAttribute('data-src', el.href)
 
     if (el.hasAttribute('data-srcset')) {
@@ -41,68 +39,63 @@ class ImageType {
     FIGURE.appendChild(IMAGE)
 
     // Create figcaption
-    if (this.userSettings.captions) {
-      let captionContent
-      if (typeof this.userSettings.captionText === 'function') {
-        captionContent = this.userSettings.captionText(el)
-      } else if (this.userSettings.captionsSelector === 'self' &&
-        el.getAttribute(this.userSettings.captionAttribute)) {
-        captionContent = el.getAttribute(this.userSettings.captionAttribute)
-      } else if (this.userSettings.captionsSelector === 'img' && THUMBNAIL &&
-        THUMBNAIL.getAttribute(this.userSettings.captionAttribute)) {
-        captionContent = THUMBNAIL.getAttribute(this.userSettings.captionAttribute)
-      }
-
+    let captionContent
+    if (typeof this.userSettings.captionText === 'function') {
+      captionContent = this.userSettings.captionText(el)
+    } else if (this.userSettings.captionsSelector === 'self' &&
+      el.getAttribute(this.userSettings.captionAttribute)) {
+      captionContent = el.getAttribute(this.userSettings.captionAttribute)
+    } else if (this.userSettings.captionsSelector === 'img' && THUMBNAIL &&
+      THUMBNAIL.getAttribute(this.userSettings.captionAttribute)) {
+      captionContent = THUMBNAIL.getAttribute(this.userSettings.captionAttribute)
+    }
+    if (this.userSettings.captions && captionContent) {
+      const FIGCAPTION = document.createElement('figcaption')
       FIGCAPTION.id = `tobii-figcaption-${this.figcaptionId}`
 
-      if (captionContent) {
-        const SPAN = document.createElement('span')
-        if (this.userSettings.captionHTML) {
-          SPAN.innerHTML = captionContent
-        } else {
-          SPAN.textContent = captionContent
-        }
-        FIGCAPTION.appendChild(SPAN)
-
-        if (this.userSettings.captionToggle) {
-          const BUTTON = document.createElement('button')
-          BUTTON.className = 'caption-toggle'
-          BUTTON.title = this.userSettings.captionToggleLabel[0]
-          BUTTON.innerText = this.userSettings.captionToggleLabel[0]
-          BUTTON.setAttribute('aria-controls', FIGCAPTION.id)
-          BUTTON.setAttribute('aria-expanded', true)
-          BUTTON.addEventListener('pointerdown', (event) => {
-            event.preventDefault()
-            event.stopPropagation()
-          })
-          BUTTON.addEventListener('pointerup', (event) => {
-            event.preventDefault()
-            event.stopPropagation()
-          })
-          BUTTON.addEventListener('click', (event) => {
-            event.preventDefault()
-            event.stopPropagation()
-            const isExpanded = BUTTON.getAttribute('aria-expanded') === 'true'
-            const buttonLabel = isExpanded
-              ? this.userSettings.captionToggleLabel[1]
-              : this.userSettings.captionToggleLabel[0]
-            BUTTON.title = buttonLabel
-            BUTTON.innerText = buttonLabel
-            BUTTON.setAttribute('aria-expanded', !isExpanded)
-            SPAN.setAttribute('aria-hidden', isExpanded)
-          })
-          FIGCAPTION.appendChild(BUTTON)
-        }
-
-        FIGURE.appendChild(FIGCAPTION)
-
-        IMAGE.setAttribute('aria-labelledby', FIGCAPTION.id)
-
-        // Add aria-label to the figure containing the caption content
-        FIGURE.setAttribute('aria-label', SPAN.textContent)
-
-        ++this.figcaptionId
+      const SPAN = document.createElement('span')
+      if (this.userSettings.captionHTML) {
+        SPAN.innerHTML = captionContent
+      } else {
+        SPAN.textContent = captionContent
       }
+      FIGCAPTION.appendChild(SPAN)
+
+      if (this.userSettings.captionToggle) {
+        const BUTTON = document.createElement('button')
+        BUTTON.className = 'caption-toggle'
+        BUTTON.textContent = BUTTON.title = this.userSettings.captionToggleLabel[0]
+        BUTTON.setAttribute('aria-controls', FIGCAPTION.id)
+        BUTTON.setAttribute('aria-expanded', true)
+
+        const preventAndStopEvent = (event) => {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        BUTTON.addEventListener('pointerdown', (event) => preventAndStopEvent(event))
+        BUTTON.addEventListener('pointerup', (event) => preventAndStopEvent(event))
+        BUTTON.addEventListener('click', (event) => {
+          preventAndStopEvent(event)
+          const isExpanded = BUTTON.getAttribute('aria-expanded') === 'true'
+          const buttonLabel = isExpanded
+            ? this.userSettings.captionToggleLabel[1]
+            : this.userSettings.captionToggleLabel[0]
+          BUTTON.textContent = BUTTON.title = buttonLabel
+          BUTTON.setAttribute('aria-expanded', !isExpanded)
+          SPAN.setAttribute('aria-hidden', isExpanded)
+        })
+
+        FIGCAPTION.appendChild(BUTTON)
+      }
+
+      FIGURE.appendChild(FIGCAPTION)
+
+      IMAGE.setAttribute('aria-labelledby', FIGCAPTION.id)
+
+      // Add aria-label to the figure containing the caption content
+      FIGURE.setAttribute('aria-label', SPAN.textContent)
+
+      ++this.figcaptionId
     }
 
     // Add figure to container
@@ -136,15 +129,13 @@ class ImageType {
     const FIGURE = container.querySelector('figure')
     const LOADING_INDICATOR = container.querySelector('.tobii__loader')
 
-    IMAGE.addEventListener('load', () => {
+    const handleImageEvent = () => {
       container.removeChild(LOADING_INDICATOR)
       FIGURE.style.opacity = '1'
-    })
+    }
 
-    IMAGE.addEventListener('error', () => {
-      container.removeChild(LOADING_INDICATOR)
-      FIGURE.style.opacity = '1'
-    })
+    IMAGE.addEventListener('load', handleImageEvent)
+    IMAGE.addEventListener('error', handleImageEvent)
 
     if (IMAGE.hasAttribute('data-srcset')) {
       IMAGE.setAttribute('srcset', IMAGE.getAttribute('data-srcset'))
