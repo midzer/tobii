@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.8.3
+
+### Fixed
+
+- fix double click zoom and delayed tap on Android by introducing a threshold
+
 ## v2.8.2
 
 ### Fixed
