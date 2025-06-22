@@ -27,7 +27,7 @@
     "rimraf": "4.4.1",
     "sass": "^1.89.2",
     "standard": "^17.1.2",
-    "stylelint": "^16.20.0"
+    "stylelint": "^16.21.0"
   },
   "overrides": {
     "eslint": "9.15.0"
