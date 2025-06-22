@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.8.4
+
+### Fixed
+
+- increase focus delay for figure due transition bug on low-end Android devices
+
 ## v2.8.3
 
 ### Fixed
