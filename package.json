@@ -5,7 +5,7 @@
   "main": "./dist/tobii.js",
   "module": "./dist/tobii.module.js",
   "umd:main": "./dist/tobii.umd.js",
-  "unpkg": "./dist/tobii.min.js",
+  "unpkg": "./dist/tobii.umd.js",
   "source": "./src/js/index.js",
   "exports": {
     ".": {
