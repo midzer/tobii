@@ -277,8 +277,6 @@ export default function Tobii (userOptions) {
       // Bind click event handler
       el.addEventListener('click', triggerTobii)
 
-      const model = getModel(el)
-
       // Create slide
       const SLIDER_ELEMENT = document.createElement('div')
       const SLIDER_ELEMENT_CONTENT = document.createElement('div')
@@ -291,6 +289,7 @@ export default function Tobii (userOptions) {
       SLIDER_ELEMENT.setAttribute('aria-hidden', 'true')
 
       // Create type elements
+      const model = getModel(el)
       model.init(el, SLIDER_ELEMENT_CONTENT, userSettings)
 
       // Add slide content container to slider element
