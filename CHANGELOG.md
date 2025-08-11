@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.8.5
+
+### Fixed
+
+- zoom only for zoomable elements
+
 ## v2.8.4
 
 ### Fixed
