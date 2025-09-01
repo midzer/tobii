@@ -1111,10 +1111,6 @@ export default function Tobii (userOptions) {
    *
    */
   const wheelHandler = (event) => {
-    if (!isZoomableElement(event.target)) {
-      return
-    }
-
     const deltaScale = Math.sign(event.deltaY) > 0 ? -1 : 1
     if (!isZoomed() && !deltaScale) return
     event.preventDefault()
@@ -1171,7 +1167,7 @@ export default function Tobii (userOptions) {
   }
 
   const zoomPan = (el, newScale, x, y, deltaX, deltaY) => {
-    if (!isZoomableElement(el)) return
+    if (el.tagName !== 'IMG') return
 
     const { left, top } = el.getBoundingClientRect()
     const originX = x - left
@@ -1369,14 +1365,6 @@ export default function Tobii (userOptions) {
   const isIgnoreElement = (el) => {
     return ['TEXTAREA', 'OPTION', 'INPUT', 'SELECT'].indexOf(el.tagName) !== -1 || el === prevButton ||
       el === nextButton || el === closeButton
-  }
-
-  /**
-   * Checks whether an element is zoomable
-   *
-   */
-  const isZoomableElement = (el) => {
-    return el.tagName === 'IMG'
   }
 
   /**
