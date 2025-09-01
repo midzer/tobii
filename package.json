@@ -35,8 +35,7 @@
   "browserslist": {
     "browser": [
       "last 2 versions",
-      "not <= 1%",
-      "IE >= 11"
+      "not <= 1%"
     ],
     "main": [
       "last 2 versions",

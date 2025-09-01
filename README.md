@@ -67,7 +67,7 @@ CSS: `dist/tobii.min.css`
 
 JavaScript:
 
-* `dist/tobii.min.js`: IIFE build for maximum browser support, including IE 11
+* `dist/tobii.min.js`: IIFE build for maximum browser support
 * `dist/tobii.modern.js`: Build specially designed to work in all modern browsers
 * `dist/tobii.module.js`: ESM build
 * `dist/tobii.umd.js`: UMD build
@@ -361,7 +361,6 @@ Tobii supports the following browser (all the latest versions):
 
 - Chrome
 - Firefox
-- Internet Explorer 11
 - Edge
 - Safari
 

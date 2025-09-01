@@ -890,14 +890,12 @@ export default function Tobii (userOptions) {
   /**
    * Keydown event handler
    *
-   * @TODO: Remove the deprecated event.keyCode when Edge support event.code and we drop f*cking IE
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
    */
   const keydownHandler = (event) => {
     const FOCUSABLE_CHILDREN = getFocusableChildren()
     const FOCUSED_ITEM_INDEX = FOCUSABLE_CHILDREN.indexOf(document.activeElement)
 
-    if (event.keyCode === 9 || event.code === 'Tab') {
+    if (event.code === 'Tab') {
       // If the SHIFT key is being pressed while tabbing (moving backwards) and
       // the currently focused item is the first one, move the focus to the last
       // focusable item from the slide
@@ -911,15 +909,15 @@ export default function Tobii (userOptions) {
         FOCUSABLE_CHILDREN[0].focus()
         event.preventDefault()
       }
-    } else if (event.keyCode === 27 || event.code === 'Escape') {
+    } else if (event.code === 'Escape') {
       // `ESC` Key: Close Tobii
       event.preventDefault()
       close()
-    } else if (event.keyCode === 37 || event.code === 'ArrowLeft') {
+    } else if (event.code === 'ArrowLeft') {
       // `PREV` Key: Show the previous slide
       event.preventDefault()
       previous()
-    } else if (event.keyCode === 39 || event.code === 'ArrowRight') {
+    } else if (event.code === 'ArrowRight') {
       // `NEXT` Key: Show the next slide
       event.preventDefault()
       next()
