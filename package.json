@@ -46,6 +46,7 @@
     "build": "npm run distclean && npm run build:main && npm run build:browser",
     "build:main": "cross-env BROWSERSLIST_ENV=main microbundle build --raw --no-sourcemap --name Tobii",
     "build:browser": "cross-env BROWSERSLIST_ENV=browser microbundle build --raw -f iife src/js/browser.js -o dist/tobii.min.js --no-sourcemap --name Tobii",
+    "postbuild:browser": "node add-banner.js",
     "distclean": "rimraf dist",
     "clean": "rimraf dist && rimraf node_modules",
     "dev": "microbundle watch --raw --format cjs",

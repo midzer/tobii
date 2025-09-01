@@ -67,7 +67,7 @@ CSS: `dist/tobii.min.css`
 
 JavaScript:
 
-* `dist/tobii.min.js`: IIFE build for maximum browser support
+* `dist/tobii.min.js`: minified IIFE build
 * `dist/tobii.modern.js`: Build specially designed to work in all modern browsers
 * `dist/tobii.module.js`: ESM build
 * `dist/tobii.umd.js`: UMD build
