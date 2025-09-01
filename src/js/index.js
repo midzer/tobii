@@ -373,7 +373,7 @@ export default function Tobii (userOptions) {
     lightbox.setAttribute('aria-label', userSettings.dialogTitle)
     lightbox.classList.add('tobii')
 
-    // Adc theme class
+    // Add theme class
     lightbox.classList.add(userSettings.theme)
 
     // Create the previous button
