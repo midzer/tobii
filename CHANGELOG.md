@@ -1,5 +1,23 @@
 # Changelog
 
+## v3.0.0
+
+### Breaking Changes
+
+- remove legacy prefixes
+- zoom icon default to false
+- remove autoplay settings, Media elements like YouTube `<video>` and `<audio>`, just autoplay
+- drop IE11 support
+- do not compress non-IIFE builds
+
+### Documentation
+
+- add banner to minified IIFE build
+
+### Chore
+
+- cleanup unused settings
+
 ## v2.8.5
 
 ### Fixed
