@@ -19,9 +19,9 @@
 
   &__icon {
     align-items: center;
-    background-color: var(--zoom-icon-background, var(--tobii-zoom-icon-background));
+    background-color: var(--tobii-zoom-icon-background);
     top: 0.5em;
-    color: var(--zoom-icon-color, var(--tobii-zoom-icon-color));
+    color: var(--tobii-zoom-icon-color);
     display: flex;
     justify-content: center;
     line-height: 1;
@@ -62,18 +62,18 @@ body.tobii-is-open {
  */
 
 .tobii {
-  background-color: var(--lightbox-background, var(--tobii-lightbox-background));
+  background-color: var(--tobii-lightbox-background);
   bottom: 0;
   box-sizing: border-box;
   contain: strict;
-  font-size: var(--base-font-size, var(--tobii-base-font-size));
+  font-size: var(--tobii-base-font-size);
   left: 0;
   line-height: 1.5;
   overflow: hidden;
   position: fixed;
   right: 0;
   top: 0;
-  z-index: var(--lightbox-z-index, var(--tobii-lightbox-z-index));
+  z-index: var(--tobii-lightbox-z-index);
 
 
   &[aria-hidden='true'] {
@@ -109,9 +109,9 @@ body.tobii-is-open {
   @media screen and (prefers-reduced-motion: no-preference) {
 
     &--animate:not(&--is-dragging) {
-      transition-duration: var(--transition-duration, var(--tobii-transition-duration));
+      transition-duration: var(--tobii-transition-duration);
       transition-property: transform;
-      transition-timing-function: var(--transition-timing-function, var(--tobii-transition-timing-function));
+      transition-timing-function: var(--tobii-transition-timing-function);
     }
   }
 
@@ -145,15 +145,15 @@ body.tobii-is-open {
     visibility: hidden;
 
     @media screen and (prefers-reduced-motion: no-preference) {
-      transition-duration: var(--transition-duration, var(--tobii-transition-duration));
+      transition-duration: var(--tobii-transition-duration);
       transition-property: visibility;
-      transition-timing-function: var(--timing-function, var(--tobii-transition-timing-function));
+      transition-timing-function: var(--tobii-transition-timing-function);
     }
   }
 
   & [data-type] {
     max-height: 100%;
-    max-width: var(--slide-max-width, var(--tobii-slide-max-width));
+    max-width: var(--tobii-slide-max-width);
     overflow: hidden;
     overscroll-behavior: contain;
   }
@@ -171,15 +171,15 @@ body.tobii-is-open {
     & > img {
       display: block;
       height: auto;
-      max-height: var(--slide-max-height, var(--tobii-slide-max-height));
-      max-width: var(--slide-max-width, var(--tobii-slide-max-width));
+      max-height: var(--tobii-slide-max-height);
+      max-width: var(--tobii-slide-max-width);
       width: auto;
     }
 
     & > figcaption {
-      background-color: var(--caption-background, var(--tobii-caption-background));
+      background-color: var(--tobii-caption-background);
       bottom: 0;
-      color: var(--caption-color, var(--tobii-caption-color));
+      color: var(--tobii-caption-color);
       padding: 0.25em 0.5em;
       position: absolute;
       white-space: pre-wrap;
@@ -229,12 +229,9 @@ body.tobii-is-open {
           transition: opacity 0.3s ease-in-out;
           pointer-events: none;
           opacity: 0;
-          color: var(--caption-color, var(--tobii-caption-color));
+          color: var(--tobii-caption-color);
           border-radius: 50%;
-          background-color: var(
-            --caption-background,
-            var(--tobii-caption-background)
-          );
+          background-color: var(--tobii-caption-background);
           font-size: medium;
           font-weight: bold;
           line-height: 1;
@@ -248,8 +245,8 @@ body.tobii-is-open {
 
     & video {
       cursor: auto;
-      max-height: var(--slide-max-height, var(--tobii-slide-max-height));
-      max-width: var(--slide-max-width, var(--tobii-slide-max-width));
+      max-height: var(--tobii-slide-max-height);
+      max-width: var(--tobii-slide-max-width);
     }
 
     & audio {
@@ -265,8 +262,8 @@ body.tobii-is-open {
 
 
     & iframe {
-      height: var(--slide-max-height, var(--tobii-slide-max-height));
-      width: var(--slide-max-width, var(--tobii-slide-max-width));
+      height: var(--tobii-slide-max-height);
+      width: var(--tobii-slide-max-width);
     }
   }
 }
@@ -278,9 +275,9 @@ body.tobii-is-open {
 
 .tobii__btn {
   appearance: none;
-  background-color: var(--button-background, var(--tobii-button-background));
+  background-color: var(--tobii-button-background);
   border: 1px solid transparent;
-  color: var(--button-color, var(--tobii-button-color));
+  color: var(--tobii-button-color);
   cursor: pointer;
   font: inherit;
   line-height: 1;
@@ -297,9 +294,9 @@ body.tobii-is-open {
   }
 
   @media screen and (prefers-reduced-motion: no-preference) {
-    transition-duration: var(--transition-duration, var(--tobii-transition-duration));
+    transition-duration: var(--tobii-transition-duration);
     transition-property: opacity, transform;
-    transition-timing-function: var(--transition-timing-function, var(--tobii-transition-timing-function));
+    transition-timing-function: var(--tobii-transition-timing-function);
     will-change: opacity, transform;
   }
 
@@ -319,7 +316,7 @@ body.tobii-is-open {
   &--next {
     top: 50%;
     transform: translateY(-50%);
-    background-color: var(--button-navigation-background, var(--tobii-button-navigation-background));
+    background-color: var(--tobii-button-navigation-background);
     border-radius: 5px;
   }
 
@@ -358,8 +355,8 @@ body.tobii-is-open {
  */
 
 .tobii__counter {
-  background-color: var(--counter-background, var(--tobii-counter-background));
-  color: var(--counter-color, var(--tobii-counter-color));
+  background-color: var(--tobii-counter-background);
+  color: var(--tobii-counter-color);
   font-size: 1.25em;
   left: 0.875em;
   line-height: 1;
@@ -396,7 +393,7 @@ body.tobii-is-open {
     animation: spin 1s infinite;
     border-radius: 100%;
     border: 2px solid #949ba3;
-    border-top-color: var(--loader-color, var(--tobii-loader-color));
+    border-top-color: var(--tobii-loader-color);
     bottom: 0;
     content: '';
     left: 0;
