@@ -279,7 +279,7 @@ The following options are available:
 | loadingIndicatorLabel | string | "Image loading" | ARIA label for screen readers. |
 | counter | bool | true | Display current image index. |
 | keyboard | bool | true | Allow keyboard navigation. |
-| zoom | bool | true | Display zoom icon. |
+| zoom | bool | false | Display zoom icon. |
 | zoomText | string | "inline svg" | Text or HTML for the zoom icon. |
 | docClose | bool | true | Click outside to close Tobii. |
 | swipeClose | bool | true | Swipe up to close Tobii. |
