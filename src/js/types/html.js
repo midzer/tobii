@@ -34,18 +34,14 @@ class HtmlType {
         VIDEO.currentTime = VIDEO.getAttribute('data-time')
       }
 
-      if (this.userSettings.autoplayVideo) {
-        // Start playback (and loading if necessary)
-        VIDEO.play()
-      }
+      // Start playback (and loading if necessary)
+      VIDEO.play()
     }
 
     const audio = container.querySelector('audio')
     if (audio) {
-      if (this.userSettings.autoplayAudio) {
-        // Start playback (and loading if necessary)
-        audio.play()
-      }
+      // Start playback (and loading if necessary)
+      audio.play()
     }
 
     container.classList.add('tobii-group-' + group)

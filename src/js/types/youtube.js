@@ -40,9 +40,7 @@ class YoutubeType {
   }
 
   onLoad (container) {
-    if (this.userSettings.autoplayVideo) {
-      this.PLAYER[container.getAttribute('data-player')].playVideo()
-    }
+    this.PLAYER[container.getAttribute('data-player')].playVideo()
   }
 
   onLeave (container) {

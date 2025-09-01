@@ -127,7 +127,6 @@ export default function Tobii (userOptions) {
       threshold: 100,
       rtl: false, // TODO
       loop: false, // TODO
-      autoplayVideo: false,
       modal: false,
       theme: 'tobii--theme-default'
     }
