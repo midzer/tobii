@@ -114,9 +114,6 @@ export default function Tobii (userOptions) {
       dialogTitle: 'Lightbox',
       loadingIndicatorLabel: 'Image loading',
       counter: true,
-      download: false, // TODO
-      downloadText: '', // TODO
-      downloadLabel: 'Download image', // TODO
       keyboard: true,
       zoom: false,
       zoomText: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="16 4 20 4 20 8" /><line x1="14" y1="10" x2="20" y2="4" /><polyline points="8 20 4 20 4 16" /><line x1="4" y1="20" x2="10" y2="14" /><polyline points="16 20 20 20 20 16" /><line x1="14" y1="14" x2="20" y2="20" /><polyline points="8 4 4 4 4 8" /><line x1="4" y1="4" x2="10" y2="10" /></svg>',
@@ -125,9 +122,6 @@ export default function Tobii (userOptions) {
       hideScrollbar: true,
       draggable: true,
       threshold: 100,
-      rtl: false, // TODO
-      loop: false, // TODO
-      modal: false,
       theme: 'tobii--theme-default'
     }
 
