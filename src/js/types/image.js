@@ -43,10 +43,10 @@ class ImageType {
     if (typeof this.userSettings.captionText === 'function') {
       captionContent = this.userSettings.captionText(el)
     } else if (this.userSettings.captionsSelector === 'self' &&
-      el.getAttribute(this.userSettings.captionAttribute)) {
+      el.hasAttribute(this.userSettings.captionAttribute)) {
       captionContent = el.getAttribute(this.userSettings.captionAttribute)
     } else if (this.userSettings.captionsSelector === 'img' && THUMBNAIL &&
-      THUMBNAIL.getAttribute(this.userSettings.captionAttribute)) {
+      THUMBNAIL.hasAttribute(this.userSettings.captionAttribute)) {
       captionContent = THUMBNAIL.getAttribute(this.userSettings.captionAttribute)
     }
     if (this.userSettings.captions && captionContent) {

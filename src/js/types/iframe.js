@@ -9,7 +9,7 @@ class IframeType {
     const HREF = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href')
 
     container.setAttribute('data-HREF', HREF)
-    if (el.getAttribute('data-allow')) {
+    if (el.hasAttribute('data-allow')) {
       container.setAttribute('data-allow', el.getAttribute('data-allow'))
     }
     if (el.hasAttribute('data-width')) {
@@ -59,11 +59,11 @@ class IframeType {
         IFRAME.setAttribute('allow', container.getAttribute('data-allow'))
       }
 
-      if (container.getAttribute('data-width')) {
+      if (container.hasAttribute('data-width')) {
         IFRAME.style.maxWidth = `${container.getAttribute('data-width')}`
       }
 
-      if (container.getAttribute('data-height')) {
+      if (container.hasAttribute('data-height')) {
         IFRAME.style.maxHeight = `${container.getAttribute('data-height')}`
       }
 
