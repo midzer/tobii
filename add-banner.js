@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import pkg from './package.json' with { type: 'json' };
 
-const pkg = require(process.env.PWD +'/package.json');
 const banner = `/*!
  * ${pkg.name} ${pkg.version}
  * Licensed under the ${pkg.license} license.
