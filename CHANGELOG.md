@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.1.0
+
+### New
+
+- empty or false `selector` option does only init Tobii (to `add()` elements later) 
+
+### Fixed
+
+- do not clone html-type target
+
 ## v3.0.0
 
 ### Breaking Changes
