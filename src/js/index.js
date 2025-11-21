@@ -181,6 +181,9 @@ export default function Tobii (userOptions) {
     // Append to body
     document.body.appendChild(lightbox)
 
+    // Init only
+    if (!userSettings.selector) return
+
     // Get a list of all elements within the document
     const LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(userSettings.selector)
 
@@ -188,29 +191,7 @@ export default function Tobii (userOptions) {
       throw new Error(`Ups, I can't find the selector ${userSettings.selector} on this website.`)
     }
 
-    // Execute a few things once per element
-    const uniqueMap = []
-    LIGHTBOX_TRIGGER_ELS.forEach((lightboxTriggerEl) => {
-      const group = lightboxTriggerEl.hasAttribute('data-group') ? lightboxTriggerEl.getAttribute('data-group') : 'default'
-      let uid = lightboxTriggerEl.href
-      if (lightboxTriggerEl.hasAttribute('data-target')) {
-        uid = lightboxTriggerEl.getAttribute('data-target')
-      }
-      uid += '__' + group
-
-      if (typeof uniqueMap[uid] !== 'undefined') {
-        // duplicate - skip, but still open lightbox on click
-        lightboxTriggerEl.addEventListener('click', (event) => {
-          selectGroup(group)
-          open()
-          event.preventDefault()
-        })
-      } else {
-        // new element
-        uniqueMap[uid] = 1
-        checkDependencies(lightboxTriggerEl)
-      }
-    })
+    LIGHTBOX_TRIGGER_ELS.forEach(el => checkDependencies(el))
   }
 
   /**

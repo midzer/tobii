@@ -261,7 +261,7 @@ The following options are available:
 
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| selector | string | ".lightbox" | All elements with this class triggers Tobii. |
+| selector | string | ".lightbox" | All elements with this class trigger Tobii. Pass `""` or `false` to init Tobii only (and `add()` later) |
 | captions | bool | true | Display captions, if available. |
 | captionsSelector | "self", "img" | "img" | Set the element where the caption is. Set it to "self" for the `a` tag itself. |
 | captionAttribute | string | "alt" | Get the caption from given attribute. |
