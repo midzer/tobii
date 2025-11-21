@@ -138,10 +138,48 @@ export default function Tobii (userOptions) {
     // Merge user options into defaults
     userSettings = mergeOptions(userOptions)
 
-    // Check if the lightbox already exists
-    if (!lightbox) {
-      createLightbox()
-    }
+    // Create the lightbox container
+    lightbox = document.createElement('div')
+    lightbox.setAttribute('role', 'dialog')
+    lightbox.setAttribute('aria-hidden', 'true')
+    lightbox.setAttribute('aria-modal', 'true')
+    lightbox.setAttribute('aria-label', userSettings.dialogTitle)
+    lightbox.classList.add('tobii')
+
+    // Add theme class
+    lightbox.classList.add(userSettings.theme)
+
+    // Create the previous button
+    prevButton = document.createElement('button')
+    prevButton.className = 'tobii__btn tobii__btn--previous'
+    prevButton.setAttribute('type', 'button')
+    prevButton.setAttribute('aria-label', userSettings.navLabel[0])
+    prevButton.innerHTML = userSettings.navText[0]
+    lightbox.appendChild(prevButton)
+
+    // Create the next button
+    nextButton = document.createElement('button')
+    nextButton.className = 'tobii__btn tobii__btn--next'
+    nextButton.setAttribute('type', 'button')
+    nextButton.setAttribute('aria-label', userSettings.navLabel[1])
+    nextButton.innerHTML = userSettings.navText[1]
+    lightbox.appendChild(nextButton)
+
+    // Create the close button
+    closeButton = document.createElement('button')
+    closeButton.className = 'tobii__btn tobii__btn--close'
+    closeButton.setAttribute('type', 'button')
+    closeButton.setAttribute('aria-label', userSettings.closeLabel)
+    closeButton.innerHTML = userSettings.closeText
+    lightbox.appendChild(closeButton)
+
+    // Create the counter
+    counter = document.createElement('div')
+    counter.className = 'tobii__counter'
+    lightbox.appendChild(counter)
+
+    // Append to body
+    document.body.appendChild(lightbox)
 
     // Get a list of all elements within the document
     const LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(userSettings.selector)
@@ -358,54 +396,6 @@ export default function Tobii (userOptions) {
       // Remove slide
       SLIDE_EL.parentNode.removeChild(SLIDE_EL)
     }
-  }
-
-  /**
-   * Create the lightbox
-   *
-   */
-  const createLightbox = () => {
-    // Create the lightbox container
-    lightbox = document.createElement('div')
-    lightbox.setAttribute('role', 'dialog')
-    lightbox.setAttribute('aria-hidden', 'true')
-    lightbox.setAttribute('aria-modal', 'true')
-    lightbox.setAttribute('aria-label', userSettings.dialogTitle)
-    lightbox.classList.add('tobii')
-
-    // Add theme class
-    lightbox.classList.add(userSettings.theme)
-
-    // Create the previous button
-    prevButton = document.createElement('button')
-    prevButton.className = 'tobii__btn tobii__btn--previous'
-    prevButton.setAttribute('type', 'button')
-    prevButton.setAttribute('aria-label', userSettings.navLabel[0])
-    prevButton.innerHTML = userSettings.navText[0]
-    lightbox.appendChild(prevButton)
-
-    // Create the next button
-    nextButton = document.createElement('button')
-    nextButton.className = 'tobii__btn tobii__btn--next'
-    nextButton.setAttribute('type', 'button')
-    nextButton.setAttribute('aria-label', userSettings.navLabel[1])
-    nextButton.innerHTML = userSettings.navText[1]
-    lightbox.appendChild(nextButton)
-
-    // Create the close button
-    closeButton = document.createElement('button')
-    closeButton.className = 'tobii__btn tobii__btn--close'
-    closeButton.setAttribute('type', 'button')
-    closeButton.setAttribute('aria-label', userSettings.closeLabel)
-    closeButton.innerHTML = userSettings.closeText
-    lightbox.appendChild(closeButton)
-
-    // Create the counter
-    counter = document.createElement('div')
-    counter.className = 'tobii__counter'
-    lightbox.appendChild(counter)
-
-    document.body.appendChild(lightbox)
   }
 
   const getModel = (el) => {
