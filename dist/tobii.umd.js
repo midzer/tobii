@@ -41,9 +41,9 @@
       let captionContent;
       if (typeof this.userSettings.captionText === 'function') {
         captionContent = this.userSettings.captionText(el);
-      } else if (this.userSettings.captionsSelector === 'self' && el.getAttribute(this.userSettings.captionAttribute)) {
+      } else if (this.userSettings.captionsSelector === 'self' && el.hasAttribute(this.userSettings.captionAttribute)) {
         captionContent = el.getAttribute(this.userSettings.captionAttribute);
-      } else if (this.userSettings.captionsSelector === 'img' && THUMBNAIL && THUMBNAIL.getAttribute(this.userSettings.captionAttribute)) {
+      } else if (this.userSettings.captionsSelector === 'img' && THUMBNAIL && THUMBNAIL.hasAttribute(this.userSettings.captionAttribute)) {
         captionContent = THUMBNAIL.getAttribute(this.userSettings.captionAttribute);
       }
       if (this.userSettings.captions && captionContent) {
@@ -148,7 +148,7 @@
       this.userSettings = userSettings;
       const HREF = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href');
       container.setAttribute('data-HREF', HREF);
-      if (el.getAttribute('data-allow')) {
+      if (el.hasAttribute('data-allow')) {
         container.setAttribute('data-allow', el.getAttribute('data-allow'));
       }
       if (el.hasAttribute('data-width')) {
@@ -192,10 +192,10 @@
         } else if (container.hasAttribute('data-allow')) {
           IFRAME.setAttribute('allow', container.getAttribute('data-allow'));
         }
-        if (container.getAttribute('data-width')) {
+        if (container.hasAttribute('data-width')) {
           IFRAME.style.maxWidth = `${container.getAttribute('data-width')}`;
         }
-        if (container.getAttribute('data-height')) {
+        if (container.hasAttribute('data-height')) {
           IFRAME.style.maxHeight = `${container.getAttribute('data-height')}`;
         }
 
@@ -243,7 +243,7 @@
     init(el, container, userSettings) {
       this.userSettings = userSettings;
       const TARGET_SELECTOR = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href');
-      const TARGET = document.querySelector(TARGET_SELECTOR).cloneNode(true);
+      const TARGET = document.querySelector(TARGET_SELECTOR);
       if (!TARGET) {
         throw new Error(`Ups, I can't find the target ${TARGET_SELECTOR}.`);
       }
@@ -497,39 +497,58 @@
       // Merge user options into defaults
       userSettings = mergeOptions(userOptions);
 
-      // Check if the lightbox already exists
-      if (!lightbox) {
-        createLightbox();
-      }
+      // Create the lightbox container
+      lightbox = document.createElement('div');
+      lightbox.setAttribute('role', 'dialog');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightbox.setAttribute('aria-modal', 'true');
+      lightbox.setAttribute('aria-label', userSettings.dialogTitle);
+      lightbox.classList.add('tobii');
+
+      // Add theme class
+      lightbox.classList.add(userSettings.theme);
+
+      // Create the previous button
+      prevButton = document.createElement('button');
+      prevButton.className = 'tobii__btn tobii__btn--previous';
+      prevButton.setAttribute('type', 'button');
+      prevButton.setAttribute('aria-label', userSettings.navLabel[0]);
+      prevButton.innerHTML = userSettings.navText[0];
+      lightbox.appendChild(prevButton);
+
+      // Create the next button
+      nextButton = document.createElement('button');
+      nextButton.className = 'tobii__btn tobii__btn--next';
+      nextButton.setAttribute('type', 'button');
+      nextButton.setAttribute('aria-label', userSettings.navLabel[1]);
+      nextButton.innerHTML = userSettings.navText[1];
+      lightbox.appendChild(nextButton);
+
+      // Create the close button
+      closeButton = document.createElement('button');
+      closeButton.className = 'tobii__btn tobii__btn--close';
+      closeButton.setAttribute('type', 'button');
+      closeButton.setAttribute('aria-label', userSettings.closeLabel);
+      closeButton.innerHTML = userSettings.closeText;
+      lightbox.appendChild(closeButton);
+
+      // Create the counter
+      counter = document.createElement('div');
+      counter.className = 'tobii__counter';
+      lightbox.appendChild(counter);
+
+      // Append to body
+      document.body.appendChild(lightbox);
+
+      // Init only
+      if (!userSettings.selector) return;
 
       // Get a list of all elements within the document
       const LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(userSettings.selector);
       if (!LIGHTBOX_TRIGGER_ELS) {
         throw new Error(`Ups, I can't find the selector ${userSettings.selector} on this website.`);
       }
-
-      // Execute a few things once per element
-      const uniqueMap = [];
-      LIGHTBOX_TRIGGER_ELS.forEach(lightboxTriggerEl => {
-        const group = lightboxTriggerEl.hasAttribute('data-group') ? lightboxTriggerEl.getAttribute('data-group') : 'default';
-        let uid = lightboxTriggerEl.href;
-        if (lightboxTriggerEl.hasAttribute('data-target')) {
-          uid = lightboxTriggerEl.getAttribute('data-target');
-        }
-        uid += '__' + group;
-        if (typeof uniqueMap[uid] !== 'undefined') {
-          // duplicate - skip, but still open lightbox on click
-          lightboxTriggerEl.addEventListener('click', event => {
-            selectGroup(group);
-            open();
-            event.preventDefault();
-          });
-        } else {
-          // new element
-          uniqueMap[uid] = 1;
-          checkDependencies(lightboxTriggerEl);
-        }
-      });
+      LIGHTBOX_TRIGGER_ELS.forEach(el => checkDependencies(el));
     };
 
     /**
@@ -699,53 +718,6 @@
         // Remove slide
         SLIDE_EL.parentNode.removeChild(SLIDE_EL);
       }
-    };
-
-    /**
-     * Create the lightbox
-     *
-     */
-    const createLightbox = () => {
-      // Create the lightbox container
-      lightbox = document.createElement('div');
-      lightbox.setAttribute('role', 'dialog');
-      lightbox.setAttribute('aria-hidden', 'true');
-      lightbox.setAttribute('aria-modal', 'true');
-      lightbox.setAttribute('aria-label', userSettings.dialogTitle);
-      lightbox.classList.add('tobii');
-
-      // Add theme class
-      lightbox.classList.add(userSettings.theme);
-
-      // Create the previous button
-      prevButton = document.createElement('button');
-      prevButton.className = 'tobii__btn tobii__btn--previous';
-      prevButton.setAttribute('type', 'button');
-      prevButton.setAttribute('aria-label', userSettings.navLabel[0]);
-      prevButton.innerHTML = userSettings.navText[0];
-      lightbox.appendChild(prevButton);
-
-      // Create the next button
-      nextButton = document.createElement('button');
-      nextButton.className = 'tobii__btn tobii__btn--next';
-      nextButton.setAttribute('type', 'button');
-      nextButton.setAttribute('aria-label', userSettings.navLabel[1]);
-      nextButton.innerHTML = userSettings.navText[1];
-      lightbox.appendChild(nextButton);
-
-      // Create the close button
-      closeButton = document.createElement('button');
-      closeButton.className = 'tobii__btn tobii__btn--close';
-      closeButton.setAttribute('type', 'button');
-      closeButton.setAttribute('aria-label', userSettings.closeLabel);
-      closeButton.innerHTML = userSettings.closeText;
-      lightbox.appendChild(closeButton);
-
-      // Create the counter
-      counter = document.createElement('div');
-      counter.className = 'tobii__counter';
-      lightbox.appendChild(counter);
-      document.body.appendChild(lightbox);
     };
     const getModel = el => {
       const type = el.getAttribute('data-type');
