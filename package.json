@@ -24,7 +24,7 @@
     "neostandard": "^0.12.2",
     "rimraf": "4.4.1",
     "sass": "^1.94.2",
-    "stylelint": "^16.25.0"
+    "stylelint": "^16.26.0"
   },
   "browserslist": {
     "browser": [
