@@ -382,7 +382,7 @@ class YoutubeType {
  * Tobii
  *
  * @author midzer
- * @version 2.8.5
+ * @version 3.1.1
  * @url https://github.com/midzer/tobii
  *
  * MIT License
@@ -670,49 +670,45 @@ function Tobii(userOptions) {
     const GROUP_NAME = getGroupName(el);
 
     // Check if element exists
-    if (groups[GROUP_NAME].gallery.indexOf(el) === -1) {
+    const galleryIndex = groups[GROUP_NAME].gallery.indexOf(el);
+    if (galleryIndex === -1) {
       throw new Error(`Ups, I can't find a slide for the element ${el}.`);
-    } else {
-      const SLIDE_INDEX = groups[GROUP_NAME].gallery.indexOf(el);
-      const SLIDE_EL = groups[GROUP_NAME].sliderElements[SLIDE_INDEX];
-
-      // If the element to be removed is the currently visible slide
-      if (isOpen() && GROUP_NAME === activeGroup && SLIDE_INDEX === groups[GROUP_NAME].currentIndex) {
-        if (groups[GROUP_NAME].elementsLength === 1) {
-          close();
-          throw new Error('Ups, I\'ve closed. There are no slides more to show.');
-        } else {
-          // TODO If there is only one slide left, deactivate horizontal dragging/ swiping
-          // TODO Set new absolute position per slide
-
-          // If the first slide is displayed
-          if (groups[GROUP_NAME].currentIndex === 0) {
-            next();
-          } else {
-            previous();
-          }
-          updateConfig();
-          updateLightbox();
-        }
-      }
-      groups[GROUP_NAME].gallery.splice(groups[GROUP_NAME].gallery.indexOf(el));
-      groups[GROUP_NAME].sliderElements.splice(groups[GROUP_NAME].gallery.indexOf(el));
-      groups[GROUP_NAME].elementsLength--;
-      --groups[GROUP_NAME].x;
-
-      // Remove zoom icon if necessary
-      if (userSettings.zoom && el.querySelector('.tobii-zoom__icon')) {
-        const ZOOM_ICON = el.querySelector('.tobii-zoom__icon');
-        ZOOM_ICON.parentNode.classList.remove('tobii-zoom');
-        ZOOM_ICON.parentNode.removeChild(ZOOM_ICON);
-      }
-
-      // Unbind click event handler
-      el.removeEventListener('click', triggerTobii);
-
-      // Remove slide
-      SLIDE_EL.parentNode.removeChild(SLIDE_EL);
     }
+    const SLIDE_EL = groups[GROUP_NAME].sliderElements[galleryIndex];
+
+    // If the element to be removed is the currently visible slide
+    if (isOpen() && GROUP_NAME === activeGroup && galleryIndex === groups[GROUP_NAME].currentIndex) {
+      if (groups[GROUP_NAME].elementsLength === 1) {
+        close();
+        throw new Error('Ups, I\'ve closed. There are no slides more to show.');
+      } else {
+        // Navigate away before removal
+        if (groups[GROUP_NAME].currentIndex === 0) {
+          next();
+        } else {
+          previous();
+        }
+        updateConfig();
+        updateLightbox();
+      }
+    }
+    groups[GROUP_NAME].gallery.splice(galleryIndex, 1);
+    groups[GROUP_NAME].sliderElements.splice(galleryIndex, 1);
+    groups[GROUP_NAME].elementsLength--;
+    --groups[GROUP_NAME].x;
+
+    // Remove zoom icon if necessary
+    if (userSettings.zoom && el.querySelector('.tobii-zoom__icon')) {
+      const ZOOM_ICON = el.querySelector('.tobii-zoom__icon');
+      ZOOM_ICON.parentNode.classList.remove('tobii-zoom');
+      ZOOM_ICON.parentNode.removeChild(ZOOM_ICON);
+    }
+
+    // Unbind click event handler
+    el.removeEventListener('click', triggerTobii);
+
+    // Remove slide
+    SLIDE_EL.parentNode.removeChild(SLIDE_EL);
   };
   const getModel = el => {
     const type = el.getAttribute('data-type');
@@ -1511,27 +1507,11 @@ function Tobii(userOptions) {
    *
    */
   const reset = () => {
-    if (isOpen()) {
-      close();
-    }
-
-    // TODO Cleanup
-    const GROUPS_ENTRIES = Object.entries(groups);
-    GROUPS_ENTRIES.forEach(groupsEntrie => {
-      const SLIDE_ELS = groupsEntrie[1].gallery;
-
-      // Remove slides
-      SLIDE_ELS.forEach(slideEl => {
-        remove(slideEl);
-      });
-    });
+    if (isOpen()) close();
+    Object.values(groups).forEach(group => group.gallery.forEach(remove));
     groups = {};
     activeGroup = null;
-    for (const i in SUPPORTED_ELEMENTS) {
-      SUPPORTED_ELEMENTS[i].onReset();
-    }
-
-    // TODO
+    Object.values(SUPPORTED_ELEMENTS).forEach(type => type.onReset());
   };
 
   /**
@@ -1611,23 +1591,24 @@ function Tobii(userOptions) {
     lightbox.removeEventListener(eventName, callback);
   };
   init(userOptions);
-  Tobii.open = open;
-  Tobii.previous = previous;
-  Tobii.next = next;
-  Tobii.close = close;
-  Tobii.add = checkDependencies;
-  Tobii.remove = remove;
-  Tobii.reset = reset;
-  Tobii.destroy = destroy;
-  Tobii.isOpen = isOpen;
-  Tobii.slidesIndex = slidesIndex;
-  Tobii.select = select;
-  Tobii.slidesCount = slidesCount;
-  Tobii.selectGroup = selectGroup;
-  Tobii.currentGroup = currentGroup;
-  Tobii.on = on;
-  Tobii.off = off;
-  return Tobii;
+  return {
+    open,
+    previous,
+    next,
+    close,
+    add: checkDependencies,
+    remove,
+    reset,
+    destroy,
+    isOpen,
+    slidesIndex,
+    select,
+    slidesCount,
+    selectGroup,
+    currentGroup,
+    on,
+    off
+  };
 }
 
 module.exports = Tobii;
