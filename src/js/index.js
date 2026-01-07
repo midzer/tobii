@@ -1378,22 +1378,22 @@ export default function Tobii (userOptions) {
 
   init(userOptions)
 
-  Tobii.open = open
-  Tobii.previous = previous
-  Tobii.next = next
-  Tobii.close = close
-  Tobii.add = checkDependencies
-  Tobii.remove = remove
-  Tobii.reset = reset
-  Tobii.destroy = destroy
-  Tobii.isOpen = isOpen
-  Tobii.slidesIndex = slidesIndex
-  Tobii.select = select
-  Tobii.slidesCount = slidesCount
-  Tobii.selectGroup = selectGroup
-  Tobii.currentGroup = currentGroup
-  Tobii.on = on
-  Tobii.off = off
-
-  return Tobii
+  return {
+    open,
+    previous,
+    next,
+    close,
+    add: checkDependencies,
+    remove,
+    reset,
+    destroy,
+    isOpen,
+    slidesIndex,
+    select,
+    slidesCount,
+    selectGroup,
+    currentGroup,
+    on,
+    off
+  }
 }
