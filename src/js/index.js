@@ -1266,30 +1266,16 @@ export default function Tobii (userOptions) {
    *
    */
   const reset = () => {
-    if (isOpen()) {
-      close()
-    }
+    if (isOpen()) close()
 
-    // TODO Cleanup
-    const GROUPS_ENTRIES = Object.entries(groups)
-
-    GROUPS_ENTRIES.forEach((groupsEntrie) => {
-      const SLIDE_ELS = groupsEntrie[1].gallery
-
-      // Remove slides
-      SLIDE_ELS.forEach((slideEl) => {
-        remove(slideEl)
-      })
-    })
+    Object.values(groups).forEach(group => 
+      group.gallery.forEach(remove)
+    )
 
     groups = {}
     activeGroup = null
 
-    for (const i in SUPPORTED_ELEMENTS) {
-      SUPPORTED_ELEMENTS[i].onReset()
-    }
-
-    // TODO
+    Object.values(SUPPORTED_ELEMENTS).forEach(type => type.onReset())
   }
 
   /**
