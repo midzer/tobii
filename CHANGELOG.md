@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.1.1
+
+### Fixed
+
+- remove() for single slide removal
+- multiple Tobii instances race conditions
+
 ## v3.1.0
 
 ### New
