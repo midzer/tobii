@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.1.2
+
+### Fixed
+
+- do not show caption initially on mobile devices
+
 ## v3.1.1
 
 ### Fixed
