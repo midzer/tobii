@@ -19,11 +19,11 @@
   },
   "devDependencies": {
     "cross-env": "^10.1.0",
-    "eslint": "9.39.1",
+    "eslint": "9.39.2",
     "microbundle": "^0.15.1",
     "neostandard": "^0.12.2",
     "rimraf": "4.4.1",
-    "sass": "^1.97.2",
+    "sass": "^1.97.3",
     "stylelint": "^16.26.1"
   },
   "browserslist": {
