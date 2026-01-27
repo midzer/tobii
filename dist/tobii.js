@@ -52,11 +52,13 @@ class ImageType {
       }
       FIGCAPTION.appendChild(SPAN);
       if (this.userSettings.captionToggle) {
+        const isMobile = window.innerWidth < 768;
         const BUTTON = document.createElement('button');
         BUTTON.className = 'caption-toggle';
-        BUTTON.textContent = BUTTON.title = this.userSettings.captionToggleLabel[0];
+        BUTTON.textContent = BUTTON.title = this.userSettings.captionToggleLabel[isMobile ? 1 : 0];
         BUTTON.setAttribute('aria-controls', FIGCAPTION.id);
-        BUTTON.setAttribute('aria-expanded', true);
+        BUTTON.setAttribute('aria-expanded', !isMobile);
+        SPAN.setAttribute('aria-hidden', isMobile);
         const preventAndStopEvent = event => {
           event.preventDefault();
           event.stopPropagation();
@@ -382,7 +384,7 @@ class YoutubeType {
  * Tobii
  *
  * @author midzer
- * @version 3.1.1
+ * @version 3.1.2
  * @url https://github.com/midzer/tobii
  *
  * MIT License
