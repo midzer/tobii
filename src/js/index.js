@@ -1268,7 +1268,7 @@ export default function Tobii (userOptions) {
   const reset = () => {
     if (isOpen()) close()
 
-    Object.values(groups).forEach(group => 
+    Object.values(groups).forEach(group =>
       group.gallery.forEach(remove)
     )
 
