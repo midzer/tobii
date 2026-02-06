@@ -105,7 +105,7 @@ class HtmlType {
 
     if (SOURCES) {
       SOURCES.forEach((source) => {
-        source.setAttribute('src', '')
+        source.removeAttribute('src')
       })
     }
   }

@@ -96,7 +96,7 @@ class IframeType {
 
   onCleanup (container) {
     const IFRAME = container.querySelector('iframe')
-    IFRAME.setAttribute('src', '')
+    IFRAME.removeAttribute('src')
     IFRAME.style.opacity = '0'
   }
 
