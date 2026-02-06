@@ -179,16 +179,17 @@ class IframeType {
       const HREF = container.getAttribute('data-href');
       IFRAME.setAttribute('frameborder', '0');
       IFRAME.setAttribute('src', HREF);
-      IFRAME.setAttribute('allowfullscreen', '');
 
-      // set allow parameters
-      if (HREF.indexOf('youtube.com') > -1) {
-        IFRAME.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-      } else if (HREF.indexOf('vimeo.com') > -1) {
-        IFRAME.setAttribute('allow', 'autoplay; picture-in-picture');
+      // Set allow parameters
+      let allowValue = 'fullscreen';
+      if (HREF.includes('youtube.com')) {
+        allowValue += '; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      } else if (HREF.includes('vimeo.com')) {
+        allowValue += '; autoplay; picture-in-picture';
       } else if (container.hasAttribute('data-allow')) {
-        IFRAME.setAttribute('allow', container.getAttribute('data-allow'));
+        allowValue = container.getAttribute('data-allow');
       }
+      IFRAME.setAttribute('allow', allowValue);
       if (container.hasAttribute('data-width')) {
         IFRAME.style.maxWidth = `${container.getAttribute('data-width')}`;
       }
@@ -201,20 +202,15 @@ class IframeType {
 
       // Add iframe to container
       container.appendChild(IFRAME);
-      IFRAME.addEventListener('load', () => {
+
+      // Handle load and error
+      const removeLoader = () => {
         IFRAME.style.opacity = '1';
         const LOADING_INDICATOR = container.querySelector('.tobii__loader');
-        if (LOADING_INDICATOR) {
-          container.removeChild(LOADING_INDICATOR);
-        }
-      });
-      IFRAME.addEventListener('error', () => {
-        IFRAME.style.opacity = '1';
-        const LOADING_INDICATOR = container.querySelector('.tobii__loader');
-        if (LOADING_INDICATOR) {
-          container.removeChild(LOADING_INDICATOR);
-        }
-      });
+        if (LOADING_INDICATOR) container.removeChild(LOADING_INDICATOR);
+      };
+      IFRAME.addEventListener('load', removeLoader);
+      IFRAME.addEventListener('error', removeLoader);
     } else {
       // was already created
       IFRAME.setAttribute('src', container.getAttribute('data-href'));
@@ -225,7 +221,7 @@ class IframeType {
   }
   onCleanup(container) {
     const IFRAME = container.querySelector('iframe');
-    IFRAME.setAttribute('src', '');
+    IFRAME.removeAttribute('src');
     IFRAME.style.opacity = '0';
   }
   onReset() {
@@ -321,7 +317,7 @@ class HtmlType {
     const SOURCES = el.querySelectorAll('src');
     if (SOURCES) {
       SOURCES.forEach(source => {
-        source.setAttribute('src', '');
+        source.removeAttribute('src');
       });
     }
   }
@@ -384,7 +380,7 @@ class YoutubeType {
  * Tobii
  *
  * @author midzer
- * @version 3.1.2
+ * @version 3.1.3
  * @url https://github.com/midzer/tobii
  *
  * MIT License
