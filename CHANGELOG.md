@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.1.3
+
+### Fixed
+
+- replace legacy allowfullscreen with allow attribute on IFrames
+
 ## v3.1.2
 
 ### Fixed
