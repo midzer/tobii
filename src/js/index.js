@@ -2,7 +2,7 @@
  * Tobii
  *
  * @author midzer
- * @version 3.1.3
+ * @version 3.2.0
  * @url https://github.com/midzer/tobii
  *
  * MIT License

@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.2.0
+
+### New
+
+- introduce ARIA live region instead of focus approach
+- replace has() CSS selector for wider browser support
+
 ## v3.1.3
 
 ### Fixed
