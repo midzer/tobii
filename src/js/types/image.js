@@ -68,6 +68,9 @@ class ImageType {
         BUTTON.textContent = BUTTON.title = this.userSettings.captionToggleLabel[isMobile ? 1 : 0]
         BUTTON.setAttribute('aria-controls', FIGCAPTION.id)
         BUTTON.setAttribute('aria-expanded', !isMobile)
+        if (isMobile) {
+          FIGCAPTION.classList.add('caption-hidden')
+        }
         SPAN.setAttribute('aria-hidden', isMobile)
 
         const preventAndStopEvent = (event) => {
@@ -84,6 +87,7 @@ class ImageType {
             : this.userSettings.captionToggleLabel[0]
           BUTTON.textContent = BUTTON.title = buttonLabel
           BUTTON.setAttribute('aria-expanded', !isExpanded)
+          FIGCAPTION.classList.toggle('caption-hidden')
           SPAN.setAttribute('aria-hidden', isExpanded)
         })
 

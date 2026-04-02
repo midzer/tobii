@@ -173,7 +173,7 @@ body.tobii-is-open {
       font-size: 1.125em;
       transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 
-      &:has(button.caption-toggle[aria-expanded='false']) {
+      &.caption-hidden {
         color: transparent;
         background-color: transparent;
 
