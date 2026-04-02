@@ -23,7 +23,7 @@
     "microbundle": "^0.15.1",
     "neostandard": "^0.12.2",
     "rimraf": "4.4.1",
-    "sass": "^1.97.3",
+    "sass": "^1.98.0",
     "stylelint": "^16.26.1"
   },
   "browserslist": {
