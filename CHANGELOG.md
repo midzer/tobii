@@ -1,5 +1,14 @@
 # Changelog
 
+## v3.2.0
+
+### New
+
+- introduce ARIA live region instead of focus approach
+  + configurable `announcementLabel`
+  + optional data attribute `data-label` as text to be used for screen readers
+- replace has() CSS selector for wider browser support
+
 ## v3.1.3
 
 ### Fixed

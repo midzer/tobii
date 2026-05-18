@@ -272,6 +272,7 @@ The following options are available:
 | nav | bool, "auto" | "auto" | Display navigation buttons. "auto" hides buttons on touch-enabled devices. |
 | navText | string | ["inline svg", "inline svg"] | Text or HTML for the navigation buttons. |
 | navLabel | string | ["Previous", "Next"] | ARIA label for screen readers. |
+| announcementLabel | string | ["Slide", "of"] | ARIA label for screen readers. |
 | close | bool | true | Display close button. |
 | closeText | string | "inline svg" | Text or HTML for the close button. |
 | closeLabel | string | "Close" | ARIA label for screen readers. |
@@ -301,15 +302,16 @@ The following options are available:
 | Property | Description |
 | --- | --- |
 | data-type | Sets media type. Possible values: `html`,`iframe`,`youtube`. |
-| data-id | Required for youtube media type. |
+| data-id | Required for YouTube media type. |
 | data-target | Can be used to set target for "iframe" and "html" types. |
 | data-group | Set custom group |
-| data-width | Set container width for iframe or youtube types.  |
-| data-height | Set container height for iframe or youtube types. |
+| data-width | Set container width for iframe or YouTube types. |
+| data-height | Set container height for iframe or YouTube types. |
 | data-controls | Indicates whether the video player controls are displayed: 0 do not display and 1 display controls in the player. |
 | data-allow | Allows to set allow attribute on iframes. |
-| data-srcset | Allows to have Responsive image or retina images  |
-| data-zoom | Allows to enable or disable zoom icon. Values: "true" or "false"  |
+| data-srcset | Allows to have Responsive image or retina images |
+| data-zoom | Allows to enable or disable zoom icon. Values: "true" or "false" |
+| data-label | Text to be used as an extra announcement for screen readers when this slide is shown. If present, Tobii’s aria‑live region will say “Slide X of Y. [data‑label]”. If data-label is missing, it will fall back to the alt attribute of the img, if available. |
 
 ## API
 
