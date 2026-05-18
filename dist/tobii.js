@@ -1361,6 +1361,8 @@ function Tobii(userOptions) {
     const originY = y - top;
     const newOriginX = originX / TRANSFORM.scale;
     const newOriginY = originY / TRANSFORM.scale;
+    deltaX += (newOriginX - TRANSFORM.originX) * (TRANSFORM.scale - 1);
+    deltaY += (newOriginY - TRANSFORM.originY) * (TRANSFORM.scale - 1);
     TRANSFORM.element = el;
     TRANSFORM.originX = newOriginX;
     TRANSFORM.originY = newOriginY;
