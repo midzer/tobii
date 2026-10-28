@@ -1,15 +1,18 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.Tobii = factory());
-})(this, (function () {
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Tobii = factory());
+})(this, (function () { 'use strict';
+
   class ImageType {
-    constructor() {
+    constructor () {
       this.figcaptionId = 0;
       this.userSettings = null;
     }
-    init(el, container, userSettings) {
+
+    init (el, container, userSettings) {
       this.userSettings = userSettings;
+
       const FIGURE = document.createElement('figure');
       const IMAGE = document.createElement('img');
       const THUMBNAIL = el.querySelector('img');
@@ -23,13 +26,17 @@
 
       // Hide figure until the image is loaded
       FIGURE.style.opacity = '0';
+
       if (THUMBNAIL) {
         IMAGE.alt = THUMBNAIL.alt || '';
       }
+
       IMAGE.setAttribute('data-src', el.href);
+
       if (el.hasAttribute('data-srcset')) {
         IMAGE.setAttribute('data-srcset', el.getAttribute('data-srcset'));
       }
+
       if (el.hasAttribute('data-sizes')) {
         IMAGE.setAttribute('data-sizes', el.getAttribute('data-sizes'));
       }
@@ -41,14 +48,17 @@
       let captionContent;
       if (typeof this.userSettings.captionText === 'function') {
         captionContent = this.userSettings.captionText(el);
-      } else if (this.userSettings.captionsSelector === 'self' && el.hasAttribute(this.userSettings.captionAttribute)) {
+      } else if (this.userSettings.captionsSelector === 'self' &&
+        el.hasAttribute(this.userSettings.captionAttribute)) {
         captionContent = el.getAttribute(this.userSettings.captionAttribute);
-      } else if (this.userSettings.captionsSelector === 'img' && THUMBNAIL && THUMBNAIL.hasAttribute(this.userSettings.captionAttribute)) {
+      } else if (this.userSettings.captionsSelector === 'img' && THUMBNAIL &&
+        THUMBNAIL.hasAttribute(this.userSettings.captionAttribute)) {
         captionContent = THUMBNAIL.getAttribute(this.userSettings.captionAttribute);
       }
       if (this.userSettings.captions && captionContent) {
         const FIGCAPTION = document.createElement('figcaption');
         FIGCAPTION.id = `tobii-figcaption-${this.figcaptionId}`;
+
         const SPAN = document.createElement('span');
         if (this.userSettings.captionHTML) {
           SPAN.innerHTML = captionContent;
@@ -56,6 +66,7 @@
           SPAN.textContent = captionContent;
         }
         FIGCAPTION.appendChild(SPAN);
+
         if (this.userSettings.captionToggle) {
           const isMobile = window.innerWidth < 768;
           const BUTTON = document.createElement('button');
@@ -67,28 +78,35 @@
             FIGCAPTION.classList.add('caption-hidden');
           }
           SPAN.setAttribute('aria-hidden', isMobile);
-          const preventAndStopEvent = event => {
+
+          const preventAndStopEvent = (event) => {
             event.preventDefault();
             event.stopPropagation();
           };
-          BUTTON.addEventListener('pointerdown', event => preventAndStopEvent(event));
-          BUTTON.addEventListener('pointerup', event => preventAndStopEvent(event));
-          BUTTON.addEventListener('click', event => {
+          BUTTON.addEventListener('pointerdown', (event) => preventAndStopEvent(event));
+          BUTTON.addEventListener('pointerup', (event) => preventAndStopEvent(event));
+          BUTTON.addEventListener('click', (event) => {
             preventAndStopEvent(event);
             const isExpanded = BUTTON.getAttribute('aria-expanded') === 'true';
-            const buttonLabel = isExpanded ? this.userSettings.captionToggleLabel[1] : this.userSettings.captionToggleLabel[0];
+            const buttonLabel = isExpanded
+              ? this.userSettings.captionToggleLabel[1]
+              : this.userSettings.captionToggleLabel[0];
             BUTTON.textContent = BUTTON.title = buttonLabel;
             BUTTON.setAttribute('aria-expanded', !isExpanded);
             FIGCAPTION.classList.toggle('caption-hidden');
             SPAN.setAttribute('aria-hidden', isExpanded);
           });
+
           FIGCAPTION.appendChild(BUTTON);
         }
+
         FIGURE.appendChild(FIGCAPTION);
+
         IMAGE.setAttribute('aria-labelledby', FIGCAPTION.id);
 
         // Add aria-label to the figure containing the caption content
         FIGURE.setAttribute('aria-label', SPAN.textContent);
+
         ++this.figcaptionId;
       }
 
@@ -107,52 +125,67 @@
       container.setAttribute('data-type', 'image');
       container.classList.add('tobii-image');
     }
-    onPreload(container) {
+
+    onPreload (container) {
       // Same as preload
       this.onLoad(container);
     }
-    onLoad(container) {
+
+    onLoad (container) {
       const IMAGE = container.querySelector('img');
+
       if (!IMAGE.hasAttribute('data-src')) {
-        return;
+        return
       }
+
       const FIGURE = container.querySelector('figure');
       const LOADING_INDICATOR = container.querySelector('.tobii__loader');
+
       const handleImageEvent = () => {
         container.removeChild(LOADING_INDICATOR);
         FIGURE.style.opacity = '1';
       };
+
       IMAGE.addEventListener('load', handleImageEvent);
       IMAGE.addEventListener('error', handleImageEvent);
+
       if (IMAGE.hasAttribute('data-srcset')) {
         IMAGE.setAttribute('srcset', IMAGE.getAttribute('data-srcset'));
         IMAGE.removeAttribute('data-srcset');
       }
+
       if (IMAGE.hasAttribute('data-sizes')) {
         IMAGE.setAttribute('sizes', IMAGE.getAttribute('data-sizes'));
         IMAGE.removeAttribute('data-sizes');
       }
+
       IMAGE.setAttribute('src', IMAGE.getAttribute('data-src'));
       IMAGE.removeAttribute('data-src');
     }
-    onLeave(container) {
+
+    onLeave (container) {
       // Nothing
     }
-    onCleanup(container) {
+
+    onCleanup (container) {
       // Nothing
     }
-    onReset() {
+
+    onReset () {
       this.figcaptionId = 0;
     }
   }
 
   class IframeType {
-    constructor() {
+    constructor () {
       this.userSettings = null;
     }
-    init(el, container, userSettings) {
+
+    init (el, container, userSettings) {
       this.userSettings = userSettings;
+
       const HREF = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href');
+
       container.setAttribute('data-HREF', HREF);
       if (el.hasAttribute('data-allow')) {
         container.setAttribute('data-allow', el.getAttribute('data-allow'));
@@ -170,10 +203,12 @@
       container.setAttribute('data-type', 'iframe');
       container.classList.add('tobii-iframe');
     }
-    onPreload(container) {
+
+    onPreload (container) {
       // Nothing
     }
-    onLoad(container) {
+
+    onLoad (container) {
       let IFRAME = container.querySelector('iframe');
 
       // Create loading indicator
@@ -182,15 +217,18 @@
       LOADING_INDICATOR.setAttribute('role', 'progressbar');
       LOADING_INDICATOR.setAttribute('aria-label', this.userSettings.loadingIndicatorLabel);
       container.appendChild(LOADING_INDICATOR);
+
       if (IFRAME == null) {
         // create iframe
         IFRAME = document.createElement('iframe');
         const HREF = container.getAttribute('data-href');
+
         IFRAME.setAttribute('frameborder', '0');
         IFRAME.setAttribute('src', HREF);
 
         // Set allow parameters
         let allowValue = 'fullscreen';
+
         if (HREF.includes('youtube.com')) {
           allowValue += '; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
         } else if (HREF.includes('vimeo.com')) {
@@ -198,10 +236,13 @@
         } else if (container.hasAttribute('data-allow')) {
           allowValue = container.getAttribute('data-allow');
         }
+
         IFRAME.setAttribute('allow', allowValue);
+
         if (container.hasAttribute('data-width')) {
           IFRAME.style.maxWidth = `${container.getAttribute('data-width')}`;
         }
+
         if (container.hasAttribute('data-height')) {
           IFRAME.style.maxHeight = `${container.getAttribute('data-height')}`;
         }
@@ -218,6 +259,7 @@
           const LOADING_INDICATOR = container.querySelector('.tobii__loader');
           if (LOADING_INDICATOR) container.removeChild(LOADING_INDICATOR);
         };
+
         IFRAME.addEventListener('load', removeLoader);
         IFRAME.addEventListener('error', removeLoader);
       } else {
@@ -225,29 +267,35 @@
         IFRAME.setAttribute('src', container.getAttribute('data-href'));
       }
     }
-    onLeave(container) {
+
+    onLeave (container) {
       // Nothing
     }
-    onCleanup(container) {
+
+    onCleanup (container) {
       const IFRAME = container.querySelector('iframe');
       IFRAME.removeAttribute('src');
       IFRAME.style.opacity = '0';
     }
-    onReset() {
+
+    onReset () {
       // Nothing
     }
   }
 
   class HtmlType {
-    constructor() {
+    constructor () {
       this.userSettings = null;
     }
-    init(el, container, userSettings) {
+
+    init (el, container, userSettings) {
       this.userSettings = userSettings;
+
       const TARGET_SELECTOR = el.hasAttribute('data-target') ? el.getAttribute('data-target') : el.getAttribute('href');
       const TARGET = document.querySelector(TARGET_SELECTOR);
+
       if (!TARGET) {
-        throw new Error(`Ups, I can't find the target ${TARGET_SELECTOR}.`);
+        throw new Error(`Ups, I can't find the target ${TARGET_SELECTOR}.`)
       }
 
       // Add content to container
@@ -257,11 +305,14 @@
       container.setAttribute('data-type', 'html');
       container.classList.add('tobii-html');
     }
-    onPreload(container) {
+
+    onPreload (container) {
       // Nothing
     }
-    onLoad(container, group) {
+
+    onLoad (container, group) {
       const VIDEO = container.querySelector('video');
+
       if (VIDEO) {
         if (VIDEO.hasAttribute('data-time') && VIDEO.readyState > 0) {
           // Continue where video was stopped
@@ -271,15 +322,19 @@
         // Start playback (and loading if necessary)
         VIDEO.play();
       }
+
       const audio = container.querySelector('audio');
       if (audio) {
         // Start playback (and loading if necessary)
         audio.play();
       }
+
       container.classList.add('tobii-group-' + group);
     }
-    onLeave(container) {
+
+    onLeave (container) {
       const VIDEO = container.querySelector('video');
+
       if (VIDEO) {
         if (!VIDEO.paused) {
           // Stop if video is playing
@@ -291,7 +346,9 @@
           VIDEO.setAttribute('data-time', VIDEO.currentTime);
         }
       }
+
       const audio = container.querySelector('audio');
+
       if (audio) {
         if (!audio.paused) {
           // Stop if is playing
@@ -299,21 +356,27 @@
         }
       }
     }
-    onCleanup(container) {
+
+    onCleanup (container) {
       const VIDEO = container.querySelector('video');
+
       if (VIDEO) {
         if (VIDEO.readyState > 0 && VIDEO.readyState < 3 && VIDEO.duration !== VIDEO.currentTime) {
           // Some data has been loaded but not the whole package.
           // In order to save bandwidth, stop downloading as soon as possible.
           const VIDEO_CLONE = VIDEO.cloneNode(true);
+
           this._removeSources(VIDEO);
           VIDEO.load();
+
           VIDEO.parentNode.removeChild(VIDEO);
+
           container.appendChild(VIDEO_CLONE);
         }
       }
     }
-    onReset() {
+
+    onReset () {
       // Nothing
     }
 
@@ -322,10 +385,11 @@
      *
      * @param {HTMLElement} el - Element to remove all `src` attributes
      */
-    _removeSources(el) {
+    _removeSources (el) {
       const SOURCES = el.querySelectorAll('src');
+
       if (SOURCES) {
-        SOURCES.forEach(source => {
+        SOURCES.forEach((source) => {
           source.removeAttribute('src');
         });
       }
@@ -333,17 +397,20 @@
   }
 
   class YoutubeType {
-    constructor() {
+    constructor () {
       this.playerId = 0;
       this.PLAYER = [];
       this.userSettings = null;
     }
-    init(el, container, userSettings) {
+
+    init (el, container, userSettings) {
       this.userSettings = userSettings;
+
       const IFRAME_PLACEHOLDER = document.createElement('div');
 
       // Add iframePlaceholder to container
       container.appendChild(IFRAME_PLACEHOLDER);
+
       this.PLAYER[this.playerId] = new window.YT.Player(IFRAME_PLACEHOLDER, {
         host: 'https://www.youtube-nocookie.com',
         height: el.getAttribute('data-height') || '360',
@@ -362,25 +429,31 @@
       // Register type
       container.setAttribute('data-type', 'youtube');
       container.classList.add('tobii-youtube');
+
       this.playerId++;
     }
-    onPreload(container) {
+
+    onPreload (container) {
       // Nothing
     }
-    onLoad(container) {
+
+    onLoad (container) {
       this.PLAYER[container.getAttribute('data-player')].playVideo();
     }
-    onLeave(container) {
+
+    onLeave (container) {
       if (this.PLAYER[container.getAttribute('data-player')].getPlayerState() === 1) {
         this.PLAYER[container.getAttribute('data-player')].pauseVideo();
       }
     }
-    onCleanup(container) {
+
+    onCleanup (container) {
       if (this.PLAYER[container.getAttribute('data-player')].getPlayerState() === 1) {
         this.PLAYER[container.getAttribute('data-player')].pauseVideo();
       }
     }
-    onReset() {
+
+    onReset () {
       // Nothing
     }
   }
@@ -389,24 +462,37 @@
    * Tobii
    *
    * @author midzer
-   * @version 3.2.0
+   * @version 3.2.1
    * @url https://github.com/midzer/tobii
    *
    * MIT License
    */
-  function Tobii(userOptions) {
+
+
+  function Tobii (userOptions) {
     /**
      * Global variables
      *
      */
     const SUPPORTED_ELEMENTS = {
-      image: new ImageType(),
-      // default
+      image: new ImageType(), // default
       html: new HtmlType(),
       iframe: new IframeType(),
       youtube: new YoutubeType()
     };
-    const FOCUSABLE_ELEMENTS = ['a[href]:not([tabindex^="-"]):not([inert])', 'area[href]:not([tabindex^="-"]):not([inert])', 'input:not([disabled]):not([inert])', 'select:not([disabled]):not([inert])', 'textarea:not([disabled]):not([inert])', 'button:not([disabled]):not([inert])', 'iframe:not([tabindex^="-"]):not([inert])', 'audio:not([tabindex^="-"]):not([inert])', 'video:not([tabindex^="-"]):not([inert])', '[contenteditable]:not([tabindex^="-"]):not([inert])', '[tabindex]:not([tabindex^="-"]):not([inert])'];
+    const FOCUSABLE_ELEMENTS = [
+      'a[href]:not([tabindex^="-"]):not([inert])',
+      'area[href]:not([tabindex^="-"]):not([inert])',
+      'input:not([disabled]):not([inert])',
+      'select:not([disabled]):not([inert])',
+      'textarea:not([disabled]):not([inert])',
+      'button:not([disabled]):not([inert])',
+      'iframe:not([tabindex^="-"]):not([inert])',
+      'audio:not([tabindex^="-"]):not([inert])',
+      'video:not([tabindex^="-"]):not([inert])',
+      '[contenteditable]:not([tabindex^="-"]):not([inert])',
+      '[tabindex]:not([tabindex^="-"]):not([inert])'
+    ];
     let userSettings = {};
     const WAITING_ELS = [];
     const GROUP_ATTS = {
@@ -430,6 +516,7 @@
     let pointerDownCache = [];
     let lastTapTime = 0;
     let liveRegion = null;
+    let figureFocusTimeout = null;
     const MIN_SCALE = 1;
     const MAX_SCALE = 4;
     const DOUBLE_TAP_TIME = 500; // milliseconds
@@ -456,7 +543,7 @@
      * @param {Object} userOptions - Optional user options
      * @returns {Object} - Custom options
      */
-    const mergeOptions = userOptions => {
+    const mergeOptions = (userOptions) => {
       // Default options
       const OPTIONS = {
         selector: '.lightbox',
@@ -466,10 +553,19 @@
         captionText: null,
         captionHTML: false,
         captionToggle: true,
-        captionToggleLabel: ['Hide caption', 'Show caption'],
+        captionToggleLabel: [
+          'Hide caption',
+          'Show caption'
+        ],
         nav: 'auto',
-        navText: ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18" /></svg>', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="9 6 15 12 9 18" /></svg>'],
-        navLabel: ['Previous image', 'Next image'],
+        navText: [
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="15 6 9 12 15 18" /></svg>',
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><polyline points="9 6 15 12 9 18" /></svg>'
+        ],
+        navLabel: [
+          'Previous image',
+          'Next image'
+        ],
         announcementLabel: ['Slide', 'of'],
         close: true,
         closeText: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path stroke="none" d="M0 0h24v24H0z"/><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>',
@@ -487,17 +583,17 @@
         threshold: 100,
         theme: 'tobii--theme-default'
       };
+
       return {
-        ...OPTIONS,
-        ...userOptions
-      };
+        ...OPTIONS, ...userOptions
+      }
     };
 
     /**
      * Init
      *
      */
-    const init = userOptions => {
+    const init = (userOptions) => {
       // Merge user options into defaults
       userSettings = mergeOptions(userOptions);
 
@@ -552,13 +648,15 @@
       document.body.appendChild(lightbox);
 
       // Init only
-      if (!userSettings.selector) return;
+      if (!userSettings.selector) return
 
       // Get a list of all elements within the document
       const LIGHTBOX_TRIGGER_ELS = document.querySelectorAll(userSettings.selector);
+
       if (!LIGHTBOX_TRIGGER_ELS) {
-        throw new Error(`Ups, I can't find the selector ${userSettings.selector} on this website.`);
+        throw new Error(`Ups, I can't find the selector ${userSettings.selector} on this website.`)
       }
+
       LIGHTBOX_TRIGGER_ELS.forEach(el => checkDependencies(el));
     };
 
@@ -567,23 +665,28 @@
      *
      * @param {HTMLElement} el - Element to add
      */
-    const checkDependencies = el => {
+    const checkDependencies = (el) => {
       // Check if there is a YouTube video and if the YouTube iframe-API is ready
       if (document.querySelector('[data-type="youtube"]') !== null && !isYouTubeDependencyLoaded) {
         if (document.getElementById('iframe_api') === null) {
           const TAG = document.createElement('script');
           const FIRST_SCRIPT_TAG = document.getElementsByTagName('script')[0];
+
           TAG.id = 'iframe_api';
           TAG.src = 'https://www.youtube.com/iframe_api';
+
           FIRST_SCRIPT_TAG.parentNode.insertBefore(TAG, FIRST_SCRIPT_TAG);
         }
+
         if (WAITING_ELS.indexOf(el) === -1) {
           WAITING_ELS.push(el);
         }
+
         window.onYouTubePlayerAPIReady = () => {
-          WAITING_ELS.forEach(waitingEl => {
+          WAITING_ELS.forEach((waitingEl) => {
             add(waitingEl);
           });
+
           isYouTubeDependencyLoaded = true;
         };
       } else {
@@ -597,8 +700,8 @@
      * @param {HTMLElement} el
      * @return {string}
      */
-    const getGroupName = el => {
-      return el.hasAttribute('data-group') ? el.getAttribute('data-group') : 'default';
+    const getGroupName = (el) => {
+      return el.hasAttribute('data-group') ? el.getAttribute('data-group') : 'default'
     };
 
     /**
@@ -607,8 +710,8 @@
      * @param {object} object
      * @return {object}
      */
-    const copyObject = object => {
-      return JSON.parse(JSON.stringify(object));
+    const copyObject = (object) => {
+      return JSON.parse(JSON.stringify(object))
     };
 
     /**
@@ -616,8 +719,9 @@
      *
      * @param {HTMLElement} el - Element to add
      */
-    const add = el => {
+    const add = (el) => {
       const newGroup = getGroupName(el);
+
       if (!Object.prototype.hasOwnProperty.call(groups, newGroup)) {
         groups[newGroup] = copyObject(GROUP_ATTS);
 
@@ -627,6 +731,7 @@
 
         // Hide slider
         groups[newGroup].slider.setAttribute('aria-hidden', 'true');
+
         lightbox.appendChild(groups[newGroup].slider);
       }
 
@@ -636,10 +741,13 @@
         groups[newGroup].elementsLength++;
 
         // Set zoom icon if necessary
-        if (userSettings.zoom && el.querySelector('img') && el.getAttribute('data-zoom') !== 'false' || el.getAttribute('data-zoom') === 'true') {
+        if ((userSettings.zoom && el.querySelector('img') && el.getAttribute('data-zoom') !== 'false') ||
+          el.getAttribute('data-zoom') === 'true') {
           const TOBII_ZOOM = document.createElement('div');
+
           TOBII_ZOOM.className = 'tobii-zoom__icon';
           TOBII_ZOOM.innerHTML = userSettings.zoomText;
+
           el.classList.add('tobii-zoom');
           el.appendChild(TOBII_ZOOM);
         }
@@ -650,6 +758,7 @@
         // Create slide
         const SLIDE_ELEMENT = document.createElement('div');
         const SLIDE_ELEMENT_CONTENT = document.createElement('div');
+
         SLIDE_ELEMENT.className = 'tobii__slide';
         SLIDE_ELEMENT.style.position = 'absolute';
         SLIDE_ELEMENT.style.left = `${groups[newGroup].x * 100}%`;
@@ -667,13 +776,15 @@
         // Add slide element to slider
         groups[newGroup].slider.appendChild(SLIDE_ELEMENT);
         groups[newGroup].sliderElements.push(SLIDE_ELEMENT);
+
         ++groups[newGroup].x;
+
         if (isOpen() && newGroup === activeGroup) {
           updateConfig();
           updateLightbox();
         }
       } else {
-        throw new Error('Ups, element already added.');
+        throw new Error('Ups, element already added.')
       }
     };
 
@@ -682,21 +793,22 @@
      *
      * @param {HTMLElement} el - Element to remove
      */
-    const remove = el => {
+    const remove = (el) => {
       const GROUP_NAME = getGroupName(el);
 
       // Check if element exists
       const galleryIndex = groups[GROUP_NAME].gallery.indexOf(el);
       if (galleryIndex === -1) {
-        throw new Error(`Ups, I can't find a slide for the element ${el}.`);
+        throw new Error(`Ups, I can't find a slide for the element ${el}.`)
       }
+
       const SLIDE_ELEMENT = groups[GROUP_NAME].sliderElements[galleryIndex];
 
       // If the element to be removed is the currently visible slide
       if (isOpen() && GROUP_NAME === activeGroup && galleryIndex === groups[GROUP_NAME].currentIndex) {
         if (groups[GROUP_NAME].elementsLength === 1) {
           close();
-          throw new Error('Ups, I\'ve closed. There are no slides more to show.');
+          throw new Error('Ups, I\'ve closed. There are no slides more to show.')
         } else {
           // Navigate away before removal
           if (groups[GROUP_NAME].currentIndex === 0) {
@@ -708,6 +820,7 @@
           updateLightbox();
         }
       }
+
       groups[GROUP_NAME].gallery.splice(galleryIndex, 1);
       groups[GROUP_NAME].sliderElements.splice(galleryIndex, 1);
       groups[GROUP_NAME].elementsLength--;
@@ -726,16 +839,17 @@
       // Remove slide
       SLIDE_ELEMENT.parentNode.removeChild(SLIDE_ELEMENT);
     };
-    const getModel = el => {
+
+    const getModel = (el) => {
       const type = el.getAttribute('data-type');
       if (SUPPORTED_ELEMENTS[type] !== undefined) {
-        return SUPPORTED_ELEMENTS[type];
+        return SUPPORTED_ELEMENTS[type]
       } else {
         // unknown - use default
         if (el.hasAttribute('data-type')) {
           console.log('Unknown lightbox element type: ' + type);
         }
-        return SUPPORTED_ELEMENTS.image;
+        return SUPPORTED_ELEMENTS.image
       }
     };
 
@@ -746,14 +860,17 @@
      */
     const open = (index = 0) => {
       if (isOpen()) {
-        throw new Error('Ups, I\'m aleady open.');
+        throw new Error('Ups, I\'m aleady open.')
       }
+
       if (index === -1 || index >= groups[activeGroup].elementsLength) {
-        throw new Error(`Ups, I can't find slide ${index}.`);
+        throw new Error(`Ups, I can't find slide ${index}.`)
       }
+
       document.documentElement.classList.add('tobii-is-open');
       document.body.classList.add('tobii-is-open');
       document.body.classList.add('tobii-is-open-' + activeGroup);
+
       updateConfig();
 
       // Hide close if necessary
@@ -771,10 +888,12 @@
         tobii: 'close'
       };
       const url = window.location.href;
+
       window.history.pushState(stateObj, 'Image', url);
 
       // Set current index
       groups[activeGroup].currentIndex = index;
+
       bindEvents();
 
       // Load slide
@@ -785,11 +904,13 @@
 
       // Show lightbox
       lightbox.setAttribute('aria-hidden', 'false');
+
       updateLightbox();
 
       // Preload previous and next slide
       preload(groups[activeGroup].currentIndex + 1);
       preload(groups[activeGroup].currentIndex - 1);
+
       groups[activeGroup].slider.classList.add('tobii__slider--animate');
 
       // Create and dispatch a new event
@@ -798,6 +919,7 @@
           group: activeGroup
         }
       });
+
       lightbox.dispatchEvent(openEvent);
     };
 
@@ -807,11 +929,13 @@
      */
     const close = () => {
       if (!isOpen()) {
-        throw new Error('Ups, I\'m already closed.');
+        throw new Error('Ups, I\'m already closed.')
       }
+
       document.documentElement.classList.remove('tobii-is-open');
       document.body.classList.remove('tobii-is-open');
       document.body.classList.remove('tobii-is-open-' + activeGroup);
+
       unbindEvents();
 
       // Remove entry in browser history
@@ -820,6 +944,8 @@
           window.history.back();
         }
       }
+
+      clearTimeout(figureFocusTimeout);
 
       // Reenable the user’s focus
       lastFocus.focus();
@@ -854,12 +980,14 @@
      *
      * @param {number} index - Index to preload
      */
-    const preload = index => {
+    const preload = (index) => {
       if (groups[activeGroup].sliderElements[index] === undefined) {
-        return;
+        return
       }
+
       const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       const model = getModel(CONTAINER);
+
       model.onPreload(CONTAINER);
     };
 
@@ -869,12 +997,18 @@
      *
      * @param {number} index - Index to load
      */
-    const load = index => {
+    const load = (index) => {
       if (groups[activeGroup].sliderElements[index] === undefined) {
-        return;
+        return
       }
+
       const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       const model = getModel(CONTAINER);
+
+      // Add active slide class
+      groups[activeGroup].sliderElements[index].classList.add('tobii__slide--is-active');
+      groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'false');
+
       model.onLoad(CONTAINER, activeGroup);
     };
 
@@ -883,32 +1017,39 @@
      *
      * @param {number} index - Index to select
      */
-    const select = index => {
+    const select = (index) => {
       const currIndex = groups[activeGroup].currentIndex;
+
       if (!isOpen()) {
-        throw new Error('Ups, I\'m closed.');
+        throw new Error('Ups, I\'m closed.')
       }
+
       if (isOpen()) {
         if (!index && index !== 0) {
-          throw new Error('Ups, no slide specified.');
+          throw new Error('Ups, no slide specified.')
         }
+
         if (index === groups[activeGroup].currentIndex) {
-          throw new Error(`Ups, slide ${index} is already selected.`);
+          throw new Error(`Ups, slide ${index} is already selected.`)
         }
+
         if (index === -1 || index >= groups[activeGroup].elementsLength) {
-          throw new Error(`Ups, I can't find slide ${index}.`);
+          throw new Error(`Ups, I can't find slide ${index}.`)
         }
       }
 
       // Set current index
       groups[activeGroup].currentIndex = index;
+
       leave(currIndex);
       load(index);
+
       if (index < currIndex) {
         updateLightbox('left');
         cleanup(currIndex);
         preload(index - 1);
       }
+
       if (index > currIndex) {
         updateLightbox('right');
         cleanup(currIndex);
@@ -922,8 +1063,9 @@
      */
     const previous = () => {
       if (!isOpen()) {
-        throw new Error('Ups, I\'m closed.');
+        throw new Error('Ups, I\'m closed.')
       }
+
       if (groups[activeGroup].currentIndex > 0) {
         leave(groups[activeGroup].currentIndex);
         load(--groups[activeGroup].currentIndex);
@@ -938,6 +1080,7 @@
           group: activeGroup
         }
       });
+
       lightbox.dispatchEvent(previousEvent);
     };
 
@@ -947,8 +1090,9 @@
      */
     const next = () => {
       if (!isOpen()) {
-        throw new Error('Ups, I\'m closed.');
+        throw new Error('Ups, I\'m closed.')
       }
+
       if (groups[activeGroup].currentIndex < groups[activeGroup].elementsLength - 1) {
         leave(groups[activeGroup].currentIndex);
         load(++groups[activeGroup].currentIndex);
@@ -963,6 +1107,7 @@
           group: activeGroup
         }
       });
+
       lightbox.dispatchEvent(nextEvent);
     };
 
@@ -971,16 +1116,19 @@
      *
      * @param {string} name - Name of the group to select
      */
-    const selectGroup = name => {
+    const selectGroup = (name) => {
       if (isOpen()) {
-        throw new Error('Ups, I\'m open.');
+        throw new Error('Ups, I\'m open.')
       }
+
       if (!name) {
-        throw new Error('Ups, no group specified.');
+        throw new Error('Ups, no group specified.')
       }
+
       if (name && !Object.prototype.hasOwnProperty.call(groups, name)) {
-        throw new Error(`Ups, I don't have a group called "${name}".`);
+        throw new Error(`Ups, I don't have a group called "${name}".`)
       }
+
       activeGroup = name;
     };
 
@@ -990,12 +1138,18 @@
      *
      * @param {number} index - Index to leave
      */
-    const leave = index => {
+    const leave = (index) => {
       if (groups[activeGroup].sliderElements[index] === undefined) {
-        return;
+        return
       }
+
       const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       const model = getModel(CONTAINER);
+
+      // Remove active slide class
+      groups[activeGroup].sliderElements[index].classList.remove('tobii__slide--is-active');
+      groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'true');
+
       model.onLeave(CONTAINER);
     };
 
@@ -1005,20 +1159,26 @@
      *
      * @param {number} index - Index to cleanup
      */
-    const cleanup = index => {
+    const cleanup = (index) => {
       if (groups[activeGroup].sliderElements[index] === undefined) {
-        return;
+        return
       }
+
       const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]');
       const model = getModel(CONTAINER);
+
       model.onCleanup(CONTAINER);
+
       DRAG.startX = 0;
       DRAG.startY = 0;
       DRAG.x = 0;
       DRAG.y = 0;
       DRAG.distance = 0;
+
       lastTapTime = 0;
+
       if (isZoomed()) resetZoom();
+
       TRANSFORM.element = null;
     };
 
@@ -1028,6 +1188,7 @@
      */
     const updateOffset = () => {
       offset = -groups[activeGroup].currentIndex * lightbox.offsetWidth;
+
       groups[activeGroup].slider.style.transform = `translate(${offset}px, 0)`;
     };
 
@@ -1044,30 +1205,46 @@
      *
      * @param {string|null} dir - Current slide direction
      */
-    const updateFocus = dir => {
+    const updateFocus = (dir) => {
       const group = groups[activeGroup];
       const isNavEnabled = userSettings.nav === true || userSettings.nav === 'auto';
       const hasMultipleSlides = group.elementsLength > 1;
+
       if (isNavEnabled && !isTouchDevice() && hasMultipleSlides) {
         setButtonState(prevButton, true, true);
         setButtonState(nextButton, true, true);
+
         if (group.currentIndex === 0) {
           setButtonState(nextButton, false, false);
-          nextButton.focus();
+          nextButton.focus({ preventScroll: true });
         } else if (group.currentIndex === group.elementsLength - 1) {
           setButtonState(prevButton, false, false);
-          prevButton.focus();
+          prevButton.focus({ preventScroll: true });
         } else {
           setButtonState(prevButton, false, false);
           setButtonState(nextButton, false, false);
           if (dir === 'left') {
-            prevButton.focus();
+            prevButton.focus({ preventScroll: true });
           } else {
-            nextButton.focus();
+            nextButton.focus({ preventScroll: true });
           }
         }
       } else if (userSettings.close) {
-        closeButton.focus();
+        closeButton.focus({ preventScroll: true });
+      }
+
+      // A pending focus belongs to a slide that is no longer shown
+      clearTimeout(figureFocusTimeout);
+
+      if (hasMultipleSlides && group.currentIndex !== 0) {
+        const focusableFigure = getFocusableFigure();
+        if (focusableFigure) {
+          // Small delay to avoid display bug
+          figureFocusTimeout = setTimeout(() => {
+            // Scrolling the lightbox to the figure would shift the slider
+            focusableFigure.focus({ preventScroll: true });
+          }, 250);
+        }
       }
     };
 
@@ -1083,9 +1260,11 @@
      * Click event handler to trigger Tobii
      *
      */
-    const triggerTobii = event => {
+    const triggerTobii = (event) => {
       event.preventDefault();
+
       activeGroup = getGroupName(event.currentTarget);
+
       open(groups[activeGroup].gallery.indexOf(event.currentTarget));
     };
 
@@ -1093,15 +1272,45 @@
      * Click event handler
      *
      */
-    const clickHandler = event => {
+    const clickHandler = (event) => {
       if (event.target === prevButton) {
         previous();
       } else if (event.target === nextButton) {
         next();
-      } else if (event.target === closeButton || event.target.classList.contains('tobii__slide') || event.target.classList.contains('tobii') && userSettings.docClose) {
+      } else if (event.target === closeButton ||
+        (event.target.classList.contains('tobii__slide') || (event.target.classList.contains('tobii') && userSettings.docClose))) {
         close();
       }
+
       event.stopPropagation();
+    };
+
+    /**
+     * Get the focusable children of the given element
+     *
+     * @return {Array<Element>}
+     */
+    const getFocusableChildren = () => {
+      return Array.prototype.slice.call(
+        lightbox.querySelectorAll(
+          `.tobii__btn:not([disabled]), .tobii__slide--is-active ${FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active ')}`
+        )
+      ).filter((child) => {
+        return !!(
+          child.offsetWidth ||
+          child.offsetHeight ||
+          child.getClientRects().length
+        )
+      })
+    };
+
+    /**
+     * Get the programmatically focusable figure of the given element
+     *
+     * @return {Element|null}
+     */
+    const getFocusableFigure = () => {
+      return lightbox.querySelector('.tobii__slide--is-active figure[tabindex="-1"]')
     };
 
     /**
@@ -1117,18 +1326,21 @@
      * Keydown event handler
      *
      */
-    const keydownHandler = event => {
+    const keydownHandler = (event) => {
       if (event.code === 'Tab') {
-        const FOCUSABLE = Array.from(lightbox.querySelectorAll(FOCUSABLE_ELEMENTS.join(', ')));
-        if (FOCUSABLE.length === 0) return;
-        const FOCUSED_INDEX = FOCUSABLE.findIndex(el => el === document.activeElement);
+        const FOCUSABLE = getFocusableChildren();
+
+        if (FOCUSABLE.length === 0) return
+
+        const FOCUSED_INDEX = FOCUSABLE.indexOf(document.activeElement);
+
         if (event.shiftKey && FOCUSED_INDEX === 0) {
           // SHIFT+Tab on first → jump to last
-          FOCUSABLE[FOCUSABLE.length - 1].focus();
+          FOCUSABLE[FOCUSABLE.length - 1].focus({ preventScroll: true });
           event.preventDefault();
-        } else if (!event.shiftKey && FOCUSED_INDEX === FOCUSABLE.length - 1) {
-          // Tab on last → jump to first
-          FOCUSABLE[0].focus();
+        } else if (!event.shiftKey && (FOCUSED_INDEX === FOCUSABLE.length - 1 || FOCUSED_INDEX === -1)) {
+          // Tab on last, or from the figure → jump to first
+          FOCUSABLE[0].focus({ preventScroll: true });
           event.preventDefault();
         }
       } else if (event.code === 'Escape') {
@@ -1163,27 +1375,33 @@
      * Pointerdown event handler
      *
      */
-    const pointerdownHandler = event => {
+    const pointerdownHandler = (event) => {
       // Prevent dragging / swiping on textareas, inputs and selects
       if (isIgnoreElement(event.target)) {
-        return;
+        return
       }
+
       event.preventDefault();
       event.stopPropagation();
+
       DRAG.startX = DRAG.x = event.clientX;
       DRAG.startY = DRAG.y = event.clientY;
       DRAG.distance = 0;
 
       // This event is cached to support 2-finger gestures
       pointerDownCache.push(event);
+
       if (pointerDownCache.length === 2) {
-        const {
-          x,
-          y
-        } = midPoint(pointerDownCache[0].clientX, pointerDownCache[0].clientY, pointerDownCache[1].clientX, pointerDownCache[1].clientY);
+        const { x, y } = midPoint(
+          pointerDownCache[0].clientX, pointerDownCache[0].clientY,
+          pointerDownCache[1].clientX, pointerDownCache[1].clientY
+        );
+
         DRAG.startX = DRAG.x = x;
         DRAG.startY = DRAG.y = y;
-        DRAG.distance = distance(pointerDownCache[0].clientX - pointerDownCache[1].clientX, pointerDownCache[0].clientY - pointerDownCache[1].clientY) / TRANSFORM.scale;
+        DRAG.distance = distance(
+          pointerDownCache[0].clientX - pointerDownCache[1].clientX, pointerDownCache[0].clientY - pointerDownCache[1].clientY
+        ) / TRANSFORM.scale;
       }
     };
 
@@ -1191,45 +1409,66 @@
      * Pointermove event handler
      *
      */
-    const pointermoveHandler = event => {
-      if (!pointerDownCache.length) return;
+    const pointermoveHandler = (event) => {
+      if (!pointerDownCache.length) return
+
       groups[activeGroup].slider.classList.add('tobii__slider--is-' + (isZoomed() ? 'moving' : 'dragging'));
 
       // Find this event in the cache and update its record with this event
-      const index = pointerDownCache.findIndex(cachedEv => cachedEv.pointerId === event.pointerId);
+      const index = pointerDownCache.findIndex(
+        (cachedEv) => cachedEv.pointerId === event.pointerId
+      );
       pointerDownCache[index] = event;
+
       if (pointerDownCache.length === 2) {
         // 2-pointer horizontal pinch/zoom gesture
-        const {
-          x,
-          y
-        } = midPoint(pointerDownCache[0].clientX, pointerDownCache[0].clientY, pointerDownCache[1].clientX, pointerDownCache[1].clientY);
-        const scale = distance(pointerDownCache[0].clientX - pointerDownCache[1].clientX, pointerDownCache[0].clientY - pointerDownCache[1].clientY) / DRAG.distance;
-        zoomPan(event.target, clamp(scale, MIN_SCALE, MAX_SCALE), x, y, x - DRAG.x, y - DRAG.y);
+        const { x, y } = midPoint(
+          pointerDownCache[0].clientX, pointerDownCache[0].clientY,
+          pointerDownCache[1].clientX, pointerDownCache[1].clientY
+        );
+        const scale = distance(
+          pointerDownCache[0].clientX - pointerDownCache[1].clientX, pointerDownCache[0].clientY - pointerDownCache[1].clientY
+        ) / DRAG.distance;
+
+        zoomPan(
+          event.target,
+          clamp(scale, MIN_SCALE, MAX_SCALE),
+          x, y,
+          x - DRAG.x, y - DRAG.y
+        );
+
         DRAG.x = x;
         DRAG.y = y;
-        return;
+
+        return
       }
+
       if (isZoomed()) {
         const deltaX = event.clientX - DRAG.x;
         const deltaY = event.clientY - DRAG.y;
+
         pan(deltaX, deltaY);
       }
+
       DRAG.x = event.clientX;
       DRAG.y = event.clientY;
+
       if (!isZoomed()) {
         // Drag animation
         const deltaX = DRAG.startX - DRAG.x;
         const deltaY = DRAG.startY - DRAG.y;
 
         // Skip animation if drag distance is too low
-        if (distance(deltaX, deltaY) < 10) return;
+        if (distance(deltaX, deltaY) < 10) return
+
         if (Math.abs(deltaX) > Math.abs(deltaY) && groups[activeGroup].elementsLength > 1) {
           // Horizontal swipe
-          groups[activeGroup].slider.style.transform = `translate(${offset - Math.round(deltaX)}px, 0)`;
+          groups[activeGroup].slider.style.transform =
+            `translate(${offset - Math.round(deltaX)}px, 0)`;
         } else if (userSettings.swipeClose) {
           // Vertical swipe
-          groups[activeGroup].slider.style.transform = `translate(${offset}px, -${Math.round(deltaY)}px)`;
+          groups[activeGroup].slider.style.transform =
+          `translate(${offset}px, -${Math.round(deltaY)}px)`;
         }
       }
     };
@@ -1238,14 +1477,18 @@
      * Pointerup event handler
      *
      */
-    const pointerupHandler = event => {
+    const pointerupHandler = (event) => {
       // Intercept regular click handler
-      if (!pointerDownCache.length) return;
+      if (!pointerDownCache.length) return
+
       groups[activeGroup].slider.classList.remove('tobii__slider--is-' + (isZoomed() ? 'moving' : 'dragging'));
 
       // Remove this event from the target's cache
-      const index = pointerDownCache.findIndex(cachedEv => cachedEv.pointerId === event.pointerId);
+      const index = pointerDownCache.findIndex(
+        (cachedEv) => cachedEv.pointerId === event.pointerId
+      );
       pointerDownCache.splice(index, 1);
+
       const x = event.clientX;
       const y = event.clientY;
       const deltaX = DRAG.startX - x;
@@ -1257,7 +1500,8 @@
           // Evaluate drag
           if (deltaX < 0 && distanceX > userSettings.threshold && groups[activeGroup].currentIndex > 0) {
             previous();
-          } else if (deltaX > 0 && distanceX > userSettings.threshold && groups[activeGroup].currentIndex !== groups[activeGroup].elementsLength - 1) {
+          } else if (deltaX > 0 && distanceX > userSettings.threshold &&
+            groups[activeGroup].currentIndex !== groups[activeGroup].elementsLength - 1) {
             next();
           } else if (deltaY > 0 && distanceY > userSettings.threshold && userSettings.swipeClose) {
             close();
@@ -1283,14 +1527,8 @@
           if (isTouchDevice()) {
             // Delayed tap on mobile
             window.setTimeout(() => {
-              const {
-                left,
-                top,
-                bottom,
-                right,
-                width
-              } = event.target.getBoundingClientRect();
-              if (y < top || y > bottom || !lastTapTime) return;
+              const { left, top, bottom, right, width } = event.target.getBoundingClientRect();
+              if (y < top || y > bottom || !lastTapTime) return
               if (x > left && x < left + width / 2) {
                 previous();
               } else if (x < right && x > right - width / 2) {
@@ -1306,38 +1544,49 @@
      * Wheel event handler
      *
      */
-    const wheelHandler = event => {
+    const wheelHandler = (event) => {
       const deltaScale = Math.sign(event.deltaY) > 0 ? -1 : 1;
-      if (!isZoomed() && !deltaScale) return;
+      if (!isZoomed() && !deltaScale) return
       event.preventDefault();
+
       const newScale = TRANSFORM.scale + deltaScale / (SCALE_SENSITIVITY / TRANSFORM.scale);
-      zoomPan(event.target, clamp(newScale, MIN_SCALE, MAX_SCALE), event.clientX, event.clientY, 0, 0);
+      zoomPan(
+        event.target,
+        clamp(newScale, MIN_SCALE, MAX_SCALE),
+        event.clientX, event.clientY,
+        0, 0
+      );
     };
+
     const clampedTranslate = (axis, translate) => {
       // Whole clamping functionality heavily inspired
       // by https://github.com/Neophen/pinch-zoom-pan
-      const {
-        element,
-        scale,
-        originX,
-        originY
-      } = TRANSFORM;
+      const { element, scale, originX, originY } = TRANSFORM;
       const axisIsX = axis === 'x';
       const origin = axisIsX ? originX : originY;
       const axisKey = axisIsX ? 'offsetWidth' : 'offsetHeight';
+
       const containerSize = element.parentNode[axisKey];
       const imageSize = element[axisKey];
       const bounds = element.getBoundingClientRect();
+
       const imageScaledSize = axisIsX ? bounds.width : bounds.height;
+
       const defaultOrigin = imageSize / 2;
       const originOffset = (origin - defaultOrigin) * (scale - 1);
+
       const range = Math.max(0, Math.round(imageScaledSize) - containerSize);
+
       const max = Math.round(range / 2);
       const min = 0 - max;
-      return clamp(translate, min + originOffset, max + originOffset);
+
+      return clamp(translate, min + originOffset, max + originOffset)
     };
+
     const clamp = (value, min, max) => Math.max(Math.min(value, max), min);
+
     const isZoomed = () => TRANSFORM.scale !== MIN_SCALE;
+
     const pan = (deltaX, deltaY) => {
       if (deltaX !== 0) {
         TRANSFORM.translateX = clampedTranslate('x', TRANSFORM.translateX + deltaX);
@@ -1345,44 +1594,53 @@
       if (deltaY !== 0) {
         TRANSFORM.translateY = clampedTranslate('y', TRANSFORM.translateY + deltaY);
       }
-      const {
-        element,
-        originX,
-        originY,
-        translateX,
-        translateY,
-        scale
-      } = TRANSFORM;
+
+      const { element, originX, originY, translateX, translateY, scale } = TRANSFORM;
       element.style.transformOrigin = `${originX}px ${originY}px`;
       element.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
     };
+
     const zoomPan = (el, newScale, x, y, deltaX, deltaY) => {
-      if (el.tagName !== 'IMG') return;
-      const {
-        left,
-        top
-      } = el.getBoundingClientRect();
+      if (el.tagName !== 'IMG') return
+
+      const { left, top } = el.getBoundingClientRect();
       const originX = x - left;
       const originY = y - top;
       const newOriginX = originX / TRANSFORM.scale;
       const newOriginY = originY / TRANSFORM.scale;
+
+      deltaX += (newOriginX - TRANSFORM.originX) * (TRANSFORM.scale - 1);
+      deltaY += (newOriginY - TRANSFORM.originY) * (TRANSFORM.scale - 1);
+
       TRANSFORM.element = el;
+
+      // Back to the original size: drop the translation the origin shifts added
+      if (newScale === MIN_SCALE) {
+        resetZoom();
+        return
+      }
+
       TRANSFORM.originX = newOriginX;
       TRANSFORM.originY = newOriginY;
       TRANSFORM.scale = newScale;
+
       pan(deltaX, deltaY);
     };
+
     const distance = (dx, dy) => Math.hypot(dx, dy);
+
     const midPoint = (x1, y1, x2, y2) => ({
       x: (x1 + x2) / 2,
       y: (y1 + y2) / 2
     });
+
     const resetZoom = () => {
       TRANSFORM.scale = MIN_SCALE;
       TRANSFORM.originX = 0;
       TRANSFORM.originY = 0;
       TRANSFORM.translateX = 0;
       TRANSFORM.translateY = 0;
+
       pan(0, 0);
     };
 
@@ -1403,6 +1661,7 @@
 
       // Click event
       on('click', clickHandler);
+
       if (userSettings.draggable) {
         // Pointer events
         on('pointerdown', pointerdownHandler);
@@ -1435,6 +1694,7 @@
 
       // Click event
       off('click', clickHandler);
+
       if (userSettings.draggable) {
         // Pointer events
         off('pointerdown', pointerdownHandler);
@@ -1457,12 +1717,19 @@
     const updateConfig = () => {
       const group = groups[activeGroup];
       const slider = group.slider;
+
       if (userSettings.draggable && !slider.classList.contains('tobii__slider--is-draggable')) {
         slider.classList.add('tobii__slider--is-draggable');
       }
-      const hideButtons = !userSettings.nav || group.elementsLength === 1 || userSettings.nav === 'auto' && isTouchDevice();
+
+      const hideButtons = (
+        !userSettings.nav ||
+        group.elementsLength === 1 ||
+        (userSettings.nav === 'auto' && isTouchDevice())
+      );
       setButtonState(prevButton, hideButtons, hideButtons);
       setButtonState(nextButton, hideButtons, hideButtons);
+
       const hideCounter = !userSettings.counter || group.elementsLength === 1;
       counter.setAttribute('aria-hidden', hideCounter ? 'true' : 'false');
     };
@@ -1477,6 +1744,7 @@
       const total = group.elementsLength;
       const trigger = group.gallery[currIndex];
       const [slide, of] = userSettings.announcementLabel;
+
       let extra;
       if (trigger.hasAttribute('data-label')) {
         extra = trigger.getAttribute('data-label');
@@ -1484,6 +1752,7 @@
         const img = trigger.querySelector('img');
         extra = img?.alt || '';
       }
+
       const base = `${slide} ${currIndex + 1} ${of} ${total}`;
 
       // Announce reliably
@@ -1511,9 +1780,14 @@
      */
     const reset = () => {
       if (isOpen()) close();
-      Object.values(groups).forEach(group => group.gallery.forEach(remove));
+
+      Object.values(groups).forEach(group =>
+        group.gallery.forEach(remove)
+      );
+
       groups = {};
       activeGroup = null;
+
       Object.values(SUPPORTED_ELEMENTS).forEach(type => type.onReset());
     };
 
@@ -1523,6 +1797,7 @@
      */
     const destroy = () => {
       reset();
+
       lightbox.parentNode.removeChild(lightbox);
     };
 
@@ -1531,7 +1806,7 @@
      *
      */
     const isOpen = () => {
-      return lightbox.getAttribute('aria-hidden') === 'false';
+      return lightbox.getAttribute('aria-hidden') === 'false'
     };
 
     /**
@@ -1539,15 +1814,16 @@
      *
      */
     const isTouchDevice = () => {
-      return 'ontouchstart' in window;
+      return 'ontouchstart' in window
     };
 
     /**
      * Checks whether element's tagName is part of array
      *
      */
-    const isIgnoreElement = el => {
-      return ['TEXTAREA', 'OPTION', 'INPUT', 'SELECT'].indexOf(el.tagName) !== -1 || el === prevButton || el === nextButton || el === closeButton;
+    const isIgnoreElement = (el) => {
+      return ['TEXTAREA', 'OPTION', 'INPUT', 'SELECT'].indexOf(el.tagName) !== -1 || el === prevButton ||
+        el === nextButton || el === closeButton
     };
 
     /**
@@ -1555,7 +1831,7 @@
      *
      */
     const slidesIndex = () => {
-      return groups[activeGroup].currentIndex;
+      return groups[activeGroup].currentIndex
     };
 
     /**
@@ -1563,7 +1839,7 @@
      *
      */
     const slidesCount = () => {
-      return groups[activeGroup].elementsLength;
+      return groups[activeGroup].elementsLength
     };
 
     /**
@@ -1571,7 +1847,7 @@
      *
      */
     const currentGroup = () => {
-      return activeGroup;
+      return activeGroup
     };
 
     /**
@@ -1593,7 +1869,9 @@
     const off = (eventName, callback) => {
       lightbox.removeEventListener(eventName, callback);
     };
+
     init(userOptions);
+
     return {
       open,
       previous,
@@ -1611,7 +1889,7 @@
       currentGroup,
       on,
       off
-    };
+    }
   }
 
   return Tobii;
