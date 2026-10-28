@@ -60,6 +60,7 @@ export default function Tobii (userOptions) {
   let pointerDownCache = []
   let lastTapTime = 0
   let liveRegion = null
+  let figureFocusTimeout = null
   const MIN_SCALE = 1
   const MAX_SCALE = 4
   const DOUBLE_TAP_TIME = 500 // milliseconds
@@ -488,6 +489,8 @@ export default function Tobii (userOptions) {
       }
     }
 
+    clearTimeout(figureFocusTimeout)
+
     // Reenable the user’s focus
     lastFocus.focus()
 
@@ -545,6 +548,10 @@ export default function Tobii (userOptions) {
 
     const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
     const model = getModel(CONTAINER)
+
+    // Add active slide class
+    groups[activeGroup].sliderElements[index].classList.add('tobii__slide--is-active')
+    groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'false')
 
     model.onLoad(CONTAINER, activeGroup)
   }
@@ -683,6 +690,10 @@ export default function Tobii (userOptions) {
     const CONTAINER = groups[activeGroup].sliderElements[index].querySelector('[data-type]')
     const model = getModel(CONTAINER)
 
+    // Remove active slide class
+    groups[activeGroup].sliderElements[index].classList.remove('tobii__slide--is-active')
+    groups[activeGroup].sliderElements[index].setAttribute('aria-hidden', 'true')
+
     model.onLeave(CONTAINER)
   }
 
@@ -749,21 +760,35 @@ export default function Tobii (userOptions) {
 
       if (group.currentIndex === 0) {
         setButtonState(nextButton, false, false)
-        nextButton.focus()
+        nextButton.focus({ preventScroll: true })
       } else if (group.currentIndex === group.elementsLength - 1) {
         setButtonState(prevButton, false, false)
-        prevButton.focus()
+        prevButton.focus({ preventScroll: true })
       } else {
         setButtonState(prevButton, false, false)
         setButtonState(nextButton, false, false)
         if (dir === 'left') {
-          prevButton.focus()
+          prevButton.focus({ preventScroll: true })
         } else {
-          nextButton.focus()
+          nextButton.focus({ preventScroll: true })
         }
       }
     } else if (userSettings.close) {
-      closeButton.focus()
+      closeButton.focus({ preventScroll: true })
+    }
+
+    // A pending focus belongs to a slide that is no longer shown
+    clearTimeout(figureFocusTimeout)
+
+    if (hasMultipleSlides && group.currentIndex !== 0) {
+      const focusableFigure = getFocusableFigure()
+      if (focusableFigure) {
+        // Small delay to avoid display bug
+        figureFocusTimeout = setTimeout(() => {
+          // Scrolling the lightbox to the figure would shift the slider
+          focusableFigure.focus({ preventScroll: true })
+        }, 250)
+      }
     }
   }
 
@@ -805,6 +830,34 @@ export default function Tobii (userOptions) {
   }
 
   /**
+   * Get the focusable children of the given element
+   *
+   * @return {Array<Element>}
+   */
+  const getFocusableChildren = () => {
+    return Array.prototype.slice.call(
+      lightbox.querySelectorAll(
+        `.tobii__btn:not([disabled]), .tobii__slide--is-active ${FOCUSABLE_ELEMENTS.join(', .tobii__slide--is-active ')}`
+      )
+    ).filter((child) => {
+      return !!(
+        child.offsetWidth ||
+        child.offsetHeight ||
+        child.getClientRects().length
+      )
+    })
+  }
+
+  /**
+   * Get the programmatically focusable figure of the given element
+   *
+   * @return {Element|null}
+   */
+  const getFocusableFigure = () => {
+    return lightbox.querySelector('.tobii__slide--is-active figure[tabindex="-1"]')
+  }
+
+  /**
    * Set the hidden/disabled state of a button
    *
    */
@@ -819,19 +872,19 @@ export default function Tobii (userOptions) {
    */
   const keydownHandler = (event) => {
     if (event.code === 'Tab') {
-      const FOCUSABLE = Array.from(lightbox.querySelectorAll(FOCUSABLE_ELEMENTS.join(', ')))
+      const FOCUSABLE = getFocusableChildren()
 
       if (FOCUSABLE.length === 0) return
 
-      const FOCUSED_INDEX = FOCUSABLE.findIndex(el => el === document.activeElement)
+      const FOCUSED_INDEX = FOCUSABLE.indexOf(document.activeElement)
 
       if (event.shiftKey && FOCUSED_INDEX === 0) {
         // SHIFT+Tab on first → jump to last
-        FOCUSABLE[FOCUSABLE.length - 1].focus()
+        FOCUSABLE[FOCUSABLE.length - 1].focus({ preventScroll: true })
         event.preventDefault()
-      } else if (!event.shiftKey && FOCUSED_INDEX === FOCUSABLE.length - 1) {
-        // Tab on last → jump to first
-        FOCUSABLE[0].focus()
+      } else if (!event.shiftKey && (FOCUSED_INDEX === FOCUSABLE.length - 1 || FOCUSED_INDEX === -1)) {
+        // Tab on last, or from the figure → jump to first
+        FOCUSABLE[0].focus({ preventScroll: true })
         event.preventDefault()
       }
     } else if (event.code === 'Escape') {
