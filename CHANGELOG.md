@@ -1,5 +1,12 @@
 # Changelog
 
+## v3.2.1
+
+### Fixed
+
+- Restore the figure focus on slide change, without the scroll glitch
+- Compensate the transform origin shift when zooming
+
 ## v3.2.0
 
 ### New
