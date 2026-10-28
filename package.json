@@ -2,28 +2,21 @@
   "name": "@midzer/tobii",
   "version": "3.2.0",
   "description": "An accessible, open-source lightbox with no dependencies.",
+  "type": "module",
   "main": "./dist/tobii.js",
   "module": "./dist/tobii.module.js",
   "umd:main": "./dist/tobii.umd.js",
   "unpkg": "./dist/tobii.umd.js",
   "source": "./src/js/index.js",
-  "exports": {
-    ".": {
-      "browser": "./dist/tobii.module.js",
-      "umd": "./dist/tobii.umd.js",
-      "import": "./dist/tobii.modern.js",
-      "require": "./dist/tobii.js"
-    },
-    "./package.json": "./package.json",
-    "./": "./"
-  },
   "devDependencies": {
-    "cross-env": "^10.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.2",
     "eslint": "9.39.2",
-    "microbundle": "^0.15.1",
     "neostandard": "^0.12.2",
     "rimraf": "4.4.1",
-    "sass": "^1.98.0",
+    "rollup": "^4.65.1",
+    "rollup-plugin-scss": "^4.0.1",
+    "sass": "^1.106.1",
     "stylelint": "^16.26.1"
   },
   "browserslist": {
@@ -37,14 +30,10 @@
     ]
   },
   "scripts": {
-    "build": "npm run distclean && npm run build:main && npm run build:browser",
-    "build:main": "cross-env BROWSERSLIST_ENV=main microbundle build --raw --no-compress --no-sourcemap --name Tobii",
-    "build:browser": "cross-env BROWSERSLIST_ENV=browser microbundle build --raw -f iife src/js/browser.js -o dist/tobii.min.js --no-sourcemap --name Tobii",
-    "postbuild:browser": "node add-banner.js",
+    "build": "npm run distclean && rollup -c",
     "distclean": "rimraf dist",
     "clean": "rimraf dist && rimraf node_modules",
-    "dev": "microbundle watch --raw --format cjs",
-    "dev-modern": "microbundle watch --raw --format esm",
+    "dev": "rollup -c -w",
     "lint": "eslint src",
     "test": "npm run lint"
   },
